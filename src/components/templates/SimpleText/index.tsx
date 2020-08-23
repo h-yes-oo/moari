@@ -4,7 +4,8 @@ import styled from 'styled-components';
 const BoldTextWrapper = styled.div`
     display: flex;
     justify-content: center;
-    transform: translateY(48px);
+    // transform: translateY(48px);
+    margin: 48px 0;
 `
 
 const BoldText = styled.div`

@@ -1,6 +1,8 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
 
+import * as T from 'types';
+
 const Root = styled.div`
     width: 358px;
     height: 512px;
@@ -11,14 +13,15 @@ const Root = styled.div`
 interface Props {
     name?: string;
     description?: string;
-    status?: any // type 정의 필요: 모집 준비 중, 상시 모집, 모집 중, 모집 마감
-    image?: File;
+    image?: string; // need change
+    status?: T.ClubStatus
+    tags?: Array<string>; // types에 tag 정의
 }
 
 const ClubCard: FC<Props> = () => {
     return (
         <Root>
-            
+        
         </Root>
     );
 }

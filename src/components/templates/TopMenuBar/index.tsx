@@ -1,6 +1,8 @@
 import React, { FC, ReactNode } from 'react';
 import styled from 'styled-components';
 
+import palette from 'constants/palette';
+
 const Root = styled.div`
     display: flex;
     align-items: center;
@@ -14,17 +16,13 @@ interface MenuButtonProps {
 const MenuButton = styled.div<MenuButtonProps>(({ isRegister }) => ({
     fontSize: '18px',
     margin: '0 24px',
+    color: palette.greyText.toString(),
 
     position: isRegister ? 'absolute' : undefined,
     right: isRegister ? '36px' : undefined,
 
     cursor: 'pointer',
 }));
-
-const RegisterButton = styled.div`
-    font-size: 18px;
-    float: right;
-`
 
 interface Props {
 

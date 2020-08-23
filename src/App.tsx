@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import LandingPage from 'components/pages/LandingPage';
+import MainPage from 'components/pages/MainPage';
 
 interface Props {
 
@@ -8,7 +8,7 @@ interface Props {
 const App: FC<Props> = () => {
   return (
     <>
-      <LandingPage />
+      <MainPage />
     </>
   );
 }
