@@ -4,9 +4,15 @@ import styled from 'styled-components';
 import palette from 'constants/palette';
 
 const Root = styled.div`
+    position: fixed;
+    width: 100%;
+    top: 138px;
     display: flex;
     align-items: center;
-    margin-left: 36px;
+    padding: 6px 36px;
+    background-color: #ffffff;
+
+    z-index: 100;
 `
 
 interface MenuButtonProps {
@@ -19,7 +25,7 @@ const MenuButton = styled.div<MenuButtonProps>(({ isRegister }) => ({
     color: palette.greyText.toString(),
 
     position: isRegister ? 'absolute' : undefined,
-    right: isRegister ? '36px' : undefined,
+    right: isRegister ? '72px' : undefined,
 
     cursor: 'pointer',
 }));
