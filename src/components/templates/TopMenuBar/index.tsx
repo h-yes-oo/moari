@@ -1,5 +1,6 @@
 import React, { FC, ReactNode } from 'react';
 import styled from 'styled-components';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import palette from 'constants/palette';
 
@@ -39,7 +40,7 @@ interface MenuMap {
 } 
 
 
-const TopMenuBar: FC<Props> = () => {  
+const TopMenuBar: FC<Props & RouteComponentProps> = ({ history }) => {  
     const menuTextList: MenuMap = {
         'home': 'Home',
         'category': '분류별 찾기',
@@ -50,6 +51,10 @@ const TopMenuBar: FC<Props> = () => {
 
     const registerText: string = '동아리 / 모집공고 등록하기';
 
+    const goRegister: () => void = () => {
+        history.push('/register/club');
+    };
+
     // need a key
     const MenuList: ReactNode = Object.entries(menuTextList).map(([tag, menu]) => (
         // console.log(tag, menu);
@@ -59,9 +64,11 @@ const TopMenuBar: FC<Props> = () => {
     return (
         <Root>
             {MenuList}
-            <MenuButton isRegister={true}>{registerText}</MenuButton>
+            <MenuButton isRegister={true} onClick={() => goRegister()}>
+                {registerText}
+            </MenuButton>
         </Root>
     );
 }
 
-export default TopMenuBar;
+export default withRouter(TopMenuBar);
