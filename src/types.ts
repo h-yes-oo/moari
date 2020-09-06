@@ -26,3 +26,10 @@ export enum RegisterButton {
     CLUB_REGISTER = 'CLUB_REGISTER',
     RECRUIT_REGISTER = 'RECRUIT_REGISTER'
 }
+
+export enum RegisterFormType {
+    INPUT = 'INPUT',
+    SELECT_BOX = 'SELECT_BOX',
+    FILE = 'FILE',
+    CALENDAR = 'CALENDAR',
+}

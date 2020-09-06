@@ -42,7 +42,7 @@ const RegisterButton: FC<Props & RouteComponentProps> = ({ history }) => {
     const isClubSelected: boolean  = selectedButton === T.RegisterButton.CLUB_REGISTER;
 
     const goRegisterForm: (buttonType: T.RegisterButton) => void = (buttonType) => {
-        buttonType === T.RegisterButton.CLUB_REGISTER ? history.push('/register/club') : history.push('register/recruit');
+        buttonType === T.RegisterButton.CLUB_REGISTER ? history.push('/register/club') : history.push('/register/recruit');
         setSelectedButton(buttonType);
     }
 

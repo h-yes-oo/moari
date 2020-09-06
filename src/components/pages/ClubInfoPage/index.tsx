@@ -2,7 +2,7 @@ import React, { FC, useEffect } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 
-import { BoldText, TagText } from 'constants/styles';
+import { BoldLargeText, TagText } from 'constants/styles';
 import BaseLayout from 'components/templates/BaseLayout';
 import likeSvg from 'assets/icons/like.svg';
 import eyesSvg from 'assets/icons/eyes.svg';
@@ -85,7 +85,7 @@ const ClubInfoPage: FC<ClubInfoProps & RouteComponentProps<ClubInfoRouterProps>>
     return (
         <BaseLayout>
             <Root>
-                <BoldText>동아리 이름 들어갈 곳</BoldText>
+                <BoldLargeText>동아리 이름 들어갈 곳</BoldLargeText>
                 <IconTagWrapper>
                     <IconCountWrapper>
                         <Icon src={likeSvg} />
