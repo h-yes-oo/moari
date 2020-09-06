@@ -52,7 +52,7 @@ const TopMenuBar: FC<Props & RouteComponentProps> = ({ history }) => {
     const registerText: string = '동아리 / 모집공고 등록하기';
 
     const goRegister: () => void = () => {
-        history.push('/register/club');
+        history.push('/register');
     };
 
     // need a key

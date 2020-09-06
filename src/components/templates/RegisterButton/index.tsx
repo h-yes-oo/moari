@@ -1,48 +1,69 @@
-import React, { FC, ReactNode } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
+import * as T from 'types';
 import palette from 'constants/palette';
 
 const Root = styled.div`
-    transform: translateY(28px);
+    transform: translateY(28 px);
     display: flex;
     justify-content: center;
 `
 
-const ClubRegisterButton = styled.div`
-    width: 300px;
-    height: 44px;
-    border-radius: 4px 0 0 4px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: ${palette.primaryGradient.toString()};
+interface ButtonProps {
+    buttonType: T.RegisterButton;
+    isSelected: boolean;
+}
 
-`
+const Button = styled.div<ButtonProps>(({ buttonType, isSelected }) => ({
+    width: '300px',
+    height: '44px',
+    fontWeight: 'bold',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    boxSizing: 'border-box',
+    cursor: 'pointer',
 
-const RecruitRegisterButton = styled.div`
-    width: 300px;
-    height: 44px;
-    border-radius: 0 4px 4px 0;
-    border: 1px solid ${palette.greyBorder.toString()};
-    box-sizing: border-box;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: ${palette.primaryGradient.toString()};
-`
+    borderRadius: buttonType === T.RegisterButton.CLUB_REGISTER ? '4px 0 0 4px' : '0 4px 4px 0',
+
+    color: isSelected ? '#ffffff' : palette.primaryGradient.toString(),
+    backgroundColor: isSelected ? palette.primaryGradient.toString() : '',
+    border: isSelected ? '' : `1px solid ${palette.greyBorder.toString()}`,
+}));
 
 interface Props {
 
 }
 
-const RegisterButton: FC<Props> = () => {
+const RegisterButton: FC<Props & RouteComponentProps> = ({ history }) => {
+    const [selectedButton, setSelectedButton] = useState<T.RegisterButton>(T.RegisterButton.CLUB_REGISTER);
+    const isClubSelected: boolean  = selectedButton === T.RegisterButton.CLUB_REGISTER;
+
+    const goRegisterForm: (buttonType: T.RegisterButton) => void = (buttonType) => {
+        buttonType === T.RegisterButton.CLUB_REGISTER ? history.push('/register/club') : history.push('register/recruit');
+        setSelectedButton(buttonType);
+    }
+
     return (
         <Root>
-            <ClubRegisterButton>동아리 등록하기</ClubRegisterButton>
-            <RecruitRegisterButton>모집공고 등록하기</RecruitRegisterButton>
+            <Button
+                buttonType={T.RegisterButton.CLUB_REGISTER}
+                isSelected={isClubSelected}
+                onClick={() => goRegisterForm(T.RegisterButton.CLUB_REGISTER)}
+            >
+                동아리 등록하기
+            </Button>
+            <Button
+                buttonType={T.RegisterButton.RECRUIT_REGISTER}
+                isSelected={!isClubSelected}
+                onClick={() => goRegisterForm(T.RegisterButton.RECRUIT_REGISTER)}
+            >
+                모집공고 등록하기
+            </Button>
         </Root>
     )
 }
 
-export default RegisterButton;
+export default withRouter(RegisterButton);

@@ -21,3 +21,8 @@ export interface ClubInfo {
     status: ClubStatus;    
     tags: Array<string>;
 }
+
+export enum RegisterButton {
+    CLUB_REGISTER = 'CLUB_REGISTER',
+    RECRUIT_REGISTER = 'RECRUIT_REGISTER'
+}
