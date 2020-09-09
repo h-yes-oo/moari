@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import logoCampusSvg from 'assets/icons/logo-campus.svg';
 import searchSvg from 'assets/icons/search.svg';
@@ -10,10 +11,18 @@ import logoutSvg from 'assets/icons/logout.svg';
 import tempProfile from 'assets/images/temp-profile.jpg';
 
 const Root = styled.div`
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    background-color: #ffffff;
+
     display: flex;
     align-items: center;
-    margin: 36px;
+    z-index: 100;
+    padding: 36px;
 `
+
 const LogoCampusIcon = styled.img`
     cursor: pointer;
 `
@@ -50,7 +59,7 @@ const ProfileWrapper = styled.div`
 
     display: flex;
     align-items: center;
-    transform: translateX(48px)
+    transform: translateX(36px);
 `
 
 const ProfileName = styled.div`
@@ -66,7 +75,7 @@ const ProfileImage = styled.img`
 
 const ButtonsWrapper = styled.div`
     position: absolute;
-    right: 36px;
+    right: 48px
 `
 
 const LikeButton = styled.img`
@@ -90,10 +99,14 @@ interface Props {
     username: string;
 }
 
-const Header: FC<Props> = ({ campusName, username }) => {    
+const Header: FC<Props & RouteComponentProps> = ({ campusName, username, history }) => {    
+    const goMainPage: () => void = () => {
+        history.push('/');
+    }
+    
     return (
         <Root>
-            <LogoCampusIcon src={logoCampusSvg} />
+            <LogoCampusIcon src={logoCampusSvg} onClick={() => goMainPage()}/>
             <SearchBoxWrapper>
                 <SearchIcon src={searchSvg} />
                 <SearchBox placeholder="동아리 이름이나 태그로 검색해보세요"/>
@@ -112,4 +125,4 @@ const Header: FC<Props> = ({ campusName, username }) => {
     );
 }
 
-export default Header;
+export default withRouter(Header);

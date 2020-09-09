@@ -14,9 +14,28 @@ export enum SearchMenu {
 }
 
 export interface ClubInfo {
+<<<<<<< HEAD
+=======
+    id: number;
+>>>>>>> 05f8d9fc71c3cf0b0dca6901a732ec35404472e5
     name: string;
     description: string;
     image: string; // need change
     status: ClubStatus;    
     tags: Array<string>;
+<<<<<<< HEAD
+=======
+}
+
+export enum RegisterButton {
+    CLUB_REGISTER = 'CLUB_REGISTER',
+    RECRUIT_REGISTER = 'RECRUIT_REGISTER'
+}
+
+export enum RegisterFormType {
+    INPUT = 'INPUT',
+    SELECT_BOX = 'SELECT_BOX',
+    FILE = 'FILE',
+    CALENDAR = 'CALENDAR',
+>>>>>>> 05f8d9fc71c3cf0b0dca6901a732ec35404472e5
 }
