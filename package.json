@@ -9,10 +9,7 @@
     "@types/color": "^3.0.1",
     "@types/jest": "^24.0.0",
     "@types/node": "^12.0.0",
-<<<<<<< HEAD
-=======
     "@types/react-router-dom": "^5.1.5",
->>>>>>> 05f8d9fc71c3cf0b0dca6901a732ec35404472e5
     "@types/styled-components": "^5.1.2",
     "body-parser": "^1.19.0",
     "color": "^3.1.2",
@@ -20,17 +17,11 @@
     "cross-env": "^7.0.2",
     "express": "^4.17.1",
     "http-proxy-middleware": "^1.0.5",
-<<<<<<< HEAD
-    "npm-run-all": "^4.1.5",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-=======
     "nodemon": "^2.0.4",
     "npm-run-all": "^4.1.5",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.2.0",
->>>>>>> 05f8d9fc71c3cf0b0dca6901a732ec35404472e5
     "react-scripts": "3.4.3",
     "styled-components": "^5.1.1",
     "typescript": "~3.7.2"
@@ -38,11 +29,7 @@
   "scripts": {
     "start": "npm-run-all --parallel start:**",
     "start:client": "react-scripts start",
-<<<<<<< HEAD
-    "start:server": "node ./server/server.js",
-=======
     "start:server": "nodemon ./server/server.js",
->>>>>>> 05f8d9fc71c3cf0b0dca6901a732ec35404472e5
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
