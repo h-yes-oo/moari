@@ -5,10 +5,10 @@ interface Props {
 
 }
 
-const RecruitRegisterForm: FC<Props> = () => {
+const RecruitRegister: FC<Props> = () => {
     return (
         <h1>Recruit Register</h1>
     );
 }
 
-export default RecruitRegisterForm;
+export default RecruitRegister;

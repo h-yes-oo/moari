@@ -1,11 +1,10 @@
 import React, { FC, ReactNode } from 'react';
 import styled from 'styled-components';
-import RegisterInputForm from '../RegisterFormInput';
+import RegisterForm from '../RegisterForm';
 import * as T from 'types';
 import text from './text';
 
 const Root = styled.div`
-    
 `
 
 const LeftSection = styled.div`
@@ -20,23 +19,23 @@ interface Props {
 
 }
 
-const ClubRegisterForm: FC<Props> = () => {
+const ClubRegisterContents: FC<Props> = () => {
     return (
         <Root>
             <LeftSection>
-                <RegisterInputForm
+                <RegisterForm
                     title={text.clubName.title}
                     description={text.clubName.description}
                     type={T.RegisterFormType.INPUT}
                     height={'48px'}
                 />
-                <RegisterInputForm
+                <RegisterForm
                     title={text.clubInfo.title}
                     description={text.clubInfo.description}
                     type={T.RegisterFormType.INPUT}
                     height={'100px'}
                 />
-                <RegisterInputForm 
+                <RegisterForm 
                     title={text.clubDetail.title}
                     description={text.clubDetail.description}
                     type={T.RegisterFormType.INPUT}
@@ -50,4 +49,4 @@ const ClubRegisterForm: FC<Props> = () => {
     );
 }
 
-export default ClubRegisterForm;
+export default ClubRegisterContents;

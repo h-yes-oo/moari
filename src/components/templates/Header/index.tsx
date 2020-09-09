@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import styled from 'styled-components';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import logoCampusSvg from 'assets/icons/logo-campus.svg';
 import searchSvg from 'assets/icons/search.svg';
@@ -98,10 +99,14 @@ interface Props {
     username: string;
 }
 
-const Header: FC<Props> = ({ campusName, username }) => {    
+const Header: FC<Props & RouteComponentProps> = ({ campusName, username, history }) => {    
+    const goMainPage: () => void = () => {
+        history.push('/');
+    }
+    
     return (
         <Root>
-            <LogoCampusIcon src={logoCampusSvg} />
+            <LogoCampusIcon src={logoCampusSvg} onClick={() => goMainPage()}/>
             <SearchBoxWrapper>
                 <SearchIcon src={searchSvg} />
                 <SearchBox placeholder="동아리 이름이나 태그로 검색해보세요"/>
@@ -120,4 +125,4 @@ const Header: FC<Props> = ({ campusName, username }) => {
     );
 }
 
-export default Header;
+export default withRouter(Header);
