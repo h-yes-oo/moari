@@ -29,6 +29,7 @@ export enum RegisterButton {
 
 export enum RegisterFormType {
     INPUT = 'INPUT',
+    TEXT_AREA = 'TEXT_AREA',
     SELECT_BOX = 'SELECT_BOX',
     FILE = 'FILE',
     CALENDAR = 'CALENDAR',
