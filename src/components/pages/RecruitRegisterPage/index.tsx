@@ -7,6 +7,7 @@ interface Props {
 
 const RecruitRegisterPage: FC<Props> = () => {
     return (
+        // 여기 지우고 작업하세요! 
         <h1>Recruit Register Page</h1>
     );
 }

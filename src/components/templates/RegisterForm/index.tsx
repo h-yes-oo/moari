@@ -3,6 +3,7 @@ import styled, { StyledFunction }from 'styled-components';
 
 import * as T from 'types';
 import palette from 'constants/palette';
+import expandArrowSvg from 'assets/icons/expand_more.svg';
 
 const Root = styled.div`
     width: 32vw;
@@ -26,7 +27,8 @@ const OptionText = styled.div`
     right: 0;
 `
 
-const InputForm = styled.textarea<{ height: string }>`
+// height -> CSSProperties prop으로 변경하기
+const TextAreaForm = styled.textarea<{ height: string }>`
     width: 100%;
     height: ${(props) => props.height};
     padding: 16px;
@@ -38,22 +40,77 @@ const InputForm = styled.textarea<{ height: string }>`
     
     resize: none;
     &:focus {
-        outline: none;
+        // outline: none;
     }
 `;
 
-// const FormSelection:
-// const FileForm:
-// const CalendarForm:
+const InputForm = styled.input`
+    width: 100%;
+    height: 48px;
+    padding: 16px;
+    box-sizing: border-box;
+    border: 1px solid ${palette.primaryGradient.toString()};
+    border-radius: 4px;
+    color: ${palette.greyText.toString()};
+    font-size: 16px;
+`
 
-interface Props {
-    title: string;
-    description: string;
+const FileForm = styled.input`
+    width: 100%;
+    height: 48px;
+    padding: 16px;
+    box-sizing: border-box;
+    border: 1px solid ${palette.primaryGradient.toString()};
+    border-radius: 4px;
+    color: ${palette.greyText.toString()};
+    font-size: 16px;
+`
+
+const SelectBoxForm = styled.select`
+    width: 100%;
+    height: 48px;
+    padding: 16px;
+    box-sizing: border-box;
+    border: 1px solid ${palette.primaryGradient.toString()};
+    border-radius: 4px;
+    color: ${palette.greyText.toString()};
+    font-size: 14px;
+
+    -webkit-appearance: none;
+    appearance:none;
+    background-image: url(${expandArrowSvg});
+    background-repeat: no-repeat;
+    background-position: top 50% right 2%; 
+`
+
+const CalendarForm = styled.input`
+    width: 100%;
+    height: 48px;
+    padding: 16px;
+    box-sizing: border-box;
+    border: 1px solid ${palette.primaryGradient.toString()};
+    border-radius: 4px;
+    color: ${palette.greyText.toString()};
+    font-size: 16px;
+`
+
+const GuideText = styled.div`
+    margin: 8px 0;
+    color: ${palette.greyText.toString()};
+    white-space: pre;
+    line-height: 24px;
+
+`
+
+interface FormFactoryProps {
     type: T.RegisterFormType;  
+    description: string;
     height: string; 
+    options?: string[]; // type should be changed
 }
 
-const RegisterForm: FC<Props> = ({ title, description, type, height }) => {
+// 여기 말고 아래에 main component 있음 (RegisterForm)
+const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options }) => {
     const [value, setValue] = useState<string>(description);
 
     const startTyping: (e: React.FocusEvent<HTMLTextAreaElement>) => void = (e) => {
@@ -65,19 +122,62 @@ const RegisterForm: FC<Props> = ({ title, description, type, height }) => {
         if (e.target.value === "") e.target.value = description;
     }
 
+    switch (type) {
+        case T.RegisterFormType.INPUT:
+            return (
+                <InputForm />
+            );
+        case T.RegisterFormType.TEXT_AREA:
+            return (
+                <TextAreaForm
+                    height={height}
+                    value={value}
+                    onFocus={(e) => startTyping(e)}
+                    onBlur={(e) => leaveInput(e)}
+                    onChange={(e) => setValue(e.target.value)}
+                />  
+            );
+        case T.RegisterFormType.FILE:
+            return (
+                <FileForm />
+            );
+        case T.RegisterFormType.SELECT_BOX:
+            // if (!options) return null; 
+            return (
+                <SelectBoxForm>
+                    <option>첫 번째 항목</option>
+                    <option>두 번째 항목</option>
+                    <option>세 번째 항목</option>
+                </SelectBoxForm>
+            )
+        case T.RegisterFormType.CALENDAR:
+            return (
+                <CalendarForm />
+            );        
+        default:
+            return null;
+    }
+};
+
+interface Props {
+    title: string;
+    guide?: string;
+    description: string;
+    type: T.RegisterFormType;  
+    height: string; 
+}
+
+const RegisterForm: FC<Props> = ({ title, guide, description, type, height }) => {
+    const registerForm: ReactNode = <FormFactory type={type} description={description} height={height} />
+
     return (
         <Root>
             <TextWrapper>
                 <FormTitle>{title}</FormTitle>
                 <OptionText>필수 항목</OptionText>
             </TextWrapper>
-            <InputForm
-                height={height}
-                value={value}
-                onFocus={(e) => startTyping(e)}
-                onBlur={(e) => leaveInput(e)}
-                onChange={(e) => setValue(e.target.value)}
-            />
+            <GuideText>{guide}</GuideText>
+            {registerForm}
         </Root>
     );
 }
