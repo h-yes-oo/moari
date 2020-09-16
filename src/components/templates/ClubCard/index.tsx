@@ -29,6 +29,7 @@ interface Props {
     id: number;
     name?: string;
     description?: string;
+    school?: string; // types에 tag 정의
     image?: string; // need change
     status?: T.ClubStatus
     tags?: Array<string>; // types에 tag 정의
