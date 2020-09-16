@@ -1,10 +1,13 @@
-import React, { FC, ReactNode } from 'react';
+import React, { FC, ReactNode, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
-import ClubCard from 'components/templates/ClubCard';
 import * as T from 'types';
+import ClubCard from 'components/templates/ClubCard';
 import leftArrowSvg from 'assets/icons/left-arrow.svg';
 import rightArrowSvg from 'assets/icons/right-arrow.svg';
+import { RootState } from 'reducers';
+import { getClubList } from 'actions/club';
 
 const Root = styled.div`
     display: flex;
@@ -53,6 +56,17 @@ export const mockClubData: ClubData = {
 }
 
 const ClubList: FC<Props> = () => {    
+    const clubs = useSelector((state: RootState) => state.club);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getClubList()); 
+    }, []);
+
+    useEffect(() => {
+        console.log(clubs);
+    }, [clubs]);
+    
     const mockClubList: ReactNode = Object.entries(mockClubData).map(([id, club]) => (
         <ClubCard
             id={club.id}
