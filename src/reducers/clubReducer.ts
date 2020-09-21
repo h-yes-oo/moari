@@ -1,18 +1,23 @@
-import { ClubActionTypes, GET_CLUBLIST, POST_CLUB } from "actions/club"
+import { act } from "@testing-library/react"
+import { ClubActionTypes, FETCH_CLUBLIST_SUCCESS, POST_CLUB } from "actions/club"
 import { ClubList } from "store/club/types"
 
 const initialState: ClubList = {
-  clubs: []
+  clubs: [
+    // {
+    //   name: '',
+    //   school: '', 
+    //   description: '',
+    // }
+  ]
 }
 
-export function clubReducer(
-  state = initialState,
-  action: ClubActionTypes
-): ClubList {
+export const clubReducer = (state = initialState, action: ClubActionTypes): ClubList => {
   switch (action.type) {
-    case GET_CLUBLIST:
+    case FETCH_CLUBLIST_SUCCESS:
+      console.log('fetch success');
       return {
-        clubs: []
+        ...action.payload
       }
     case POST_CLUB:
       return {
