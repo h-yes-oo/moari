@@ -1,29 +1,30 @@
-import { act } from "@testing-library/react"
-import { ClubActionTypes, FETCH_CLUBLIST_SUCCESS, POST_CLUB } from "actions/club"
-import { ClubList } from "store/club/types"
+import { ActionType, createReducer, createAsyncAction, action } from 'typesafe-actions'
 
-const initialState: ClubList = {
-  clubs: [
-    // {
-    //   name: '',
-    //   school: '', 
-    //   description: '',
-    // }
-  ]
+import { Club, ClubList } from "store/club/types"
+import { fetchClubList } from "actions/club"
+
+const actions = {
+  fetchClubList,
+  // postClub
 }
 
-export const clubReducer = (state = initialState, action: ClubActionTypes): ClubList => {
-  switch (action.type) {
-    case FETCH_CLUBLIST_SUCCESS:
-      console.log('fetch success');
-      return {
-        ...action.payload
-      }
-    case POST_CLUB:
-      return {
-        clubs: [...state.clubs, action.payload]
-      }
-    default:
-      return state
-  }
+type Actions = ActionType<typeof actions>
+type State = { clubs: Club[], message: string }
+
+const initialState: State = {
+  clubs: [],
+  message: '',
 }
+
+export const clubReducer = createReducer<State, Actions>(initialState)
+  .handleAction(fetchClubList.success, (state, action) => ({
+    ...state,
+    ...action.payload
+  }))
+  .handleAction(fetchClubList.failure, (state, action) => ({
+    ...state,
+    message: action.payload.message
+  }))
+  // .handleAction(fetchClubList.request, (state) => ({
+  //   ...state,
+  // }))

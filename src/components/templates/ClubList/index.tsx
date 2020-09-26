@@ -7,7 +7,7 @@ import ClubCard from 'components/templates/ClubCard';
 import leftArrowSvg from 'assets/icons/left-arrow.svg';
 import rightArrowSvg from 'assets/icons/right-arrow.svg';
 import { RootState } from 'reducers';
-import { getClubList } from 'actions/club';
+import { fetchClubList } from 'actions/club';
 
 const Root = styled.div`
     display: flex;
@@ -60,7 +60,7 @@ const ClubList: FC<Props> = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getClubList()); 
+        dispatch(fetchClubList.request()); 
     }, []);
 
     useEffect(() => {

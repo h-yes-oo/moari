@@ -1,11 +1,15 @@
 const mongoose = require('mongoose');
 
 const userSchema = mongoose.Schema({
-    name:{
+    id: {
         type: String,
         maxlength: 50
     },
-    email: {
+    nickname: {
+        type: String,
+        maxlength: 50
+    },
+    email: { // 학교 이메일 
         type: String,
         trim: true, // space를 없애주는 역할
         unique: 1
@@ -14,15 +18,10 @@ const userSchema = mongoose.Schema({
         type: String,
         minlength: 5
     },
-    lastname: {
-        type: String,
-        maxlength: 50
-    },
     role: {
         type: Number,
         default: 0
     },
-    image: String,
     token: {
         type: String
     },

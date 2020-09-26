@@ -1,48 +1,26 @@
 import { Club, ClubList } from "store/club/types";
-import axios from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
+import { createAsyncAction } from "typesafe-actions";
 
-export const FETCH_CLUBLIST_REQUEST = 'FETCH_CLUBLIST_REQUEST';
-export const FETCH_CLUBLIST_SUCCESS = 'FETCH_CLUBLIST_SUCCESS';
-export const FETCH_CLUBLIST_FAIL = 'FETCH_CLUBLIST_FAIL';
-
-export const POST_CLUB = 'POST_LIST';
-
-interface GetClubListAction {
-  type: typeof FETCH_CLUBLIST_REQUEST | typeof FETCH_CLUBLIST_FAIL
-  // payload: ClubList
+export const FETCH_CLUB = {
+  REQUEST: 'CLUB_FETCH_REQUEST',
+  SUCCESS: 'CLUB_FETCH_SUCCESS',
+  FAILURE: 'CLUB_FETCH_FAILURE'
 }
 
-interface GetClubListActionSuccess {
-  type: typeof FETCH_CLUBLIST_SUCCESS
-  payload: ClubList
-}
+// const POST_CLUB = {
+//   REQUEST: 'CLUB_POST_REQUEST',
+//   SUCCESS: 'CLUB_POST_SUCCESS',
+//   FAILURE: 'CLUB_POST_FAILURE'
+// }
 
-interface PostClubAction {
-  type: typeof POST_CLUB
-  payload: Club // need change
-}
+export const fetchClubList =
+  createAsyncAction(
+    FETCH_CLUB.REQUEST, FETCH_CLUB.SUCCESS, FETCH_CLUB.FAILURE
+  )<void, AxiosResponse<ClubList>, AxiosError>()
 
-export const getClubList = (): ClubActionTypes => {  
-  console.log('get club action');
-  return {
-    type: FETCH_CLUBLIST_REQUEST,
-  }
+export const fetchClubListRequest = (): Promise<ClubList> => {
+  console.log("fetch action working");
+  return axios.get('http://localhost:5000/clubs')
+  .then(res => res.data);
 }
-
-export const getClubListSuccess = (clubs: ClubList): ClubActionTypes => {
-  console.log(clubs);
-  return {
-    type: FETCH_CLUBLIST_SUCCESS,
-    payload: clubs
-  }
-}
-
-export const postClub = (club: Club): ClubActionTypes => {
-  console.log('post club action');
-  return {
-    type: POST_CLUB,
-    payload: club
-  }
-}
-
-export type ClubActionTypes = GetClubListAction | GetClubListActionSuccess | PostClubAction

@@ -1,16 +1,18 @@
-import { all, takeLatest } from "redux-saga/effects";
-import { postsSaga } from "./clubs";
+import { takeEvery, call, put } from 'redux-saga/effects'
 
-export default function* rootSaga() {
-  yield all([
-    postsSaga(),
-  ])
-  // code after all-effect
+import { fetchClubListRequest } from 'actions/club'
+
+function* fetchClubSaga(): Generator {
+  console.log('saga working');
+  try {
+    const clubs = yield call(fetchClubListRequest)
+    yield put({ type: 'CLUB_FETCH_SUCCESS', payload: { clubs: clubs } })
+  } catch (e) {
+    yield put({ type: 'CLUB_FETCH_FAILURE', payload: { message: e.message } })
+  }
 }
 
-// export default function* rootSaga() {
-//   yield fork(saga1)
-//   yield fork(saga2)
-//   yield fork(saga3)
-//   // code after fork-effect
-// }
+export default function* sagas() {
+  // takeEvery로 CLUB_FETCH_REQUEST를 지속적으로 감시
+  yield takeEvery("CLUB_FETCH_REQUEST", fetchClubSaga)
+}

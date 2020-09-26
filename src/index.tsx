@@ -7,14 +7,14 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import rootReducer from 'reducers';
-import rootSaga from 'sagas';
+import sagas from 'sagas';
 
 const sagaMiddleware = createSagaMiddleware()
 
 const configureStore = () => {
   const store = createStore(rootReducer, applyMiddleware(sagaMiddleware))
 
-  sagaMiddleware.run(rootSaga)
+  sagaMiddleware.run(sagas)
   return store
 }
 
@@ -29,3 +29,4 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
+
