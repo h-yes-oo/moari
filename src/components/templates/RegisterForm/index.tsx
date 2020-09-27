@@ -1,5 +1,5 @@
-import React, { FC, ReactNode, useState } from 'react';
-import styled, { StyledFunction }from 'styled-components';
+import React, { Dispatch, FC, ReactNode, SetStateAction, useState, useMemo } from 'react';
+import styled from 'styled-components';
 
 import * as T from 'types';
 import palette from 'constants/palette';
@@ -107,15 +107,20 @@ interface FormFactoryProps {
     description: string;
     height: string; 
     options?: string[]; // type should be changed
+    onChange?: Dispatch<SetStateAction<string>>;
 }
 
 // 여기 말고 아래에 main component 있음 (RegisterForm)
-const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options }) => {
+const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options, onChange }) => {
     const [value, setValue] = useState<string>(description);
+
+    const handleTextArea: (value: string, onChange: Dispatch<SetStateAction<string>>) => void = (value, onChange) => {
+        setValue(value);
+        onChange(value);
+    }
 
     const startTyping: (e: React.FocusEvent<HTMLTextAreaElement>) => void = (e) => {
         if (e.target.value === description) e.target.value = "";
-        
     }
 
     const leaveInput: (e: React.FocusEvent<HTMLTextAreaElement>) => void = (e) => {
@@ -124,17 +129,20 @@ const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options 
 
     switch (type) {
         case T.RegisterFormType.INPUT:
+            if (onChange === undefined) return null;
             return (
-                <InputForm />
+                <InputForm onChange={(e) => onChange(e.target.value)} />
             );
         case T.RegisterFormType.TEXT_AREA:
+            if (onChange === undefined) return null;
             return (
+                // TODO: useMemo로 최적화할 수 있는 방법
                 <TextAreaForm
                     height={height}
                     value={value}
                     onFocus={(e) => startTyping(e)}
                     onBlur={(e) => leaveInput(e)}
-                    onChange={(e) => setValue(e.target.value)}
+                    onChange={(e) => handleTextArea(e.target.value, onChange)}
                 />  
             );
         case T.RegisterFormType.FILE:
@@ -165,10 +173,11 @@ interface Props {
     description: string;
     type: T.RegisterFormType;  
     height: string; 
+    onChange?: Dispatch<SetStateAction<string>>;
 }
 
-const RegisterForm: FC<Props> = ({ title, guide, description, type, height }) => {
-    const registerForm: ReactNode = <FormFactory type={type} description={description} height={height} />
+const RegisterForm: FC<Props> = ({ title, guide, description, type, height, onChange }) => {
+    const registerForm: ReactNode = <FormFactory type={type} description={description} height={height} onChange={onChange} />
 
     return (
         <Root>

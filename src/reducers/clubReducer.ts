@@ -1,11 +1,12 @@
 import { ActionType, createReducer, createAsyncAction, action } from 'typesafe-actions'
 
 import { Club, ClubList } from "store/club/types"
-import { fetchClubList } from "actions/club"
+import { fetchClubList, postClub } from "actions/club"
+import { ClubStatus } from 'types'
 
 const actions = {
   fetchClubList,
-  // postClub
+  postClub
 }
 
 type Actions = ActionType<typeof actions>
@@ -17,6 +18,9 @@ const initialState: State = {
 }
 
 export const clubReducer = createReducer<State, Actions>(initialState)
+  // .handleAction(fetchClubList.request, (state) => ({
+  //   ...state,
+  // }))
   .handleAction(fetchClubList.success, (state, action) => ({
     ...state,
     ...action.payload
@@ -25,6 +29,16 @@ export const clubReducer = createReducer<State, Actions>(initialState)
     ...state,
     message: action.payload.message
   }))
-  // .handleAction(fetchClubList.request, (state) => ({
+  // .handleAction(postClub.request, (state) => ({
   //   ...state,
   // }))
+  .handleAction(postClub.success, (state, action) => ({
+    ...state,
+    clubs: [...state.clubs, action.payload],
+  }))
+  // .handleAction(postClub.failure, (state, action) => ({
+  //   ...state,
+  //   message: action.payload.message
+  // }))
+
+

@@ -15,6 +15,8 @@ const Root = styled.div`
     background-color: #EEEEEE;
     position: relative;
     cursor: pointer;
+    margin: 0 72px;
+    flex-shrink: 0;
 ` 
 
 const StatusLabel = styled.img`
@@ -26,24 +28,24 @@ const StatusLabel = styled.img`
 `
 
 interface Props {
-    id: number;
-    name?: string;
-    description?: string;
+    key: string;
+    name: string;
+    description: string;
     school?: string; // types에 tag 정의
     image?: string; // need change
     status?: T.ClubStatus
     tags?: Array<string>; // types에 tag 정의
 }
 
-const ClubCard: FC<Props & RouteComponentProps> = ({ id, status, history }) => {
+const ClubCard: FC<Props & RouteComponentProps> = ({ key, status, history }) => {
     // const goClubDetail: (e: React.MouseEvent<HTMLDivElement>) => void = (e) => {
-    const goClubDetail: (id: number) => void = (id) => {
+    const goClubDetail: (id: string) => void = (id) => {
         history.push(`/club/${id}`);
     }
     
     // need refactoring: switch-case
     return (
-        <Root onClick={() => goClubDetail(id)}>
+        <Root onClick={() => goClubDetail(key)}>
             {(() => {
                 switch (status) {
                     case T.ClubStatus.PREPARE:

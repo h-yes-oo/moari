@@ -4,7 +4,7 @@ export default {
         description: '동아리 이름을 입력해주세요',
     },
     clubInfo: {
-        title: '동아리 소개',
+        title: '동아리 소개(학교 이름)',
         description: `메인페이지에 등록될 동아리 소개글입니다.\n100자 이내로 짧고 굵게 소개해주세요`
     },        
     clubDetail: {
