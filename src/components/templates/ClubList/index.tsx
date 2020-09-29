@@ -19,11 +19,15 @@ const ArrowButton = styled.img`
     cursor: pointer;
 `
 
-const ClubListWrapper = styled.div`
-    display: flex;
-    // justify-content: space-around;
+const ClubListContainer = styled.div`
     overflow-x: hidden;
     margin: 0 36px;
+`
+
+const SliderContainer = styled.div<{ currentSlide: number }>`
+    margin-left: calc(42px * ${(props) => props.currentSlide + 1 });
+    display: flex;
+    // justify-content: space-between;
 `
 
 interface Props {
@@ -34,23 +38,25 @@ interface ClubData {
     [key: number]: T.ClubInfo; // key refers to id
 }
 
-
 const ClubList: FC<Props> = () => {    
     const clubs = useSelector((state: RootState) => state.club);
     const dispatch = useDispatch();
     
-    const TOTAL_SLIDES: number = (clubs.clubs.length - 1) / 3 + 1;
+    const TOTAL_SLIDES: number = Math.floor((clubs.clubs.length - 1) / 3);
+    // const TOTAL_SLIDES: number = 5;
 
     const [currentSlide, setCurrentSlide] = useState<number>(0);
-    const slideRef = useRef(null);
+    const slideRef = useRef(document.createElement("div"))
 
     const nextSlide = () => {
+        console.log("next slide");
         if (currentSlide >= TOTAL_SLIDES) setCurrentSlide(0);
         else setCurrentSlide(currentSlide + 1);
     };
 
     const prevSlide = () => {
-        if (currentSlide === 0)  setCurrentSlide(TOTAL_SLIDES);
+        console.log("prev slide");
+        if (currentSlide === 0) setCurrentSlide(TOTAL_SLIDES);
         else setCurrentSlide(currentSlide - 1);
     };
 
@@ -59,15 +65,14 @@ const ClubList: FC<Props> = () => {
     }, []);
 
     useEffect(() => {
-        // if (slideRef === null) return;
-        console.log(slideRef.current);
-        // slideRef.current.style.transition = "all 0.5s ease-in-out";
-        // slideRef.current.style.transform = `translateX(-${currentSlide}00%)`;
+        slideRef.current.style.transition = "all 0.5s ease-in-out";
+        slideRef.current.style.transform = `translateX(-${currentSlide}00%)`;
       }, [currentSlide]);
 
     const topClubList: ReactNode = clubs.clubs.map((club) => (
         <ClubCard
             key={club._id}
+            id={club._id}
             name={club.name}
             description={club.description}
         />
@@ -76,9 +81,12 @@ const ClubList: FC<Props> = () => {
     return (
         <Root>
             <ArrowButton src={leftArrowSvg} onClick={prevSlide} />
-                <ClubListWrapper ref={slideRef}>
-                    {topClubList}
-                </ClubListWrapper>
+                <ClubListContainer>
+                    {/* <span style={{ display: "none" }}>{currentSlide}</span> */}
+                    <SliderContainer ref={slideRef} currentSlide={currentSlide}>
+                        {topClubList}
+                    </SliderContainer>
+                </ClubListContainer>
             <ArrowButton src={rightArrowSvg} onClick={nextSlide} />
         </Root>
     );

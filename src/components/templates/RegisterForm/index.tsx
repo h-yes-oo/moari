@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import * as T from 'types';
 import palette from 'constants/palette';
 import expandArrowSvg from 'assets/icons/expand_more.svg';
+import FileUploadSvg from 'assets/icons/upload-photo.svg';
 
 const Root = styled.div`
     width: 32vw;
@@ -56,15 +57,20 @@ const InputForm = styled.input`
 `
 
 const FileForm = styled.input`
-    width: 100%;
-    height: 48px;
-    padding: 16px;
-    box-sizing: border-box;
-    border: 1px solid ${palette.primaryGradient.toString()};
-    border-radius: 4px;
-    color: ${palette.greyText.toString()};
-    font-size: 16px;
+    // display: none;
+    // width: 100%;
+    // height: 48px;
+    // padding: 16px;
+    // box-sizing: border-box;
+    // border: 1px solid ${palette.primaryGradient.toString()};
+    // border-radius: 4px;
+    // color: ${palette.greyText.toString()};
+    // font-size: 16px;
 `
+
+const FileButton = styled.img`
+    // width: 100%;
+`   
 
 const SelectBoxForm = styled.select`
     width: 100%;
@@ -131,7 +137,7 @@ const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options,
         case T.RegisterFormType.INPUT:
             if (onChange === undefined) return null;
             return (
-                <InputForm onChange={(e) => onChange(e.target.value)} />
+                <InputForm placeholder={description} onChange={(e) => onChange(e.target.value)} />
             );
         case T.RegisterFormType.TEXT_AREA:
             if (onChange === undefined) return null;
@@ -147,7 +153,12 @@ const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options,
             );
         case T.RegisterFormType.FILE:
             return (
-                <FileForm />
+                <>
+                    <label htmlFor="upload-photo">
+                        <FileForm type="file" id="upload-photo" />
+                        <FileButton src={FileUploadSvg} />
+                    </label>
+                </>
             );
         case T.RegisterFormType.SELECT_BOX:
             // if (!options) return null; 

@@ -13,7 +13,6 @@ const Root = styled.div`
     flex-direction: column;
 `
 
-
 const FormWrapper = styled.div`
     display: flex;
     justify-content: space-between;

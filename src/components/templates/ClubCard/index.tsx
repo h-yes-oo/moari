@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
@@ -29,6 +29,7 @@ const StatusLabel = styled.img`
 
 interface Props {
     key: string;
+    id: string;
     name: string;
     description: string;
     school?: string; // types에 tag 정의
@@ -37,15 +38,16 @@ interface Props {
     tags?: Array<string>; // types에 tag 정의
 }
 
-const ClubCard: FC<Props & RouteComponentProps> = ({ key, status, history }) => {
+const ClubCard: FC<Props & RouteComponentProps> = ({ key, id, status, history }) => {
     // const goClubDetail: (e: React.MouseEvent<HTMLDivElement>) => void = (e) => {
+
     const goClubDetail: (id: string) => void = (id) => {
         history.push(`/club/${id}`);
     }
     
     // need refactoring: switch-case
     return (
-        <Root onClick={() => goClubDetail(key)}>
+        <Root onClick={() => goClubDetail(id)}>
             {(() => {
                 switch (status) {
                     case T.ClubStatus.PREPARE:
