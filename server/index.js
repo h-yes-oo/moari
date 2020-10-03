@@ -6,7 +6,11 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
+
 const config = require('./config/key');
+const { User } = require("./models/User");
+const { Club } = require("./models/Club");
+const { auth } = require("./middleware/auth");
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -18,10 +22,6 @@ const clubsRoute = require('./routes/clubs');
 
 app.use('/accounts', accountsRoute);
 app.use('/clubs', clubsRoute);
-
-const { User } = require("./models/User");
-const { Club } = require("./models/Club");
-const { auth } = require("./middleware/auth");
 
 mongoose.connect(config.mongoURI, {
     useNewUrlParser: true, useUnifiedTopology:true, useCreateIndex:true, useFindAndModify:false
@@ -75,6 +75,19 @@ app.get('/auth', auth, (req,res) => {
         email: req.user.email,
         name: req.user.name
     })
+})
+
+app.get('/logout', auth, (req,res)=>{
+    //미들웨어를 통과하여 이 콜백함수에 왔다는 것은 Authentication이 True라는 의미
+    //req에 담긴 user와 _id가 같은 user를 찾아서 token을 지워준다.
+    User.findOneAndUpdate({_id: req.user._id},
+        { token: ""},
+        (err, user) =>{
+            if(err) return res.json({success:false, err})
+            return res.status(200).send({
+                success:true
+            })
+        })
 })
 
 // app.post('/register/club', (req, res)=>{
