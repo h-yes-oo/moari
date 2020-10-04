@@ -1,3 +1,3 @@
 module.exports = {
-    mongoURI: "mongodb+srv://hyesoo:1003@boilerplate.a5yew.mongodb.net/boilerplate?retryWrites=true&w=majority"
+    mongoURI: "mongodb+srv://hyesoo:1003@cluster0.i9uzs.mongodb.net/moaridb?retryWrites=true&w=majority"
 }

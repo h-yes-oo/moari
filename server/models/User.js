@@ -6,11 +6,15 @@ const saltRounds = 10;
 const jwt = require('jsonwebtoken');
 
 const userSchema = mongoose.Schema({
-    name:{
+    id: {
         type: String,
         maxlength: 50
     },
-    email: {
+    nickname: {
+        type: String,
+        maxlength: 50
+    },
+    email: { // 학교 이메일 
         type: String,
         trim: true, // space를 없애주는 역할
         unique: 1
