@@ -32,12 +32,14 @@ const ClubRegisterContents: FC<Props> = () => {
     const [name, setName] = useState<string>('');
     const [school, setSchool] = useState<string>('');
     const [description, setDescription] = useState<string>('');
+    const [photo, setPhoto] = useState<File>();
 
     const clubs = useSelector((state: RootState) => state.club);
     const dispatch = useDispatch();
 
     const handlePostClub: () => void = () => {
-        dispatch(postClub.request({ name, school, description })); 
+        if (photo === undefined) return;
+        dispatch(postClub.request({ name, school, description, photo })); 
     }
 
     return (
@@ -50,21 +52,21 @@ const ClubRegisterContents: FC<Props> = () => {
                         description={text.clubName.description}
                         type={T.RegisterFormType.INPUT}
                         height={'48px'}
-                        onChange={setName}
+                        setValue={setName}
                     />
                     <RegisterForm
                         title={text.clubInfo.title}
                         description={text.clubInfo.description}
                         type={T.RegisterFormType.INPUT}
                         height={'100px'}
-                        onChange={setSchool}
+                        setValue={setSchool}
                     />
                     <RegisterForm 
                         title={text.clubDetail.title}
                         description={text.clubDetail.description}
                         type={T.RegisterFormType.TEXT_AREA}
                         height={'600px'}
-                        onChange={setDescription}
+                        setValue={setDescription}
                     />
                 </Section>
                 <Section>
@@ -73,6 +75,7 @@ const ClubRegisterContents: FC<Props> = () => {
                         description={text.photo.description}
                         type={T.RegisterFormType.FILE}
                         height={'48px'}
+                        setValue={setPhoto}
                     />
                     <RegisterForm 
                         title={text.recruit.title}

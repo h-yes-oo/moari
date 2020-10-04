@@ -113,16 +113,16 @@ interface FormFactoryProps {
     description: string;
     height: string; 
     options?: string[]; // type should be changed
-    onChange?: Dispatch<SetStateAction<string>>;
+    setValue?: Dispatch<SetStateAction<any>>;
 }
 
 // 여기 말고 아래에 main component 있음 (RegisterForm)
-const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options, onChange }) => {
-    const [value, setValue] = useState<string>(description);
+const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options, setValue }) => {
+    const [text, setText] = useState<string>(description);
 
-    const handleTextArea: (value: string, onChange: Dispatch<SetStateAction<string>>) => void = (value, onChange) => {
+    const handleTextArea: (value: string, onChange: Dispatch<SetStateAction<string>>) => void = (value, setValue) => {
+        setText(value);
         setValue(value);
-        onChange(value);
     }
 
     const startTyping: (e: React.FocusEvent<HTMLTextAreaElement>) => void = (e) => {
@@ -135,27 +135,28 @@ const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options,
 
     switch (type) {
         case T.RegisterFormType.INPUT:
-            if (onChange === undefined) return null;
+            if (setValue === undefined) return null;
             return (
-                <InputForm placeholder={description} onChange={(e) => onChange(e.target.value)} />
+                <InputForm placeholder={description} onChange={(e) => setValue(e.target.value)} />
             );
         case T.RegisterFormType.TEXT_AREA:
-            if (onChange === undefined) return null;
+            if (setValue === undefined) return null;
             return (
                 // TODO: useMemo로 최적화할 수 있는 방법
                 <TextAreaForm
                     height={height}
-                    value={value}
+                    value={text}
                     onFocus={(e) => startTyping(e)}
                     onBlur={(e) => leaveInput(e)}
-                    onChange={(e) => handleTextArea(e.target.value, onChange)}
+                    onChange={(e) => handleTextArea(e.target.value, setValue)}
                 />  
             );
         case T.RegisterFormType.FILE:
+            if (setValue === undefined) return null;
             return (
                 <>
                     <label htmlFor="upload-photo">
-                        <FileForm type="file" id="upload-photo" />
+                        <FileForm type="file" id="upload-photo" onChange={(e) => setValue(e.target.files![0])} />
                         <FileButton src={FileUploadSvg} />
                     </label>
                 </>
@@ -184,11 +185,11 @@ interface Props {
     description: string;
     type: T.RegisterFormType;  
     height: string; 
-    onChange?: Dispatch<SetStateAction<string>>;
+    setValue?: Dispatch<SetStateAction<any>>;
 }
 
-const RegisterForm: FC<Props> = ({ title, guide, description, type, height, onChange }) => {
-    const registerForm: ReactNode = <FormFactory type={type} description={description} height={height} onChange={onChange} />
+const RegisterForm: FC<Props> = ({ title, guide, description, type, height, setValue }) => {
+    // const registerForm: ReactNode = <FormFactory type={type} description={description} height={height} onChange={onChange} />
 
     return (
         <Root>
@@ -197,7 +198,8 @@ const RegisterForm: FC<Props> = ({ title, guide, description, type, height, onCh
                 <OptionText>필수 항목</OptionText>
             </TextWrapper>
             <GuideText>{guide}</GuideText>
-            {registerForm}
+            {/* {registerForm} */}
+            <FormFactory type={type} description={description} height={height} setValue={setValue} />
         </Root>
     );
 }

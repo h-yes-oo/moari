@@ -29,6 +29,7 @@ interface PostClubPayload {
   name: string;
   school: string;
   description: string;
+  photo: File
 }
 
 export const postClub =
@@ -36,12 +37,13 @@ export const postClub =
     POST_CLUB.REQUEST, POST_CLUB.SUCCESS, POST_CLUB.FAILURE
   )<PostClubPayload, Club, AxiosError>()
 
-export const postClubRequest = ({ name, school, description }: PostClubPayload): Promise<Club> => {
+export const postClubRequest = ({ name, school, description, photo }: PostClubPayload): Promise<Club> => {
   console.log("post action working");
   return axios.post('http://localhost:5000/clubs', {
     name: name,
     school: school,
-    description: description
+    description: description,
+    photo: photo
   })
   .then(res => res.data);
 }
