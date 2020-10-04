@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
     res.json({ message: err });
   }
 });
-
+ 
 router.post('/', async (req, res) => {
     console.log(req.body);
     const club = new Club(req.body);
