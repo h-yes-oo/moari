@@ -120,9 +120,14 @@ interface FormFactoryProps {
 const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options, setValue }) => {
     const [text, setText] = useState<string>(description);
 
-    const handleTextArea: (value: string, onChange: Dispatch<SetStateAction<string>>) => void = (value, setValue) => {
+    const handleTextArea: (value: string, setValue: Dispatch<SetStateAction<string>>) => void = (value, setValue) => {
         setText(value);
         setValue(value);
+    }
+
+    const handleSendImage: (files: HTMLInputElement["files"], setValue: Dispatch<SetStateAction<FileList>>) => void = (files, setValue) => {
+        if (!files) return;
+        setValue(files);
     }
 
     const startTyping: (e: React.FocusEvent<HTMLTextAreaElement>) => void = (e) => {
@@ -156,7 +161,7 @@ const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options,
             return (
                 <>
                     <label htmlFor="upload-photo">
-                        <FileForm type="file" id="upload-photo" onChange={(e) => setValue(e.target.files![0])} />
+                        <FileForm type="file" id="upload-photo" multiple onChange={(e) => handleSendImage(e.target.files, setValue)} />
                         <FileButton src={FileUploadSvg} />
                     </label>
                 </>

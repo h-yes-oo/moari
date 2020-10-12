@@ -29,7 +29,7 @@ interface PostClubPayload {
   name: string;
   school: string;
   description: string;
-  photo: File
+  photos?: FileList;
 }
 
 export const postClub =
@@ -37,13 +37,26 @@ export const postClub =
     POST_CLUB.REQUEST, POST_CLUB.SUCCESS, POST_CLUB.FAILURE
   )<PostClubPayload, Club, AxiosError>()
 
-export const postClubRequest = ({ name, school, description, photo }: PostClubPayload): Promise<Club> => {
+export const postClubRequest = ({ name, school, description, photos }: PostClubPayload): Promise<Club> => {
   console.log("post action working");
-  return axios.post('http://localhost:5000/clubs', {
-    name: name,
-    school: school,
-    description: description,
-    photo: photo
-  })
+
+  const formData = new FormData();
+  if (photos) {
+    for (let i=0; i<photos.length; i++) {
+      console.log(photos);
+      formData.append("photos", photos[i]);
+    }
+  }
+
+  for (var key of formData.entries()) {
+    console.log(key[0]);
+    console.log(key[1]);
+  }
+
+  formData.append("name", name);
+  formData.append("school", school);
+  formData.append("description", description);
+
+  return axios.post('http://localhost:5000/clubs', formData)
   .then(res => res.data);
 }

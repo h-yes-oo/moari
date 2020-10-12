@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import RegisterForm from '../RegisterForm';
 import * as T from 'types';
@@ -7,6 +7,7 @@ import registerButtonSvg from 'assets/icons/register-button.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'reducers';
 import { postClub } from 'actions/club';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 const Root = styled.div`
     display: flex;
@@ -22,24 +23,33 @@ const Section = styled.div``
 
 const RegisterButton = styled.img`
     transform: translateY(100%);
+    &:hover {
+        cursor: pointer;
+    }
 `
 
 interface Props {
 
 }
 
-const ClubRegisterContents: FC<Props> = () => {
+const ClubRegisterContents: FC<Props & RouteComponentProps> = ({ history }) => {
     const [name, setName] = useState<string>('');
     const [school, setSchool] = useState<string>('');
     const [description, setDescription] = useState<string>('');
-    const [photo, setPhoto] = useState<File>();
+    const [photos, setPhotos] = useState<FileList>();
+
+    useEffect(() => {
+        console.log(photos);
+    }, [photos])
 
     const clubs = useSelector((state: RootState) => state.club);
     const dispatch = useDispatch();
 
     const handlePostClub: () => void = () => {
-        if (photo === undefined) return;
-        dispatch(postClub.request({ name, school, description, photo })); 
+        // 실패 alert 필요
+        dispatch(postClub.request({ name, school, description, photos })); 
+        alert('동아리 등록 성공! 😆');
+        // history.push('/');
     }
 
     return (
@@ -75,7 +85,7 @@ const ClubRegisterContents: FC<Props> = () => {
                         description={text.photo.description}
                         type={T.RegisterFormType.FILE}
                         height={'48px'}
-                        setValue={setPhoto}
+                        setValue={setPhotos}
                     />
                     <RegisterForm 
                         title={text.recruit.title}
@@ -109,4 +119,4 @@ const ClubRegisterContents: FC<Props> = () => {
     );
 }
 
-export default ClubRegisterContents;
+export default withRouter(ClubRegisterContents);

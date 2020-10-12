@@ -1,12 +1,6 @@
 const mongoose = require('mongoose');
 
 const imageSchema = mongoose.Schema({ 
-    // name: String, 
-    // desc: String, 
-    // img: { 
-    //     data: Buffer, 
-    //     contentType: String 
-    // } 
     img: {
         data: Buffer,
         contentType: String
@@ -30,8 +24,12 @@ const clubSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    photos: [imageSchema],
-    // photos : [{ type: mongoose.Schema.Types.ObjectId, ref: 'Image' }]
+    photos : [{
+        // type: mongoose.Schema.Types.ObjectId,
+        type: imageSchema,
+        ref: "Image"
+    }]
+    // photos: [imageSchema]
 
     // field: {
     //     type: String[],
