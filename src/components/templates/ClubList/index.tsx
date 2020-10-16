@@ -64,19 +64,27 @@ const ClubList: FC<Props> = () => {
         dispatch(fetchClubList.request()); 
     }, []);
 
+    // useEffect(() => {
+    //     console.log(clubs);
+    // }, [clubs]);
+
     useEffect(() => {
         slideRef.current.style.transition = "all 0.5s ease-in-out";
         slideRef.current.style.transform = `translateX(-${currentSlide}00%)`;
       }, [currentSlide]);
 
-    const topClubList: ReactNode = clubs.clubs.map((club) => (
-        <ClubCard
-            key={club._id}
-            id={club._id}
-            name={club.name}
-            description={club.description}
-        />
-    ));
+    const topClubList: ReactNode = clubs.clubs.map((club) => {
+        // console.log(club.photos);
+        return (
+            <ClubCard
+                key={club._id}
+                id={club._id}
+                name={club.name}
+                description={club.description}
+                image={club.photos[0]}
+            />
+        )
+    });
 
     return (
         <Root>

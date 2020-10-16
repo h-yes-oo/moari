@@ -4,6 +4,7 @@ const app = express();
 const port = 5000;
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const path = require('path'); 
 const cors = require('cors');
 const mongoose = require('mongoose');
 
@@ -19,6 +20,7 @@ app.use(cookieParser());
 
 const accountsRoute = require('./routes/accounts');
 const clubsRoute = require('./routes/clubs');
+// const clubsImageRoute = require('./routes/uploads/clubs');
 
 app.use('/accounts', accountsRoute);
 app.use('/clubs', clubsRoute);

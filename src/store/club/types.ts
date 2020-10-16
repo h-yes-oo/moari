@@ -3,6 +3,7 @@ export interface Club {
   name: string
   school: string
   description: string
+  photos: string[]
 }
 
 export interface ClubList {

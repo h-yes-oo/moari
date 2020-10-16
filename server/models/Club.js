@@ -1,5 +1,16 @@
 const mongoose = require('mongoose');
 
+const imageSchema = mongoose.Schema({ 
+    img: {
+        data: Buffer,
+        contentType: String
+    },
+    club: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Club",
+    }
+}); 
+
 const clubSchema = mongoose.Schema({
     name: {
         type: String,
@@ -13,9 +24,13 @@ const clubSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    // photo: {
-    //     type: String, 
-    // },
+    photos : [{
+        // type: mongoose.Schema.Types.ObjectId,
+        type: imageSchema,
+        ref: "Image"
+    }]
+    // photos: [imageSchema]
+
     // field: {
     //     type: String[],
     // },
@@ -40,5 +55,10 @@ const clubSchema = mongoose.Schema({
 
 // add gender ratio?
 
+const Image = mongoose.model('Image', imageSchema); 
 const Club = mongoose.model('Club', clubSchema)
-module.exports = Club;
+module.exports = {
+    Club, 
+    Image
+};
+
