@@ -1,4 +1,4 @@
-import { Club, ClubList } from "store/club/types";
+import { Club, ClubList } from "store/types";
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { createAsyncAction } from "typesafe-actions";
 
@@ -43,7 +43,6 @@ export const postClubRequest = ({ name, school, description, photos }: PostClubP
   const formData = new FormData();
   if (photos) {
     for (let i=0; i<photos.length; i++) {
-      console.log(photos);
       formData.append("photos", photos[i]);
     }
   }

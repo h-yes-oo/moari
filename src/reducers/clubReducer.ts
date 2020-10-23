@@ -1,6 +1,6 @@
 import { ActionType, createReducer, createAsyncAction, action } from 'typesafe-actions'
 
-import { Club, ClubList } from "store/club/types"
+import { Club, ClubList } from "store/types"
 import { fetchClubList, postClub } from "actions/club"
 import { ClubStatus } from 'types'
 

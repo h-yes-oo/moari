@@ -37,10 +37,18 @@ const ClubRegisterContents: FC<Props & RouteComponentProps> = ({ history }) => {
     const [school, setSchool] = useState<string>('');
     const [description, setDescription] = useState<string>('');
     const [photos, setPhotos] = useState<FileList>();
+    const [recruit, setRecruit] = useState<string>('');
+    const [category, setCategory] = useState<string>('');
+    const [tags, setTags] = useState<string[]>([]);
+    const [managerIds, setManagerIds] = useState<string[]>([]);
+
+    // useEffect(() => {
+    //     console.log(photos);
+    // }, [photos])
 
     useEffect(() => {
-        console.log(photos);
-    }, [photos])
+        console.log(managerIds);
+    }, [managerIds]);
 
     const clubs = useSelector((state: RootState) => state.club);
     const dispatch = useDispatch();
@@ -53,7 +61,7 @@ const ClubRegisterContents: FC<Props & RouteComponentProps> = ({ history }) => {
     }
 
     return (
-        // 반복되는 부분은 추후 refactoring 예정, 혜수's 과제를 위해 남겨놓음
+        // 반복되는 부분은 추후 refactoring 예정
         <Root>
             <FormWrapper>
                 <Section>
@@ -92,25 +100,29 @@ const ClubRegisterContents: FC<Props & RouteComponentProps> = ({ history }) => {
                         description={text.recruit.description}
                         type={T.RegisterFormType.SELECT_BOX}
                         height={'48px'}
+                        setValue={setRecruit}
                     />
                     <RegisterForm 
                         title={text.category.title}
                         description={text.category.description}
                         type={T.RegisterFormType.SELECT_BOX}
                         height={'48px'}
+                        setValue={setCategory}
                     />
                     <RegisterForm 
                         title={text.tag.title}
                         description={text.tag.description}
                         type={T.RegisterFormType.SELECT_BOX}
                         height={'48px'}
+                        setValue={setTags}
                     />
                     <RegisterForm 
                         title={text.managerId.title}
                         guide={text.managerId.description}
                         description={"jieun hyesoo"}
-                        type={T.RegisterFormType.INPUT}
+                        type={T.RegisterFormType.INPUT_ADDABLE}
                         height={'48px'}
+                        setValue={setManagerIds}
                     />
                 </Section>
             </FormWrapper>

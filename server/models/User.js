@@ -5,7 +5,7 @@ const saltRounds = 10;
 //JSON web token 생성 및 검증을 위한 모듈
 const jwt = require('jsonwebtoken');
 
-const userSchema = mongoose.Schema({
+export const userSchema = mongoose.Schema({
     id: {
         type: String,
         maxlength: 50
@@ -103,4 +103,4 @@ userSchema.statics.findByToken = function(token,cb){
 
 const User = mongoose.model('User', userSchema)
 
-module.exports = {User}
+module.exports = { User }
