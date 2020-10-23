@@ -92,16 +92,6 @@ app.get('/logout', auth, (req,res)=>{
         })
 })
 
-// app.post('/register/club', (req, res)=>{
-//     const club = new Club(req.body);
-//     club.save((err, clubInto) => {
-//         if(err) return res.json({ success: false, err })
-//         return res.status(200).json({
-//             success: true
-//         }) 
-//     })
-// });
-
 app.route('/register/club')
     .get(function(req, res) {
         console.log(req);

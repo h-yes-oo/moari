@@ -17,7 +17,7 @@ export default {
     },
     recruit: {
         title: '모집 방법',
-        description: '상시 모집  / 기수별 모집 중 선택해주세요',
+        description: '상시 모집 / 기수별 모집 중 선택해주세요',
     },
     category: {
         title: '분류',

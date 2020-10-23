@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { userSchema } = require("../models/User");
 
 const imageSchema = mongoose.Schema({ 
     img: {
@@ -28,19 +29,18 @@ const clubSchema = mongoose.Schema({
         // type: mongoose.Schema.Types.ObjectId,
         type: imageSchema,
         ref: "Image"
-    }]
-    // photos: [imageSchema]
-
-    // field: {
-    //     type: String[],
-    // },
-    // tags: {
-    //     type: String[],
-    // },
-    // owner: {
-    //     type: User,
-    //     required: true,
-    // },
+    }],
+    category: {
+        type: [String],
+    },
+    tags: {
+        type: [String],
+    },
+    managers: [{
+        type: userSchema,
+        ref: "User"
+    }],
+    
     // status: {
     //     type: string,
     //     required: true,
