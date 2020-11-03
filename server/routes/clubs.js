@@ -64,8 +64,7 @@ router.post('/', upload_club.array('photos'), async (req, res) => {
         newImage.save();
         club.photos.push(newImage);
     }
-    
-    try {
+        try {
         const newClub = await club.save();
         res.json(newClub);
     } catch(err) {
