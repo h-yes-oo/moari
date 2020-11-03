@@ -1,14 +1,25 @@
-import React, { Dispatch, FC, ReactNode, SetStateAction, useState, useMemo } from 'react';
+import React, { Dispatch, FC, ReactNode, SetStateAction, useState, useMemo, useEffect } from 'react';
 import styled from 'styled-components';
+import Select from 'react-select'
 
 import * as T from 'types';
 import palette from 'constants/palette';
 import expandArrowSvg from 'assets/icons/expand_more.svg';
-import FileUploadSvg from 'assets/icons/upload-photo.svg';
+import fileUploadSvg from 'assets/icons/upload-photo.svg';
+import personIcon from 'assets/icons/person-icon.svg';
+import plusIcon from 'assets/icons/id-add.svg';
+import removeIcon from 'assets/icons/id-remove.svg';
 
 const Root = styled.div`
     width: 32vw;
     margin: 44px 0;
+`
+
+const FlexContainer = styled.div<{ type?: string}>`
+    display: flex;
+    position: relative;
+    align-items: center;
+    margin: ${(props) => props.type === "addableInput" ? '4px 0' : ''};
 `
 
 const TextWrapper = styled.div`
@@ -45,7 +56,35 @@ const TextAreaForm = styled.textarea<{ height: string }>`
     }
 `;
 
-const InputForm = styled.input`
+const InputForm = styled.input<{ addable?: boolean }>`
+    width: 100%;
+    height: 48px;
+    position: relative;
+
+    padding: 16px;
+    padding-left: ${(props) => props.addable ? '56px' : 'none'};
+    box-sizing: border-box;
+    border: 1px solid ${palette.primaryGradient.toString()};
+    border-radius: 4px;
+    color: ${palette.greyText.toString()};
+    font-size: 16px;
+`
+
+const InputIcon = styled.img<{ type: string }>`
+    position: absolute;
+    width: ${(props) => props.type === 'person' ? '20px' : '28px'};
+    height: auto;
+
+    left: ${(props) => props.type === 'person' ? '18px' : 'none'};
+    right: ${(props) => props.type === 'plus' ? '18px' : props.type === 'minus' ? '52px' : 'none'};
+    cursor: ${(props) => props.type === 'person' ? '' : 'pointer'};
+`
+
+const FileForm = styled.input`
+    display: none;   
+`
+
+const FileInput = styled.input`
     width: 100%;
     height: 48px;
     padding: 16px;
@@ -56,23 +95,11 @@ const InputForm = styled.input`
     font-size: 16px;
 `
 
-const FileForm = styled.input`
-    // display: none;
-    // width: 100%;
-    // height: 48px;
-    // padding: 16px;
-    // box-sizing: border-box;
-    // border: 1px solid ${palette.primaryGradient.toString()};
-    // border-radius: 4px;
-    // color: ${palette.greyText.toString()};
-    // font-size: 16px;
-`
-
 const FileButton = styled.img`
-    // width: 100%;
 `   
 
-const SelectBoxForm = styled.select`
+const SelectBoxContainer = styled.select`
+    // display: none;
     width: 100%;
     height: 48px;
     padding: 16px;
@@ -105,7 +132,6 @@ const GuideText = styled.div`
     color: ${palette.greyText.toString()};
     white-space: pre;
     line-height: 24px;
-
 `
 
 interface FormFactoryProps {
@@ -113,16 +139,25 @@ interface FormFactoryProps {
     description: string;
     height: string; 
     options?: string[]; // type should be changed
-    onChange?: Dispatch<SetStateAction<string>>;
+    setValue?: Dispatch<SetStateAction<any>>;
 }
 
 // 여기 말고 아래에 main component 있음 (RegisterForm)
-const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options, onChange }) => {
-    const [value, setValue] = useState<string>(description);
+const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options, setValue }) => {
+    const [text, setText] = useState<string>(description);
+    const [selectedFiles, setSelectedFiles] = useState<FileList>();
+    const [currInput, setCurrInput] = useState<string>("");
+    const [currManagerIds, setCurrManagerIds] = useState<string[]>([]);
 
-    const handleTextArea: (value: string, onChange: Dispatch<SetStateAction<string>>) => void = (value, onChange) => {
+    const handleTextArea: (value: string, setValue: Dispatch<SetStateAction<string>>) => void = (value, setValue) => {
+        setText(value);
         setValue(value);
-        onChange(value);
+    }
+
+    const handleSelectImage: (files: HTMLInputElement["files"], setValue: Dispatch<SetStateAction<FileList>>) => void = (files, setValue) => {
+        if (!files) return;
+        setValue(files);
+        setSelectedFiles(files);
     }
 
     const startTyping: (e: React.FocusEvent<HTMLTextAreaElement>) => void = (e) => {
@@ -135,39 +170,133 @@ const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options,
 
     switch (type) {
         case T.RegisterFormType.INPUT:
-            if (onChange === undefined) return null;
+            if (setValue === undefined) return null;
             return (
-                <InputForm placeholder={description} onChange={(e) => onChange(e.target.value)} />
+                <InputForm placeholder={description} onChange={(e) => setValue(e.target.value)} />
             );
+        case T.RegisterFormType.INPUT_ADDABLE:
+            if (setValue === undefined) return null;
+            const addInput: () => void = () => {
+                setCurrManagerIds([...currManagerIds, currInput]);
+                setValue([...currManagerIds, currInput]);
+            }
+
+            const removeInput: (id: string) => void = (id) => {
+                setCurrManagerIds([...currManagerIds.filter((managerId) => managerId !== id)]);
+                setValue([...currManagerIds.filter((managerId) => managerId !== id)]);
+            }
+
+            const handleInput: (e: React.ChangeEvent<HTMLInputElement>) => void = (e) => {            
+                setCurrInput(e.target.value);               
+            }
+
+            const managerIdInput: ReactNode = (
+                <>
+                    <FlexContainer>
+                        {/* TODO: onChange event throttling */}
+                        <InputForm addable={true} onChange={(e) => handleInput(e)} />
+                        <InputIcon src={personIcon} type={'person'} />
+                        <InputIcon src={plusIcon} type={'plus'} onClick={() => addInput()} />
+                    </FlexContainer>
+                    <hr style={{ border: `1px solid ${palette.primaryGradient.toString()}` }}/>
+                </>
+            );
+
+            return (
+                <>
+                    {managerIdInput}
+                    { currManagerIds.map((managerId) => (
+                        <FlexContainer type={"addableInput"} key={managerId}>
+                            <InputForm addable={true} placeholder={managerId} disabled={true} />
+                            <InputIcon src={personIcon} type={'person'} />
+                            <InputIcon src={plusIcon} type={'plus'} onClick={() => addInput()} />
+                            <InputIcon src={removeIcon} type={'minus'} onClick={() => removeInput(managerId)} />
+                        </FlexContainer>
+                    ))}
+                </>
+            )
         case T.RegisterFormType.TEXT_AREA:
-            if (onChange === undefined) return null;
+            if (setValue === undefined) return null;
             return (
                 // TODO: useMemo로 최적화할 수 있는 방법
                 <TextAreaForm
                     height={height}
-                    value={value}
+                    value={text}
                     onFocus={(e) => startTyping(e)}
                     onBlur={(e) => leaveInput(e)}
-                    onChange={(e) => handleTextArea(e.target.value, onChange)}
+                    onChange={(e) => handleTextArea(e.target.value, setValue)}
                 />  
             );
         case T.RegisterFormType.FILE:
+            if (setValue === undefined) return null;
+            const selectedFileInfo = selectedFiles ? selectedFiles[0].name : "선택된 파일이 없습니다."  
             return (
-                <>
-                    <label htmlFor="upload-photo">
-                        <FileForm type="file" id="upload-photo" />
-                        <FileButton src={FileUploadSvg} />
+                <FlexContainer>
+                    <FileInput placeholder={selectedFileInfo} />
+                    <label htmlFor="upload-photo" style={{ "display": "flex" }}>
+                        <FileForm id="upload-photo" type="file" multiple onChange={(e) => handleSelectImage(e.target.files, setValue)} />
+                        <FileButton src={fileUploadSvg} />
                     </label>
-                </>
+                </FlexContainer>
             );
         case T.RegisterFormType.SELECT_BOX:
             // if (!options) return null; 
+            if (setValue === undefined) return null;
+            const options = [
+                { value: 'first', label: '첫 번째 항목' },
+                { value: 'second', label: '두 번째 항목' },
+                { value: 'third', label: '세 번째 항목' },
+            ]
+
+            const customStyles = {
+                valueContainer: (provided: any, state: { isSelected: any; }) => ({
+                    ...provided,
+                    // display: 'none',
+                    width: '100%',
+                    height: '48px',
+                    padding: '16px',
+                    boxSizing: 'border-box',
+                    border: `1px solid ${palette.primaryGradient.toString()}`,
+                    borderRadius: '4px',
+                    color: palette.greyText.toString(),
+                    fontSize: '14px',
+                    backgroundImage:`url(${expandArrowSvg})`,
+                    backgroundRepeat: 'no-repeat',
+                    backgroundPosition: 'top 50% right 2%',
+                }),
+                
+                dropdownIndicator: (provided: any, state: { isSelected: any; }) => ({
+                    ...provided,
+                    display: 'none',                   
+                }),
+
+                option: (provided: any, state: { isSelected: any; isFocused: any; }) => ({
+                    ...provided,
+                    color: state.isSelected || state.isFocused ? '#ffffff' : palette.greyText.toString(),
+                    backgroundColor: state.isSelected || state.isFocused ? palette.primaryGradient.toString() : '#ffffff',
+                    padding: 20,
+                    width: '100%',
+                    height: '48px',
+                    boxSizing: 'border-box',
+                    border: `1px solid ${palette.primaryGradient.toString()}`,
+                    borderRadius: '4px',
+                    fontSize: '14px',
+                }),
+
+                // singleValue: (provided: any, state: { isDisabled: any; }) => {
+                //   const opacity = state.isDisabled ? 0.5 : 1;
+                //   const transition = 'opacity 300ms';
+              
+                //   return { ...provided, opacity, transition };
+                // }
+            }
+
             return (
-                <SelectBoxForm>
-                    <option>첫 번째 항목</option>
-                    <option>두 번째 항목</option>
-                    <option>세 번째 항목</option>
-                </SelectBoxForm>
+                <Select
+                    styles={customStyles}
+                    options={options}
+                    placeholder={description}
+                />
             )
         case T.RegisterFormType.CALENDAR:
             return (
@@ -184,11 +313,11 @@ interface Props {
     description: string;
     type: T.RegisterFormType;  
     height: string; 
-    onChange?: Dispatch<SetStateAction<string>>;
+    setValue?: Dispatch<SetStateAction<any>>;
 }
 
-const RegisterForm: FC<Props> = ({ title, guide, description, type, height, onChange }) => {
-    const registerForm: ReactNode = <FormFactory type={type} description={description} height={height} onChange={onChange} />
+const RegisterForm: FC<Props> = ({ title, guide, description, type, height, setValue }) => {
+    // const registerForm: ReactNode = <FormFactory type={type} description={description} height={height} onChange={onChange} />
 
     return (
         <Root>
@@ -197,7 +326,8 @@ const RegisterForm: FC<Props> = ({ title, guide, description, type, height, onCh
                 <OptionText>필수 항목</OptionText>
             </TextWrapper>
             <GuideText>{guide}</GuideText>
-            {registerForm}
+            {/* {registerForm} */}
+            <FormFactory type={type} description={description} height={height} setValue={setValue} />
         </Root>
     );
 }

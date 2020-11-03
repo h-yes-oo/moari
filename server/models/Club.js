@@ -1,5 +1,16 @@
 const mongoose = require('mongoose');
 
+const imageSchema = mongoose.Schema({ 
+    img: {
+        data: Buffer,
+        contentType: String
+    },
+    club: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Club",
+    }
+}); 
+
 const clubSchema = mongoose.Schema({
     name: {
         type: String,
@@ -13,19 +24,22 @@ const clubSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    // photo: {
-    //     type: String, 
-    // },
-    // field: {
-    //     type: String[],
-    // },
-    // tags: {
-    //     type: String[],
-    // },
-    // owner: {
-    //     type: User,
-    //     required: true,
-    // },
+    photos : [{
+        // type: mongoose.Schema.Types.ObjectId,
+        type: imageSchema,
+        ref: "Image"
+    }],
+    category: {
+        type: String,
+    },
+    tags: {
+        type: [String],
+    },
+    // managers: [{
+    //     type: userSchema,
+    //     ref: "User"
+    // }],
+    
     // status: {
     //     type: string,
     //     required: true,
@@ -40,5 +54,10 @@ const clubSchema = mongoose.Schema({
 
 // add gender ratio?
 
+const Image = mongoose.model('Image', imageSchema); 
 const Club = mongoose.model('Club', clubSchema)
-module.exports = Club;
+module.exports = {
+    Club, 
+    Image
+};
+

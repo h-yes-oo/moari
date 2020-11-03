@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import RegisterForm from '../RegisterForm';
 import * as T from 'types';
@@ -7,6 +7,7 @@ import registerButtonSvg from 'assets/icons/register-button.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'reducers';
 import { postClub } from 'actions/club';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 const Root = styled.div`
     display: flex;
@@ -22,26 +23,45 @@ const Section = styled.div``
 
 const RegisterButton = styled.img`
     transform: translateY(100%);
+    &:hover {
+        cursor: pointer;
+    }
 `
 
 interface Props {
 
 }
 
-const ClubRegisterContents: FC<Props> = () => {
+const ClubRegisterContents: FC<Props & RouteComponentProps> = ({ history }) => {
     const [name, setName] = useState<string>('');
     const [school, setSchool] = useState<string>('');
     const [description, setDescription] = useState<string>('');
+    const [photos, setPhotos] = useState<FileList>();
+    const [recruit, setRecruit] = useState<string>('');
+    const [category, setCategory] = useState<string>('');
+    const [tags, setTags] = useState<string[]>([]);
+    const [managerIds, setManagerIds] = useState<string[]>([]);
 
-    const clubs = useSelector((state: RootState) => state.club);
+    // useEffect(() => {
+    //     console.log(photos);
+    // }, [photos])
+
+    useEffect(() => {
+        console.log(managerIds);
+    }, [managerIds]);
+
+    // const clubs = useSelector((state: RootState) => state.club);
     const dispatch = useDispatch();
 
     const handlePostClub: () => void = () => {
-        dispatch(postClub.request({ name, school, description })); 
+        // 실패 alert 필요
+        dispatch(postClub.request({ name, school, description, photos })); 
+        alert('동아리 등록 성공! 😆');
+        // history.push('/');
     }
 
     return (
-        // 반복되는 부분은 추후 refactoring 예정, 혜수's 과제를 위해 남겨놓음
+        // 반복되는 부분은 추후 refactoring 예정
         <Root>
             <FormWrapper>
                 <Section>
@@ -50,21 +70,21 @@ const ClubRegisterContents: FC<Props> = () => {
                         description={text.clubName.description}
                         type={T.RegisterFormType.INPUT}
                         height={'48px'}
-                        onChange={setName}
+                        setValue={setName}
                     />
                     <RegisterForm
                         title={text.clubInfo.title}
                         description={text.clubInfo.description}
                         type={T.RegisterFormType.INPUT}
                         height={'100px'}
-                        onChange={setSchool}
+                        setValue={setSchool}
                     />
                     <RegisterForm 
                         title={text.clubDetail.title}
                         description={text.clubDetail.description}
                         type={T.RegisterFormType.TEXT_AREA}
                         height={'600px'}
-                        onChange={setDescription}
+                        setValue={setDescription}
                     />
                 </Section>
                 <Section>
@@ -73,31 +93,36 @@ const ClubRegisterContents: FC<Props> = () => {
                         description={text.photo.description}
                         type={T.RegisterFormType.FILE}
                         height={'48px'}
+                        setValue={setPhotos}
                     />
                     <RegisterForm 
                         title={text.recruit.title}
                         description={text.recruit.description}
                         type={T.RegisterFormType.SELECT_BOX}
                         height={'48px'}
+                        setValue={setRecruit}
                     />
                     <RegisterForm 
                         title={text.category.title}
                         description={text.category.description}
                         type={T.RegisterFormType.SELECT_BOX}
                         height={'48px'}
+                        setValue={setCategory}
                     />
                     <RegisterForm 
                         title={text.tag.title}
                         description={text.tag.description}
                         type={T.RegisterFormType.SELECT_BOX}
                         height={'48px'}
+                        setValue={setTags}
                     />
                     <RegisterForm 
                         title={text.managerId.title}
                         guide={text.managerId.description}
                         description={"jieun hyesoo"}
-                        type={T.RegisterFormType.INPUT}
+                        type={T.RegisterFormType.INPUT_ADDABLE}
                         height={'48px'}
+                        setValue={setManagerIds}
                     />
                 </Section>
             </FormWrapper>
@@ -106,4 +131,4 @@ const ClubRegisterContents: FC<Props> = () => {
     );
 }
 
-export default ClubRegisterContents;
+export default withRouter(ClubRegisterContents);

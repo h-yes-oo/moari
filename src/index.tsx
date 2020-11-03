@@ -13,8 +13,8 @@ const sagaMiddleware = createSagaMiddleware()
 
 const configureStore = () => {
   const store = createStore(rootReducer, applyMiddleware(sagaMiddleware))
-
   sagaMiddleware.run(sagas)
+  
   return store
 }
 

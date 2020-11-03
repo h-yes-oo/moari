@@ -31,18 +31,20 @@ const SliderContainer = styled.div<{ currentSlide: number }>`
 `
 
 interface Props {
-
+    keyword?: string;
 }
 
-interface ClubData {
-    [key: number]: T.ClubInfo; // key refers to id
-}
+// interface ClubData {
+//     [key: number]: T.ClubInfo; // key refers to id
+// }
 
-const ClubList: FC<Props> = () => {    
-    const clubs = useSelector((state: RootState) => state.club);
+const ClubList: FC<Props> = ({ keyword }) => {    
+    const clubs = useSelector((state: RootState) => state.fetch.clubs);
+    const searchedClubs = useSelector((state: RootState) => state.search.clubs);
     const dispatch = useDispatch();
     
-    const TOTAL_SLIDES: number = Math.floor((clubs.clubs.length - 1) / 3);
+    // clubs.length === 0인 경우?
+    const TOTAL_SLIDES: number = Math.floor((clubs.length - 1) / 3);
     // const TOTAL_SLIDES: number = 5;
 
     const [currentSlide, setCurrentSlide] = useState<number>(0);
@@ -61,22 +63,44 @@ const ClubList: FC<Props> = () => {
     };
 
     useEffect(() => {
+        console.log("keyword: " + keyword);
+    }, [keyword]);
+
+    useEffect(() => {
         dispatch(fetchClubList.request()); 
     }, []);
+
+    // useEffect(() => {
+    //     console.log(clubs);
+    // }, [clubs]);
 
     useEffect(() => {
         slideRef.current.style.transition = "all 0.5s ease-in-out";
         slideRef.current.style.transform = `translateX(-${currentSlide}00%)`;
       }, [currentSlide]);
 
-    const topClubList: ReactNode = clubs.clubs.map((club) => (
-        <ClubCard
-            key={club._id}
-            id={club._id}
-            name={club.name}
-            description={club.description}
-        />
-    ));
+    const topClubList: ReactNode = keyword === undefined ? clubs.map((club) => {
+        // console.log(club.photos);
+        return (
+            <ClubCard
+                key={club._id}
+                id={club._id}
+                name={club.name}
+                description={club.description}
+                image={club.photos ? club.photos[0] : undefined}
+            />
+        )
+    }) : searchedClubs.map((club) => {
+        return (
+            <ClubCard
+                key={club._id}
+                id={club._id}
+                name={club.name}
+                description={club.description}
+                image={club.photos ? club.photos[0] : undefined}
+            />
+        )
+    })
 
     return (
         <Root>

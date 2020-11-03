@@ -10,7 +10,7 @@ const userSchema = mongoose.Schema({
         type: String,
         maxlength: 50
     },
-    nickname: {
+    name: {
         type: String,
         maxlength: 50
     },
@@ -103,4 +103,4 @@ userSchema.statics.findByToken = function(token,cb){
 
 const User = mongoose.model('User', userSchema)
 
-module.exports = {User}
+module.exports = { User }

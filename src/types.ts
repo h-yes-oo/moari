@@ -13,14 +13,14 @@ export enum SearchMenu {
     NAME = 'NAME',
 }
 
-export interface ClubInfo {
-    id: number;
-    name: string;
-    description: string;
-    image: string; // need change
-    status: ClubStatus;    
-    tags: Array<string>;
-}
+// export interface ClubInfo {
+//     id: number;
+//     name: string;
+//     description: string;
+//     image: string; // need change
+//     // status: ClubStatus;    
+//     // tags: Array<string>;
+// }
 
 export enum RegisterButton {
     CLUB_REGISTER = 'CLUB_REGISTER',
@@ -29,8 +29,10 @@ export enum RegisterButton {
 
 export enum RegisterFormType {
     INPUT = 'INPUT',
+    INPUT_ADDABLE = 'INPUT_ADDABLE',
     TEXT_AREA = 'TEXT_AREA',
     SELECT_BOX = 'SELECT_BOX',
     FILE = 'FILE',
     CALENDAR = 'CALENDAR',
+    
 }
