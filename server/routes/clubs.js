@@ -1,40 +1,76 @@
 const express = require('express');
 const router = express.Router();
-const Club = require('../models/Club');
+const { Club, Image } = require("../models/Club");
 
-// middleware that is specific to this router
-router.use(function(req, res, next) {
-  console.log('clubs router');
-  next();
+// use for image upload
+const fs = require('fs'); 
+const path = require('path'); 
+const multer = require('multer');
+const { nextTick } = require('process');
+  
+const upload_club = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, path.join(__dirname+'/uploads/clubs'));
+    },
+    filename: function (req, file, cb) {
+        // extname: 확장자(.png, .jpg, .jpeg...)
+        cb(null, new Date().valueOf() + path.extname(file.originalname));
+    }
+  }),
 });
+
+// router.use(function(req, res, next) {
+//   console.log('clubs router');
+//   next();
+// });
 
 router.get('/', async (req, res) => {
   console.log('clubs index');
   try {
     const clubs = await Club.find();
+    // clubs.map(club => {
+    //     console.log(club.photos);
+    // })
+
     res.json(clubs);
-  } catch(err) {
+    // res.send(clubs);    
+  } catch (err) {
     res.json({ message: err });
   }
 });
- 
-router.post('/', async (req, res) => {
-    console.log(req.body);
-    const club = new Club(req.body);
-    try {
+
+// single - single file
+// array - multiple files
+router.post('/', upload_club.array('photos'), async (req, res) => {
+    const club = new Club({
+        name: req.body.name,
+        school: req.body.school,
+        description: req.body.description,
+    });
+
+    console.log(req.files);
+
+    for (let image of req.files) {
+        let obj = {
+            img: {
+                data: fs.readFileSync(path.join(__dirname + '/uploads/clubs/' + image.filename)),
+                contentType: 'image/png' 
+            },
+            club: club
+        }
+
+        const newImage = new Image(obj);
+        newImage.save();
+        club.photos.push(newImage);
+    }
+        try {
         const newClub = await club.save();
         res.json(newClub);
     } catch(err) {
         res.json({ message: err });
     }
-    // club.save()
-    //     .then(data => {
-    //         res.json(data);
-    //     })
-    //     .catch(err => {
-    //         res.json({ message: err });
-    //     });
-})
+});
 
 router.get('/:clubId', async (req, res) => {
     try {

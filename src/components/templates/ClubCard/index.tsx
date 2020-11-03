@@ -1,5 +1,6 @@
 import React, { FC, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import * as T from 'types';
@@ -8,7 +9,10 @@ import alwaysSvg from 'assets/icons/stat-always.svg';
 import openSvg from 'assets/icons/stat-open.svg';
 import closedSvg from 'assets/icons/stat-closed.svg';
 
-const Root = styled.div`
+const Root = styled.div<{ image?: string | undefined }>`
+    background-image: url(${(props) => props.image});
+    // background-size: cover;
+    background-position: center;
     width: 358px;
     height: 512px;
     border-radius: 20px;
@@ -32,22 +36,26 @@ interface Props {
     id: string;
     name: string;
     description: string;
-    school?: string; // types에 tag 정의
-    image?: string; // need change
+    image?: any; // need change
     status?: T.ClubStatus
     tags?: Array<string>; // types에 tag 정의
 }
 
-const ClubCard: FC<Props & RouteComponentProps> = ({ key, id, status, history }) => {
-    // const goClubDetail: (e: React.MouseEvent<HTMLDivElement>) => void = (e) => {
+const ClubCard: FC<Props & RouteComponentProps> = ({ id, status, image, history }) => {
 
+    // const goClubDetail: (e: React.MouseEvent<HTMLDivElement>) => void = (e) => {
     const goClubDetail: (id: string) => void = (id) => {
         history.push(`/club/${id}`);
     }
+        
+    const imageBuffer = image.img.data.data;
+    const imageConverterPrefix = "data:image/png;base64,"
+    const imageElem = imageConverterPrefix + btoa(String.fromCharCode.apply(null, imageBuffer));
+    console.log(imageElem);
     
     // need refactoring: switch-case
     return (
-        <Root onClick={() => goClubDetail(id)}>
+        <Root onClick={() => goClubDetail(id)} image={imageElem} >
             {(() => {
                 switch (status) {
                     case T.ClubStatus.PREPARE:
