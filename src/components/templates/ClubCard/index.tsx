@@ -8,9 +8,10 @@ import prepareSvg from 'assets/icons/stat-prepare.svg';
 import alwaysSvg from 'assets/icons/stat-always.svg';
 import openSvg from 'assets/icons/stat-open.svg';
 import closedSvg from 'assets/icons/stat-closed.svg';
+import logoPng from 'assets/images/logo.png';
 
 const Root = styled.div<{ image?: string | undefined }>`
-    background-image: url(${(props) => props.image});
+    background-image: url(${(props) => props.image ? props.image : logoPng });
     // background-size: cover;
     background-position: center;
     width: 358px;
@@ -48,10 +49,10 @@ const ClubCard: FC<Props & RouteComponentProps> = ({ id, status, image, history 
         history.push(`/club/${id}`);
     }
         
-    const imageBuffer = image.img.data.data;
+    const imageBuffer = image ? image.img.data.data : "";
     const imageConverterPrefix = "data:image/png;base64,"
-    const imageElem = imageConverterPrefix + btoa(String.fromCharCode.apply(null, imageBuffer));
-    console.log(imageElem);
+    const imageElem = image ? imageConverterPrefix + btoa(String.fromCharCode.apply(null, imageBuffer)) : "";
+    // console.log(imageElem);
     
     // need refactoring: switch-case
     return (

@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
-import { clubReducer } from './clubReducer';
+import { fetchReducer, postReducer, searchReducer } from './clubReducer';
 
 const rootReducer = combineReducers({
-    club: clubReducer
+    fetch: fetchReducer,
+    post: postReducer,
+    search: searchReducer
 });
 
 export default rootReducer;

@@ -30,7 +30,7 @@ const clubSchema = mongoose.Schema({
         ref: "Image"
     }],
     category: {
-        type: [String],
+        type: String,
     },
     tags: {
         type: [String],

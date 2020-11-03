@@ -241,6 +241,7 @@ const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options,
             );
         case T.RegisterFormType.SELECT_BOX:
             // if (!options) return null; 
+            if (setValue === undefined) return null;
             const options = [
                 { value: 'first', label: '첫 번째 항목' },
                 { value: 'second', label: '두 번째 항목' },

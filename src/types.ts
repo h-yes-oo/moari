@@ -13,14 +13,14 @@ export enum SearchMenu {
     NAME = 'NAME',
 }
 
-export interface ClubInfo {
-    id: number;
-    name: string;
-    description: string;
-    image: string; // need change
-    status: ClubStatus;    
-    tags: Array<string>;
-}
+// export interface ClubInfo {
+//     id: number;
+//     name: string;
+//     description: string;
+//     image: string; // need change
+//     // status: ClubStatus;    
+//     // tags: Array<string>;
+// }
 
 export enum RegisterButton {
     CLUB_REGISTER = 'CLUB_REGISTER',

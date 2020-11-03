@@ -18,6 +18,7 @@ const Root: FC<Props> = () => {
         <BrowserRouter>
             <Switch>
                 <Route exact path="/" component={MainPage} />
+                <Route path="/search/:keyword" component={MainPage} />
                 <Route path="/club/:id" component={ClubInfoPage} />
                 <Route path="/register" component={RegisterPage} />
                 <Route path="/signup" component={SignupPage} />
