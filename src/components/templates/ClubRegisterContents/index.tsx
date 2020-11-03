@@ -50,7 +50,7 @@ const ClubRegisterContents: FC<Props & RouteComponentProps> = ({ history }) => {
         console.log(managerIds);
     }, [managerIds]);
 
-    const clubs = useSelector((state: RootState) => state.club);
+    // const clubs = useSelector((state: RootState) => state.club);
     const dispatch = useDispatch();
 
     const handlePostClub: () => void = () => {

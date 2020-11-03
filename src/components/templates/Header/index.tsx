@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
@@ -11,6 +11,11 @@ import signupSvg from 'assets/icons/signup.svg';
 import loginSvg from 'assets/icons/login.svg';
 import logoutSvg from 'assets/icons/logout.svg';
 import tempProfile from 'assets/images/temp-profile.jpg';
+// import { searchClub } from 'actions/club';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from 'reducers';
+import { Club, ClubList } from 'store/types';
+import { searchClub } from 'actions/club';
 
 const Root = styled.div`
     position: fixed;
@@ -42,9 +47,11 @@ const SearchBoxWrapper = styled.div`
 
 const SearchIcon = styled.img`
     margin: 4px;
+    cursor: pointer;
 `
 
 const SearchBox = styled.input`
+    padding-left: 12px;
     border: none;
     width: 100%;
     height: 100%;
@@ -91,6 +98,10 @@ interface Props {
 }
 
 const Header: FC<Props & RouteComponentProps> = ({ campusName, username, history }) => {    
+    const dispatch = useDispatch();
+    const [searchKeyword, setSearchKeyword] = useState<string>("");
+    const searchedClubs = useSelector((state: RootState) => state.search.clubs);
+        
     const goMainPage: () => void = () => {
         history.push('/');
     }
@@ -103,12 +114,43 @@ const Header: FC<Props & RouteComponentProps> = ({ campusName, username, history
         history.push('/login');
     }
 
+    const goSearchResult: () => void = () => {
+        history.push(`/search/${searchKeyword}`);
+    }
+
+    const clickSearch: () => void = () => {
+        if (searchKeyword === "") alert("검색어를 입력해주세요");
+        console.log(searchKeyword);
+        setSearchKeyword("");
+        dispatch(searchClub.request({ keyword: searchKeyword }));
+        goSearchResult();
+    }
+
+    // 마지막 한 글자가 한번 더 쳐짐 ㅠㅠ
+    const enterSearch: (e: React.KeyboardEvent<HTMLInputElement>) => void = (e) => {
+        if (e.key === "Enter") {
+            if (searchKeyword === "") alert("검색어를 입력해주세요");        
+            console.log(searchKeyword);
+            setSearchKeyword("");
+            dispatch(searchClub.request({ keyword: searchKeyword }));
+            goSearchResult();
+        }
+    }
+
     return (
         <Root>
             <LogoCampusIcon src={logoCampusSvg} onClick={() => goMainPage()}/>
             <SearchBoxWrapper>
-                <SearchIcon src={searchSvg} />
-                <SearchBox placeholder="동아리 이름이나 태그로 검색해보세요"/>
+                <SearchIcon
+                    src={searchSvg}
+                    onClick={() => clickSearch()}
+                />
+                <SearchBox
+                    placeholder="동아리 이름이나 태그로 검색해보세요"
+                    value={searchKeyword}
+                    onChange={(e) => setSearchKeyword(e.target.value)}
+                    onKeyDown={(e) => enterSearch(e)}
+                />
             </SearchBoxWrapper>
             <ProfileWrapper>
                 <ProfileName>{username}님</ProfileName>

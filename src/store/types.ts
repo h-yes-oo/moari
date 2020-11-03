@@ -3,11 +3,11 @@ export interface Club {
   name: string
   school: string
   description: string
-  photos: string[]
-  recruit: string
-  category: string
-  tags: string[]
-  managerIds: string[]
+  photos: any[]
+  recruit?: string
+  category?: string
+  tags?: string[]
+  // managerIds: string[]
 }
 
 export interface ClubList {
