@@ -7,7 +7,7 @@ import ClubCard from 'components/templates/ClubCard';
 import leftArrowSvg from 'assets/icons/left-arrow.svg';
 import rightArrowSvg from 'assets/icons/right-arrow.svg';
 import { RootState } from 'reducers';
-import { fetchClubList } from 'actions/club';
+import { fetchClubList, searchClub } from 'actions/club';
 
 const Root = styled.div`
     display: flex;
