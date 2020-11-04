@@ -55,9 +55,14 @@ const TopMenuBar: FC<Props & RouteComponentProps> = ({ history }) => {
         history.push('/register/club');
     };
 
+    const goFindPage: (tag: string) => void = (tag) => {
+        // console.log(tag);
+        
+    }
+
     // need a key
     const MenuList: ReactNode = Object.entries(menuTextList).map(([tag, menu]) => (
-        <MenuButton key={tag} isRegister={false}>{menu}</MenuButton>
+        <MenuButton key={tag} isRegister={false} onClick={() => goFindPage(tag)}>{menu}</MenuButton>
     ));
     
     return (

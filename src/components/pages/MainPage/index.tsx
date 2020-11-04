@@ -1,9 +1,9 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, ReactNode, useEffect } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { ProposeClubText } from 'components/templates/SimpleText';
-import ClubList from 'components/templates/ClubList';
+import TopClubList from 'components/templates/TopClubList';
 import BaseLayout from 'components/templates/BaseLayout';
-import { match } from 'assert';
+import ClubList from 'components/templates/ClubList';
 import { useDispatch } from 'react-redux';
 import { searchClub } from 'actions/club';
 
@@ -22,9 +22,13 @@ const MainPage: FC<Props & RouteComponentProps<MatchParams>> = ({ match }) => {
         dispatch(searchClub.request({ keyword: match.params.keyword }));
     }, []);
 
+    const topClubList: ReactNode = match.params.keyword ? null : <TopClubList />
+
     return (
         <BaseLayout>
             <ProposeClubText />
+            {/* <TopClubList keyword={match.params.keyword} /> */}
+            {topClubList}
             <ClubList keyword={match.params.keyword} />
         </BaseLayout>
     );
