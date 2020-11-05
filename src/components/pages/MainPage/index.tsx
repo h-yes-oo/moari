@@ -27,7 +27,6 @@ const MainPage: FC<Props & RouteComponentProps<MatchParams>> = ({ match }) => {
     return (
         <BaseLayout>
             <ProposeClubText />
-            {/* <TopClubList keyword={match.params.keyword} /> */}
             {topClubList}
             <ClubList keyword={match.params.keyword} />
         </BaseLayout>
