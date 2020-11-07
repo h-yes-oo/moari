@@ -1,35 +1,44 @@
-import React, { FC, ReactNode } from 'react';
+import React, { FC, ReactNode, useState, useRef, RefObject, MutableRefObject, useEffect } from 'react';
 import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import palette from 'constants/palette';
+import { searchClub } from 'actions/club';
+import UnfoldTopMenu from '../UnfoldTopMenu';
 
 const Root = styled.div`
+  
+`
+
+const MenuContainer = styled.div`
     position: fixed;
     width: 100%;
     top: 138px;
     display: flex;
     align-items: center;
-    padding: 6px 36px;
     background-color: #ffffff;
 
     z-index: 100;
+    padding: 10px 36px;
 `
 
-interface MenuButtonProps {
-    isRegister: boolean;
-}
+const MenuButton = styled.div<{ isRegisterButton?: boolean }>`
+    font-size: 18px;
+    padding: 0 24px;
+    color: ${palette.greyText.toString()};
+    box-sizing: border-box;
+    padding-bottom: 4px;
+    
+    &:hover {
+        color: ${palette.primaryViolet.toString()};
+        border-bottom: 4px solid ${palette.primaryViolet.toString()};
+    }
+    
+    position: ${(props) => !props.isRegisterButton ? undefined : `absolute`};
+    right: ${(props) => !props.isRegisterButton ? undefined : `72px`};
 
-const MenuButton = styled.div<MenuButtonProps>(({ isRegister }) => ({
-    fontSize: '18px',
-    margin: '0 24px',
-    color: palette.greyText.toString(),
-
-    position: isRegister ? 'absolute' : undefined,
-    right: isRegister ? '72px' : undefined,
-
-    cursor: 'pointer',
-}));
+    cursor: pointer;
+`
 
 interface Props {
 
@@ -39,8 +48,15 @@ interface MenuMap {
     [key: string]: string;
 } 
 
-
 const TopMenuBar: FC<Props & RouteComponentProps> = ({ history }) => {  
+    const [showUnfoldMenu, setShowUnfoldMenu] = useState<Boolean>(false);
+    const [menuLoaded, setMenuLoaded] = useState<boolean>(false);
+
+    const homeRef = useRef<HTMLDivElement>(null);
+    const categoryRef = useRef<HTMLDivElement>(null);
+    const tagRef = useRef<HTMLDivElement>(null);
+    const statusRef = useRef<HTMLDivElement>(null);
+
     const menuTextList: MenuMap = {
         'home': 'Home',
         'category': '분류별 찾기',
@@ -55,17 +71,49 @@ const TopMenuBar: FC<Props & RouteComponentProps> = ({ history }) => {
         history.push('/register/club');
     };
 
-    // need a key
-    const MenuList: ReactNode = Object.entries(menuTextList).map(([tag, menu]) => (
-        <MenuButton key={tag} isRegister={false}>{menu}</MenuButton>
+    const goFindPage: (key: string) => void = (tag) => {
+        // console.log(tag);
+    }
+
+    const isAllRefLoaded: boolean = homeRef && categoryRef && tagRef && statusRef ? true : false;
+
+    useEffect(() => {
+        setMenuLoaded(true);
+        // console.log("isAllRefLoaded: " + isAllRefLoaded);
+    }, [isAllRefLoaded])
+
+    const MenuList: ReactNode = Object.entries(menuTextList).map(([key, menu]) => (
+        <MenuButton
+            key={key}
+            isRegisterButton={false}
+            onClick={() => goFindPage(key)}
+            onMouseEnter={() => setShowUnfoldMenu(true)}
+            onMouseLeave={() => setShowUnfoldMenu(false)}
+            // too bad !!!
+            ref={key === 'home' ? homeRef : key === 'category' ? categoryRef : key === 'tag' ? tagRef : key === 'status' ? statusRef : null}
+        >
+            {menu}
+        </MenuButton>
     ));
+
+    const unfoldTopMenu: ReactNode = showUnfoldMenu && menuLoaded ?
+     <UnfoldTopMenu
+        homeWidth={homeRef.current?.clientWidth}
+        categoryWidth={categoryRef.current?.clientWidth}
+        tagWidth={tagRef.current?.clientWidth}
+        statusWidth={statusRef.current?.clientWidth}
+        setShowUnfoldMenu={setShowUnfoldMenu}
+    /> : null;
     
     return (
         <Root>
-            {MenuList}
-            <MenuButton isRegister={true} onClick={() => goRegister()}>
-                {registerText}
-            </MenuButton>
+            <MenuContainer>
+                {MenuList}
+                <MenuButton isRegisterButton={true} onClick={() => goRegister()}>
+                    {registerText}
+                </MenuButton>
+            </MenuContainer>
+            {unfoldTopMenu}
         </Root>
     );
 }

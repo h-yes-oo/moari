@@ -1,119 +1,81 @@
-import React, { FC, ReactNode, useEffect, useRef, useState } from 'react';
+import React, { FC, ReactNode, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
-import * as T from 'types';
 import ClubCard from 'components/templates/ClubCard';
-import leftArrowSvg from 'assets/icons/left-arrow.svg';
-import rightArrowSvg from 'assets/icons/right-arrow.svg';
 import { RootState } from 'reducers';
-import { fetchClubList } from 'actions/club';
+import { stat } from 'fs';
+import { Club } from 'store/types';
+
 
 const Root = styled.div`
-    display: flex;
-    padding: 0 24px;
 ` 
 
-const ArrowButton = styled.img`
-    text-align: center;
-    cursor: pointer;
-`
-
 const ClubListContainer = styled.div`
-    overflow-x: hidden;
-    margin: 0 36px;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 132px; 
 `
 
-const SliderContainer = styled.div<{ currentSlide: number }>`
-    margin-left: calc(42px * ${(props) => props.currentSlide + 1 });
-    display: flex;
-    // justify-content: space-between;
+const CardWrapper = styled.div`
+  margin: 2em 0;
 `
 
 interface Props {
-    keyword?: string;
+  keyword?: string;
+  category?: string;
+  tag?: string;
+  status?: string;
 }
 
-// interface ClubData {
-//     [key: number]: T.ClubInfo; // key refers to id
-// }
+const ClubList: FC<Props> = ({ keyword, category, tag, status }) => {    
+  // const [clubsLoaded, setClubsLoaded] = useState<Boolean>(false);
+  const clubs = useSelector((state: RootState) => state.fetch.clubs);
+  const searchedClubs = useSelector((state: RootState) => state.search.clubs);
 
-const ClubList: FC<Props> = ({ keyword }) => {    
-    const clubs = useSelector((state: RootState) => state.fetch.clubs);
-    const searchedClubs = useSelector((state: RootState) => state.search.clubs);
-    const dispatch = useDispatch();
-    
-    // clubs.length === 0인 경우?
-    const TOTAL_SLIDES: number = Math.floor((clubs.length - 1) / 3);
-    // const TOTAL_SLIDES: number = 5;
+  const getFilteredClubs: () => Club[] = () => {
+    // TODO: erase console logs and shorten return statements
+    if (category !== undefined) {
+      // console.log("category searching...");
+      return clubs.filter((club) => club.category === category);
+    }
+    else if (tag !== undefined) {
+      // console.log("tag searching...");
+      return clubs.filter((club) => club.tags ? club.tags.includes(tag) : clubs);
+    }
+    else if (status !== undefined) {
+      // console.log("status searching...");
+      return clubs.filter((club) => club.recruit === status);
+    }
+    else return clubs;
+  }
 
-    const [currentSlide, setCurrentSlide] = useState<number>(0);
-    const slideRef = useRef(document.createElement("div"))
+  const filteredClubs: Club[] = getFilteredClubs();
 
-    const nextSlide = () => {
-        console.log("next slide");
-        if (currentSlide >= TOTAL_SLIDES) setCurrentSlide(0);
-        else setCurrentSlide(currentSlide + 1);
-    };
-
-    const prevSlide = () => {
-        console.log("prev slide");
-        if (currentSlide === 0) setCurrentSlide(TOTAL_SLIDES);
-        else setCurrentSlide(currentSlide - 1);
-    };
-
-    useEffect(() => {
-        console.log("keyword: " + keyword);
-    }, [keyword]);
-
-    useEffect(() => {
-        dispatch(fetchClubList.request()); 
-    }, []);
-
-    // useEffect(() => {
-    //     console.log(clubs);
-    // }, [clubs]);
-
-    useEffect(() => {
-        slideRef.current.style.transition = "all 0.5s ease-in-out";
-        slideRef.current.style.transform = `translateX(-${currentSlide}00%)`;
-      }, [currentSlide]);
-
-    const topClubList: ReactNode = keyword === undefined ? clubs.map((club) => {
-        // console.log(club.photos);
-        return (
-            <ClubCard
-                key={club._id}
-                id={club._id}
-                name={club.name}
-                description={club.description}
-                image={club.photos ? club.photos[0] : undefined}
-            />
-        )
-    }) : searchedClubs.map((club) => {
-        return (
-            <ClubCard
-                key={club._id}
-                id={club._id}
-                name={club.name}
-                description={club.description}
-                image={club.photos ? club.photos[0] : undefined}
-            />
-        )
-    })
-
+  const clubsToShow = keyword !== undefined ? searchedClubs :
+    (category !== undefined || tag !== undefined || status !== undefined) ? filteredClubs : clubs;
+  
+  const clubList: ReactNode = clubsToShow.map((club) => {  
     return (
-        <Root>
-            <ArrowButton src={leftArrowSvg} onClick={prevSlide} />
-                <ClubListContainer>
-                    {/* <span style={{ display: "none" }}>{currentSlide}</span> */}
-                    <SliderContainer ref={slideRef} currentSlide={currentSlide}>
-                        {topClubList}
-                    </SliderContainer>
-                </ClubListContainer>
-            <ArrowButton src={rightArrowSvg} onClick={nextSlide} />
-        </Root>
-    );
+      <CardWrapper>
+        <ClubCard
+            key={club._id}
+            id={club._id}
+            name={club.name}
+            description={club.description}
+            image={club.photos ? club.photos[0] : undefined}
+        />
+      </CardWrapper>
+    )
+  });
+
+  return (
+    <Root>
+      <ClubListContainer>
+        {clubList}
+      </ClubListContainer>
+    </Root>
+  );
 }
 
 export default ClubList;

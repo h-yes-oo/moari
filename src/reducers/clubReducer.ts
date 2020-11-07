@@ -54,8 +54,8 @@ export const searchReducer = createReducer<State, Actions>(initialState)
   }))
   .handleAction(searchClub.success, (state, action) => {
     // ...state,
-    console.log("search reducer working");
-    console.log(action.payload.clubs);
+    // console.log("search reducer working");
+    // console.log(action.payload.clubs);
     return {
       ...state,
       clubs: action.payload.clubs,
