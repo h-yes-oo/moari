@@ -8,6 +8,7 @@ import ClubRegisterPage from 'components/pages/ClubRegisterPage';
 import RecruitRegisterPage from 'components/pages/RecruitRegisterPage';
 import SignupPage from 'components/pages/SignupPage';
 import LoginPage from 'components/pages/LoginPage';
+import FilteredPage from 'components/pages/FilteredPage';
 
 interface Props {
 
@@ -23,6 +24,10 @@ const Root: FC<Props> = () => {
                 <Route path="/register" component={RegisterPage} />
                 <Route path="/signup" component={SignupPage} />
                 <Route path="/login" component={LoginPage} />
+                {/* FilteredPage로 변경 */}
+                <Route path="/category/:category" component={FilteredPage} />
+                <Route path="/tag/:tag" component={FilteredPage} />
+                <Route path="/status/:status" component={FilteredPage} />
                 {/* <Route path="/register/club" component={ClubRegisterPage} />
                 <Route path="/register/recruit" component={RecruitRegisterPage} /> */}
             </Switch>

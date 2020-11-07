@@ -5,8 +5,6 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import palette from 'constants/palette';
 import { searchClub } from 'actions/club';
 import UnfoldTopMenu from '../UnfoldTopMenu';
-import Menu from 'react-select/src/components/Menu';
-import { stat } from 'fs';
 
 const Root = styled.div`
   
@@ -22,7 +20,6 @@ const MenuContainer = styled.div`
 
     z-index: 100;
     padding: 10px 36px;
-
 `
 
 const MenuButton = styled.div<{ isRegisterButton?: boolean }>`
@@ -78,18 +75,11 @@ const TopMenuBar: FC<Props & RouteComponentProps> = ({ history }) => {
         // console.log(tag);
     }
 
-    // useEffect(() => {
-    //     console.log(homeRef.current?.clientWidth);
-    //     console.log(categoryRef.current?.clientWidth);
-    //     console.log(tagRef.current?.clientWidth);
-    //     console.log(statusRef.current?.clientWidth);
-    // }, [])
-
     const isAllRefLoaded: boolean = homeRef && categoryRef && tagRef && statusRef ? true : false;
 
     useEffect(() => {
         setMenuLoaded(true);
-        console.log("isAllRefLoaded: " + isAllRefLoaded);
+        // console.log("isAllRefLoaded: " + isAllRefLoaded);
     }, [isAllRefLoaded])
 
     const MenuList: ReactNode = Object.entries(menuTextList).map(([key, menu]) => (
@@ -112,6 +102,7 @@ const TopMenuBar: FC<Props & RouteComponentProps> = ({ history }) => {
         categoryWidth={categoryRef.current?.clientWidth}
         tagWidth={tagRef.current?.clientWidth}
         statusWidth={statusRef.current?.clientWidth}
+        setShowUnfoldMenu={setShowUnfoldMenu}
     /> : null;
     
     return (

@@ -10,7 +10,7 @@ const Root = styled.div`
 
 const ContentsWrapper = styled.div`
     position: relative;
-    margin-top: 178px;
+    margin-top: 208px;
 `
 
 interface LayoutProps {

@@ -27,7 +27,7 @@ export const fetchClubList =
   )<void, ClubList, AxiosError>()
 
 export const fetchClubListRequest = (): Promise<ClubList> => {
-  console.log("fetch action working");
+  // console.log("fetch action working");
   return axios.get('http://localhost:5000/clubs')
   // res.json()?
   .then(res => res.data);
@@ -84,7 +84,7 @@ export const searchClub =
   )<SearchClubPayload, ClubList, AxiosError>()
 
 export const searchClubRequest = ({ keyword }: SearchClubPayload): Promise<ClubList> => {
-  console.log("search action working");
+  // console.log("search action working");
   // console.log(`http://localhost:5000/search/${keyword}`);
   return axios.get(`http://localhost:5000/search/${keyword}`)
   .then(res => res.data);
