@@ -5,14 +5,17 @@ import TopClubList from 'components/templates/TopClubList';
 import BaseLayout from 'components/templates/BaseLayout';
 import ClubList from 'components/templates/ClubList';
 import { useDispatch } from 'react-redux';
-import { searchClub } from 'actions/club';
+import { fetchClubList, searchClub } from 'actions/club';
 
 interface Props {
 
 }
 
 interface MatchParams {
-    keyword: string
+    keyword: string;
+    category: string;
+    tag: string;
+    status: string;
 }
 
 const MainPage: FC<Props & RouteComponentProps<MatchParams>> = ({ match }) => {
@@ -22,14 +25,24 @@ const MainPage: FC<Props & RouteComponentProps<MatchParams>> = ({ match }) => {
         dispatch(searchClub.request({ keyword: match.params.keyword }));
     }, []);
 
-    const topClubList: ReactNode = match.params.keyword ? null : <TopClubList />
+    useEffect(() => {
+        dispatch(fetchClubList.request());
+    }, []);
+
+    const isFilteredPage: boolean = Object.keys(match.params).length > 0;
+    const topClubList: ReactNode = isFilteredPage ? null : <TopClubList />
+    const proposeClubText: ReactNode = isFilteredPage ? null : <ProposeClubText />
 
     return (
         <BaseLayout>
-            <ProposeClubText />
-            {/* <TopClubList keyword={match.params.keyword} /> */}
+            {proposeClubText}
             {topClubList}
-            <ClubList keyword={match.params.keyword} />
+            <ClubList
+                keyword={match.params.keyword}
+                category={match.params.category}
+                tag={match.params.tag}
+                status={match.params.status}
+            /> 
         </BaseLayout>
     );
 }

@@ -38,8 +38,10 @@ interface Props {
     name: string;
     description: string;
     image?: any; // need change
-    status?: T.ClubStatus
-    tags?: Array<string>; // types에 tag 정의
+    status?: T.ClubStatus;
+    // tags?: Array<string>; // types에 tag 정의
+    category?: T.Category;
+    tags?: string[];
 }
 
 const ClubCard: FC<Props & RouteComponentProps> = ({ id, status, image, history }) => {
