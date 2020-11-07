@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 import ClubCard from 'components/templates/ClubCard';
 import { RootState } from 'reducers';
-import { stat } from 'fs';
 import { Club } from 'store/types';
 
 
