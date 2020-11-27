@@ -52,10 +52,9 @@ const UnfoldTopMenu: FC<Props & RouteComponentProps> = ({ homeWidth, categoryWid
   //   console.log(statusWidth);    
   // }, [])
 
-
   const goFindClubs: (type: string, select?: string) => void = (type, select) => {
-    if (select === undefined) history.push(`/${type}`);
-    else history.push(`/${type}/${select}`);
+    // if (select === undefined) history.push(`/${type}`);
+    history.push(`/${type}/${select}`);
   }
   
   let categoryIdx = 1;
@@ -77,7 +76,7 @@ const UnfoldTopMenu: FC<Props & RouteComponentProps> = ({ homeWidth, categoryWid
     return <MenuText key={tagIdx++} onClick={() => goFindClubs("tag", key.toLowerCase())}>{tag}</MenuText>
   });
 
-  const statusMenus: ReactNode = Object.entries(T.ClubStatus).map(([key, status]) => {
+  const statusMenus: ReactNode = Object.entries(T.Status).map(([key, status]) => {
     return <MenuText key={status} onClick={() => goFindClubs("status", key.toLowerCase())}>{status}</MenuText>
   });
   
