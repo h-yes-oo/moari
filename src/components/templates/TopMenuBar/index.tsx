@@ -2,6 +2,7 @@ import React, { FC, ReactNode, useState, useRef, RefObject, MutableRefObject, us
 import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
+import * as T from 'types';
 import palette from 'constants/palette';
 import { searchClub } from 'actions/club';
 import UnfoldTopMenu from '../UnfoldTopMenu';
@@ -44,9 +45,9 @@ interface Props {
 
 }
 
-interface MenuMap {
-    [key: string]: string;
-} 
+type MenuMap = {
+    [key in keyof typeof T.SearchMenu]: string;
+}; 
 
 const TopMenuBar: FC<Props & RouteComponentProps> = ({ history }) => {  
     const [showUnfoldMenu, setShowUnfoldMenu] = useState<Boolean>(false);
@@ -58,11 +59,11 @@ const TopMenuBar: FC<Props & RouteComponentProps> = ({ history }) => {
     const statusRef = useRef<HTMLDivElement>(null);
 
     const menuTextList: MenuMap = {
-        'home': 'Home',
-        'category': '분류별 찾기',
-        'tag': '태그로 찾기',
-        'status': '모집 상태로 찾기',
-        'name': '이름 순 전체보기',
+        HOME: 'Home',
+        CATEGORY: '분류별 찾기',
+        TAG: '태그로 찾기',
+        STATUS: '모집 상태로 찾기',
+        NAME: '이름 순 전체보기',
     }
 
     const registerText: string = '동아리 / 모집공고 등록하기';
@@ -71,15 +72,25 @@ const TopMenuBar: FC<Props & RouteComponentProps> = ({ history }) => {
         history.push('/register/club');
     };
 
-    const goFindPage: (key: string) => void = (tag) => {
-        // console.log(tag);
+    const goFindPage: (key: string) => void = (key) => {
+        // console.log(key);
+        if (key === T.SearchMenu.HOME) {
+            history.push("/");
+            return;
+        }
+
+        let select;
+        // too bad!! replace string literals
+        if (key === T.SearchMenu.CATEGORY) select = "study";
+        else if (key === T.SearchMenu.TAG) select = "tag1";
+        else if (key === T.SearchMenu.STATUS) select = "always";
+        history.push(`/${key.toLowerCase()}/${select}`);
     }
 
     const isAllRefLoaded: boolean = homeRef && categoryRef && tagRef && statusRef ? true : false;
 
     useEffect(() => {
         setMenuLoaded(true);
-        // console.log("isAllRefLoaded: " + isAllRefLoaded);
     }, [isAllRefLoaded])
 
     const MenuList: ReactNode = Object.entries(menuTextList).map(([key, menu]) => (
@@ -90,7 +101,7 @@ const TopMenuBar: FC<Props & RouteComponentProps> = ({ history }) => {
             onMouseEnter={() => setShowUnfoldMenu(true)}
             onMouseLeave={() => setShowUnfoldMenu(false)}
             // too bad !!!
-            ref={key === 'home' ? homeRef : key === 'category' ? categoryRef : key === 'tag' ? tagRef : key === 'status' ? statusRef : null}
+            ref={key === T.SearchMenu.HOME ? homeRef : key === T.SearchMenu.CATEGORY ? categoryRef : key === T.SearchMenu.TAG ? tagRef : key === T.SearchMenu.STATUS ? statusRef : null}
         >
             {menu}
         </MenuButton>
