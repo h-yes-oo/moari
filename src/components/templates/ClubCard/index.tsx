@@ -45,7 +45,6 @@ interface Props {
 }
 
 const ClubCard: FC<Props & RouteComponentProps> = ({ id, status, image, history }) => {
-
     // const goClubDetail: (e: React.MouseEvent<HTMLDivElement>) => void = (e) => {
     const goClubDetail: (id: string) => void = (id) => {
         history.push(`/club/${id}`);
@@ -58,7 +57,7 @@ const ClubCard: FC<Props & RouteComponentProps> = ({ id, status, image, history 
     
     // need refactoring: switch-case
     return (
-        <Root onClick={() => goClubDetail(id)} image={imageElem} >
+        <Root id="clubcard-root" onClick={() => goClubDetail(id)} image={imageElem}>
             {(() => {
                 switch (status) {
                     case T.ClubStatus.PREPARE:
