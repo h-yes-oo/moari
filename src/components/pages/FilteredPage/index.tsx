@@ -34,7 +34,7 @@ const FilteredPage: FC<Props & RouteComponentProps<MatchParams>> = ({ match }) =
   const getFilterType: () => T.FilterType = () => {
     if (match.params.category) return T.Category
     else if (match.params.tag) return T.Tag
-    else if (match.params.status) return T.ClubStatus
+    else if (match.params.status) return T.Status
     return T.Category;
   }
 

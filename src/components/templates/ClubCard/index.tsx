@@ -38,7 +38,7 @@ interface Props {
     name: string;
     description: string;
     image?: any; // need change
-    status?: T.ClubStatus;
+    status?: T.Status;
     // tags?: Array<string>; // types에 tag 정의
     category?: T.Category;
     tags?: string[];
@@ -61,13 +61,13 @@ const ClubCard: FC<Props & RouteComponentProps> = ({ id, status, image, history 
         <Root onClick={() => goClubDetail(id)} image={imageElem} >
             {(() => {
                 switch (status) {
-                    case T.ClubStatus.PREPARE:
+                    case T.Status.PREPARE:
                         return <StatusLabel src={prepareSvg} />
-                    case T.ClubStatus.ALWAYS:
+                    case T.Status.ALWAYS:
                         return <StatusLabel src={alwaysSvg} />
-                    case T.ClubStatus.OPEN:
+                    case T.Status.OPEN:
                         return <StatusLabel src={openSvg} />
-                    case T.ClubStatus.CLOSED:
+                    case T.Status.CLOSED:
                         return <StatusLabel src={closedSvg} />
                     default:
                         return null;

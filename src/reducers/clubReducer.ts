@@ -2,7 +2,7 @@ import { ActionType, createReducer, createAsyncAction, action } from 'typesafe-a
 
 import { Club, ClubList } from "store/types"
 import { fetchClubList, postClub, searchClub } from "actions/club"
-import { ClubStatus } from 'types'
+import { Status } from 'types'
 
 const actions = {
   fetchClubList,

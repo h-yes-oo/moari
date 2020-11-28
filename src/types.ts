@@ -11,7 +11,7 @@ export enum SearchMenu {
 //     name: string;
 //     description: string;
 //     image: string; // need change
-//     // status: ClubStatus;    
+//     // status: Status;    
 //     // tags: Array<string>;
 // }
 
@@ -26,8 +26,7 @@ export enum RegisterFormType {
     TEXT_AREA = 'TEXT_AREA',
     SELECT_BOX = 'SELECT_BOX',
     FILE = 'FILE',
-    CALENDAR = 'CALENDAR',
-    
+    CALENDAR = 'CALENDAR',   
 }
 
 export enum Category {
@@ -51,7 +50,7 @@ export enum Tag {
     TAG3 = "태그3",
 }
 
-export enum ClubStatus {
+export enum Status {
     ALWAYS = '상시 모집',
     OPEN = '모집 중',
     CLOSED = '모집 완료',
@@ -59,4 +58,4 @@ export enum ClubStatus {
 }
 
 // how to reduce code? 
-export type FilterType = typeof Category | typeof Tag | typeof ClubStatus;
+export type FilterType = typeof Category | typeof Tag | typeof Status;

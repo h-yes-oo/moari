@@ -1,5 +1,5 @@
 import React, { FC, ReactNode, useEffect, useState } from 'react';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { RouteComponentProps, useLocation, withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 
 import * as T from 'types';
@@ -43,7 +43,13 @@ interface Props {
 }
 
 const FilteringButtons: FC<Props & RouteComponentProps> = ({ filter, history }) => {
+  const location = useLocation();
   const [selected, setSelected] = useState<string>("");
+
+  useEffect(() => {
+    const currentFilter = location.pathname.slice(location.pathname.lastIndexOf("/")+1).toUpperCase();
+    setSelected(currentFilter);
+  }, [location.pathname]);
   
   const handleClick: (tag: string) => void = (tag) => {
     setSelected(tag);
@@ -51,7 +57,7 @@ const FilteringButtons: FC<Props & RouteComponentProps> = ({ filter, history }) 
     let filterstring: string = "";
     if (filter === T.Category) filterstring = "category";
     else if (filter === T.Tag) filterstring = "tag";
-    else if (filter === T.ClubStatus) filterstring = "status";
+    else if (filter === T.Status) filterstring = "status";
   
     history.push(`/${filterstring}/${tag.toLowerCase()}`);
   }
@@ -67,10 +73,6 @@ const FilteringButtons: FC<Props & RouteComponentProps> = ({ filter, history }) 
       </TagButtonContainer>
     )
   });
-
-  useEffect(() => {
-    console.log(filter);
-  }, [filter]);
 
   return (
     <Root>
