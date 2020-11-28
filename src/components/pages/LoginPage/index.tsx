@@ -1,7 +1,6 @@
 import React, { FC, useEffect, useState } from 'react';
 import BaseLayout from 'components/templates/BaseLayout';
 import styled from 'styled-components';
-import ClubRegisterContents from 'components/templates/ClubRegisterContents';
 import LoginForm from '../../templates/LoginForm';
 import text from './text';
 import * as T from 'types';
