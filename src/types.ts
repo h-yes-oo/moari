@@ -26,7 +26,12 @@ export enum RegisterFormType {
     TEXT_AREA = 'TEXT_AREA',
     SELECT_BOX = 'SELECT_BOX',
     FILE = 'FILE',
-    CALENDAR = 'CALENDAR',   
+    CALENDAR = 'CALENDAR',
+}
+
+export enum LoginFormType {
+    INPUT = 'INPUT', 
+    PASSWORD = 'PASSWORD',
 }
 
 export enum Category {

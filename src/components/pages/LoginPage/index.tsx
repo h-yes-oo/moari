@@ -130,14 +130,13 @@ const LoginPage: FC<Props> = () => {
                     </TopWrapper>
                     <LoginForm
                         description={text.loginId.description}
-                        type={T.RegisterFormType.INPUT}
+                        type={T.LoginFormType.INPUT}
                         height={'60px'}
                         setValue={setId}
                     />
-                    {/* RegisterFormType 지은이한테 물어보기*/}
                     <LoginForm
                         description={text.password.description}
-                        type={T.RegisterFormType.TEXT_AREA}
+                        type={T.LoginFormType.PASSWORD}
                         height={'60px'}
                         setValue={setPassword}
                     />

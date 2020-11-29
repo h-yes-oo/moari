@@ -25,7 +25,7 @@ const InputForm = styled.input<{ addable?: boolean }>`
 
 
 interface FormFactoryProps {
-    type: T.RegisterFormType;  
+    type: T.LoginFormType;  
     description: string;
     height: string; 
     options?: string[]; // type should be changed
@@ -35,12 +35,12 @@ interface FormFactoryProps {
 const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options, setValue }) => {
 
     switch (type) {
-        case T.RegisterFormType.INPUT:
+        case T.LoginFormType.INPUT:
             if (setValue === undefined) return null;
             return (
                 <InputForm placeholder={description} onChange={(e) => setValue(e.target.value)}/>
             );
-        case T.RegisterFormType.TEXT_AREA:
+        case T.LoginFormType.PASSWORD:
             if (setValue === undefined) return null;
             return (
                 <InputForm placeholder={description} onChange={(e) => setValue(e.target.value)} type="password"/>
@@ -52,7 +52,7 @@ const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options,
 
 interface Props {
     description: string;
-    type: T.RegisterFormType;  
+    type: T.LoginFormType;  
     height: string; 
     setValue?: Dispatch<SetStateAction<any>>;
 }

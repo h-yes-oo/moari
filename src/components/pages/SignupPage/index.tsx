@@ -116,35 +116,34 @@ const SignupPage: FC<Props> = () => {
                     </TopWrapper>
                     <LoginForm
                         description={text.loginId.description}
-                        type={T.RegisterFormType.INPUT}
+                        type={T.LoginFormType.INPUT}
                         height={'60px'}
                         setValue={setId}
                     />
                     <LoginForm
                         description={text.email.description}
-                        type={T.RegisterFormType.INPUT}
+                        type={T.LoginFormType.INPUT}
                         height={'60px'}
                         setValue={setEmail}
                     />
                     <NickNameWrapper>
                         <LoginForm
                             description={text.nickname.description}
-                            type={T.RegisterFormType.INPUT}
+                            type={T.LoginFormType.INPUT}
                             height={'60px'}
                             setValue={setNickname}
                         />
                         <DuplicateButton src={duplicateCheckSvg} onClick={() => duplicateCheck()} />
                     </NickNameWrapper>
-                    {/* RegisterFormType 지은이한테 물어보기*/}
                     <LoginForm
                         description={text.password.description}
-                        type={T.RegisterFormType.TEXT_AREA}
+                        type={T.LoginFormType.PASSWORD}
                         height={'60px'}
                         setValue={setPassword}
                     />
                     <LoginForm
                         description={text.confirmPassword.description}
-                        type={T.RegisterFormType.TEXT_AREA}
+                        type={T.LoginFormType.PASSWORD}
                         height={'60px'}
                         setValue={setConfirmPassword}
                     />
