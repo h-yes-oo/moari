@@ -42,20 +42,12 @@ const ClubRegisterContents: FC<Props & RouteComponentProps> = ({ history }) => {
     const [tags, setTags] = useState<string[]>([]);
     const [managerIds, setManagerIds] = useState<string[]>([]);
 
-    // useEffect(() => {
-    //     console.log(photos);
-    // }, [photos])
-
-    useEffect(() => {
-        console.log(managerIds);
-    }, [managerIds]);
-
     // const clubs = useSelector((state: RootState) => state.club);
     const dispatch = useDispatch();
 
     const handlePostClub: () => void = () => {
         // 실패 alert 필요
-        dispatch(postClub.request({ name, school, description, photos })); 
+        dispatch(postClub.request({ name, school, description, photos, category, tags, recruit })); 
         alert('동아리 등록 성공! 😆');
         // history.push('/');
     }
@@ -99,6 +91,7 @@ const ClubRegisterContents: FC<Props & RouteComponentProps> = ({ history }) => {
                         title={text.recruit.title}
                         description={text.recruit.description}
                         type={T.RegisterFormType.SELECT_BOX}
+                        options={Object.values(T.Status)}
                         height={'48px'}
                         setValue={setRecruit}
                     />
@@ -106,13 +99,14 @@ const ClubRegisterContents: FC<Props & RouteComponentProps> = ({ history }) => {
                         title={text.category.title}
                         description={text.category.description}
                         type={T.RegisterFormType.SELECT_BOX}
+                        options={Object.values(T.Category)}
                         height={'48px'}
                         setValue={setCategory}
                     />
                     <RegisterForm 
                         title={text.tag.title}
                         description={text.tag.description}
-                        type={T.RegisterFormType.SELECT_BOX}
+                        type={T.RegisterFormType.INPUT}
                         height={'48px'}
                         setValue={setTags}
                     />

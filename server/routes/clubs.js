@@ -6,7 +6,6 @@ const { Club, Image } = require("../models/Club");
 const fs = require('fs'); 
 const path = require('path'); 
 const multer = require('multer');
-const { nextTick } = require('process');
   
 const upload_club = multer({
   storage: multer.diskStorage({
@@ -48,11 +47,11 @@ router.post('/', upload_club.array('photos'), async (req, res) => {
         school: req.body.school,
         description: req.body.description,
         category: req.body.category,
-        tags: req.body.tags
+        tags: req.body.tags,
+        recruit: req.body.recruit        
     });
 
-    console.log(req.files);
-
+    // console.log(req.files);
     for (let image of req.files) {
         let obj = {
             img: {
@@ -66,7 +65,7 @@ router.post('/', upload_club.array('photos'), async (req, res) => {
         newImage.save();
         club.photos.push(newImage);
     }
-        try {
+    try {
         const newClub = await club.save();
         res.json(newClub);
     } catch(err) {

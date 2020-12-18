@@ -25,7 +25,7 @@ export default {
     },
     tag: {
         title: '태그',
-        description: '동아리의 태그를 선택해주세요 (최대 5개)',
+        description: '동아리의 태그를 입력해 주세요(ex. #개발 #춤 #데이식스 #김선호)',
     },
     managerId: {
         title: '담당자 아이디',
