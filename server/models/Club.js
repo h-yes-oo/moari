@@ -31,19 +31,19 @@ const clubSchema = mongoose.Schema({
     }],
     category: {
         type: String,
+        required: true,
     },
     tags: {
         type: [String],
+    },
+    status: {
+        type: String,
+        required: true,
     },
     // managers: [{
     //     type: userSchema,
     //     ref: "User"
     // }],
-    
-    // status: {
-    //     type: string,
-    //     required: true,
-    // },
     // useCertificate: {
     //     type: Boolean,
     // },
