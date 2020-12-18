@@ -37,7 +37,7 @@ const ClubRegisterContents: FC<Props & RouteComponentProps> = ({ history }) => {
     const [school, setSchool] = useState<string>('');
     const [description, setDescription] = useState<string>('');
     const [photos, setPhotos] = useState<FileList>();
-    const [recruit, setRecruit] = useState<string>('');
+    const [status, setStatus] = useState<string>('');
     const [category, setCategory] = useState<string>('');
     const [tags, setTags] = useState<string[]>([]);
     const [managerIds, setManagerIds] = useState<string[]>([]);
@@ -47,7 +47,7 @@ const ClubRegisterContents: FC<Props & RouteComponentProps> = ({ history }) => {
 
     const handlePostClub: () => void = () => {
         // 실패 alert 필요
-        dispatch(postClub.request({ name, school, description, photos, category, tags, recruit })); 
+        dispatch(postClub.request({ name, school, description, photos, category, tags, status })); 
         alert('동아리 등록 성공! 😆');
         // history.push('/');
     }
@@ -88,12 +88,12 @@ const ClubRegisterContents: FC<Props & RouteComponentProps> = ({ history }) => {
                         setValue={setPhotos}
                     />
                     <RegisterForm 
-                        title={text.recruit.title}
-                        description={text.recruit.description}
+                        title={text.status.title}
+                        description={text.status.description}
                         type={T.RegisterFormType.SELECT_BOX}
                         options={Object.values(T.Status)}
                         height={'48px'}
-                        setValue={setRecruit}
+                        setValue={setStatus}
                     />
                     <RegisterForm 
                         title={text.category.title}

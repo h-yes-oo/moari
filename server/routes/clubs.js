@@ -48,7 +48,7 @@ router.post('/', upload_club.array('photos'), async (req, res) => {
         description: req.body.description,
         category: req.body.category,
         tags: req.body.tags,
-        recruit: req.body.recruit        
+        status: req.body.status        
     });
 
     // console.log(req.files);

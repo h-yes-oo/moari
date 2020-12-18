@@ -40,7 +40,7 @@ interface PostClubPayload {
   photos?: FileList;
   category: string;
   tags: string[];
-  recruit: string;
+  status: string;
 }
 
 export const postClub =
@@ -49,7 +49,7 @@ export const postClub =
   // AxiosResponse<Club>
   )<PostClubPayload, Club, AxiosError>()
 
-export const postClubRequest = ({ name, school, description, photos, category, tags, recruit }: PostClubPayload): Promise<Club> => {
+export const postClubRequest = ({ name, school, description, photos, category, tags, status }: PostClubPayload): Promise<Club> => {
   console.log("post action working");
 
   const formData = new FormData();
@@ -59,7 +59,7 @@ export const postClubRequest = ({ name, school, description, photos, category, t
   formData.append("description", description);
   formData.append("tags", JSON.stringify(tags));
   formData.append("category", category);
-  formData.append("recruit", recruit);
+  formData.append("status", status);
 
   if (photos) {
     for (let i=0; i<photos.length; i++) {

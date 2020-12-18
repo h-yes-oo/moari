@@ -36,7 +36,7 @@ const clubSchema = mongoose.Schema({
     tags: {
         type: [String],
     },
-    recruit: {
+    status: {
         type: String,
         required: true,
     },
