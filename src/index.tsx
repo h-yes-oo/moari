@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
+import { persistStore } from 'redux-persist';
 import createSagaMiddleware from "redux-saga"
 import './index.css';
 import App from './App';
@@ -13,8 +14,9 @@ const sagaMiddleware = createSagaMiddleware()
 
 const configureStore = () => {
   const store = createStore(rootReducer, applyMiddleware(sagaMiddleware))
-
   sagaMiddleware.run(sagas)
+  // const persistor = persistStore(store);
+
   return store
 }
 

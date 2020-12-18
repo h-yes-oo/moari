@@ -4,6 +4,7 @@ const app = express();
 const port = 5000;
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const path = require('path'); 
 const cors = require('cors');
 const mongoose = require('mongoose');
 
@@ -19,6 +20,7 @@ app.use(cookieParser());
 
 const accountsRoute = require('./routes/accounts');
 const clubsRoute = require('./routes/clubs');
+// const clubsImageRoute = require('./routes/uploads/clubs');
 
 app.use('/accounts', accountsRoute);
 app.use('/clubs', clubsRoute);
@@ -30,10 +32,10 @@ mongoose.connect(config.mongoURI, {
 
 app.get('/', (req, res) => res.send('Hello World'));
 
-app.post('/register',(req,res)=>{
+app.post('/signup',(req,res)=>{
     const user = new User(req.body);
     user.save((err,userInfo) => {
-        if(err) return res.json({success:false, err})
+        if(err) return res.json({ success: false, err })
         return res.status(200).json({
             success: true
         })
@@ -90,16 +92,6 @@ app.get('/logout', auth, (req,res)=>{
         })
 })
 
-// app.post('/register/club', (req, res)=>{
-//     const club = new Club(req.body);
-//     club.save((err, clubInto) => {
-//         if(err) return res.json({ success: false, err })
-//         return res.status(200).json({
-//             success: true
-//         }) 
-//     })
-// });
-
 app.route('/register/club')
     .get(function(req, res) {
         console.log(req);
@@ -107,7 +99,15 @@ app.route('/register/club')
     })
     .post(function(req, res) {
         res.send('Add a book');
-    })
+})
 
+app.get('/search/:keyword', (req, res) => {
+    console.log("searching...");
+    Club.find({ name: req.params.keyword }, (err, club) => {
+        if (err) return res.status(500).json({ error: err });
+        if (!club) return res.status(404).json({ error: "찾는 동아리가 없습니다." });
+        res.json(club);
+    });
+});
 
 app.listen(port,() => console.log(`Moari Server listening on port ${port}!`))

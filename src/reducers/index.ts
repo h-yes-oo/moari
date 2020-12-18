@@ -1,10 +1,23 @@
 import { combineReducers } from 'redux';
-import { clubReducer } from './clubReducer';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+
+import { fetchReducer, postReducer, searchReducer } from './clubReducer';
+
+const persistConfig = {
+    key: 'root',
+    storage: storage,
+    whitelist: ["foodList"],
+};
 
 const rootReducer = combineReducers({
-    club: clubReducer
+    fetch: fetchReducer,
+    post: postReducer,
+    search: searchReducer
 });
 
-export default rootReducer;
+export default persistReducer(persistConfig, rootReducer)
+
+// export default rootReducer;
 
 export type RootState = ReturnType<typeof rootReducer>;

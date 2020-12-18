@@ -1,4 +1,4 @@
-import { Club, ClubList } from "store/club/types";
+import { Club, ClubList } from "store/types";
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { createAsyncAction } from "typesafe-actions";
 
@@ -14,14 +14,22 @@ export const POST_CLUB = {
   FAILURE: 'CLUB_POST_FAILURE'
 }
 
+export const SEARCH_CLUB = {
+  REQUEST: 'CLUB_SEARCH_REQUEST',
+  SUCCESS: 'CLUB_SEARCH_SUCCESS',
+  FAILURE: 'CLUB_SEARCH_FAILURE'
+}
+
 export const fetchClubList =
   createAsyncAction(
     FETCH_CLUB.REQUEST, FETCH_CLUB.SUCCESS, FETCH_CLUB.FAILURE
+  // AxiosResponse<ClubList>?
   )<void, ClubList, AxiosError>()
 
 export const fetchClubListRequest = (): Promise<ClubList> => {
-  console.log("fetch action working");
+  // console.log("fetch action working");
   return axios.get('http://localhost:5000/clubs')
+  // res.json()?
   .then(res => res.data);
 }
 
@@ -29,19 +37,55 @@ interface PostClubPayload {
   name: string;
   school: string;
   description: string;
+  photos?: FileList;
+  category?: string;
+  tags?: string[];
 }
 
 export const postClub =
   createAsyncAction(
     POST_CLUB.REQUEST, POST_CLUB.SUCCESS, POST_CLUB.FAILURE
+  // AxiosResponse<Club>?
   )<PostClubPayload, Club, AxiosError>()
 
-export const postClubRequest = ({ name, school, description }: PostClubPayload): Promise<Club> => {
+export const postClubRequest = ({ name, school, description, photos }: PostClubPayload): Promise<Club> => {
   console.log("post action working");
-  return axios.post('http://localhost:5000/clubs', {
-    name: name,
-    school: school,
-    description: description
-  })
+
+  const formData = new FormData();
+  
+  formData.append("name", name);
+  formData.append("school", school);
+  formData.append("description", description);
+
+  if (photos) {
+    for (let i=0; i<photos.length; i++) {
+      formData.append("photos", photos[i]);
+    }
+  }
+
+  // for (var key of formData.entries()) {
+  //   console.log(key[0]);
+  //   console.log(key[1]);
+  // }
+
+  return axios.post('http://localhost:5000/clubs', formData)
+  // as Club?
+  .then(res => res.data);
+}
+
+interface SearchClubPayload {
+  keyword: string;
+}
+
+export const searchClub = 
+  createAsyncAction(
+    SEARCH_CLUB.REQUEST, SEARCH_CLUB.SUCCESS, SEARCH_CLUB.FAILURE
+  // AxiosResponse<ClubList>?
+  )<SearchClubPayload, ClubList, AxiosError>()
+
+export const searchClubRequest = ({ keyword }: SearchClubPayload): Promise<ClubList> => {
+  // console.log("search action working");
+  // console.log(`http://localhost:5000/search/${keyword}`);
+  return axios.get(`http://localhost:5000/search/${keyword}`)
   .then(res => res.data);
 }
