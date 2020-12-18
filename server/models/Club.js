@@ -24,7 +24,7 @@ const clubSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    photos : [{
+    photos: [{
         // type: mongoose.Schema.Types.ObjectId,
         type: imageSchema,
         ref: "Image"

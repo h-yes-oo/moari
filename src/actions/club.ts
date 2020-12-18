@@ -29,7 +29,7 @@ export const fetchClubList =
 export const fetchClubListRequest = (): Promise<ClubList> => {
   // console.log("fetch action working");
   return axios.get('http://localhost:5000/clubs')
-  // res.json()?
+  // res.json()
   .then(res => res.data);
 }
 
@@ -38,17 +38,18 @@ interface PostClubPayload {
   school: string;
   description: string;
   photos?: FileList;
-  category?: string;
-  tags?: string[];
+  category: string;
+  tags: string[];
+  status: string;
 }
 
 export const postClub =
   createAsyncAction(
     POST_CLUB.REQUEST, POST_CLUB.SUCCESS, POST_CLUB.FAILURE
-  // AxiosResponse<Club>?
+  // AxiosResponse<Club>
   )<PostClubPayload, Club, AxiosError>()
 
-export const postClubRequest = ({ name, school, description, photos }: PostClubPayload): Promise<Club> => {
+export const postClubRequest = ({ name, school, description, photos, category, tags, status }: PostClubPayload): Promise<Club> => {
   console.log("post action working");
 
   const formData = new FormData();
@@ -56,6 +57,9 @@ export const postClubRequest = ({ name, school, description, photos }: PostClubP
   formData.append("name", name);
   formData.append("school", school);
   formData.append("description", description);
+  formData.append("tags", JSON.stringify(tags));
+  formData.append("category", category);
+  formData.append("status", status);
 
   if (photos) {
     for (let i=0; i<photos.length; i++) {
@@ -69,8 +73,11 @@ export const postClubRequest = ({ name, school, description, photos }: PostClubP
   // }
 
   return axios.post('http://localhost:5000/clubs', formData)
-  // as Club?
-  .then(res => res.data);
+  // as Club
+  .then(res => {
+    console.log(res.data);
+    return res.data;
+  });
 }
 
 interface SearchClubPayload {
@@ -80,12 +87,11 @@ interface SearchClubPayload {
 export const searchClub = 
   createAsyncAction(
     SEARCH_CLUB.REQUEST, SEARCH_CLUB.SUCCESS, SEARCH_CLUB.FAILURE
-  // AxiosResponse<ClubList>?
+  // AxiosResponse<ClubList>
   )<SearchClubPayload, ClubList, AxiosError>()
 
 export const searchClubRequest = ({ keyword }: SearchClubPayload): Promise<ClubList> => {
   // console.log("search action working");
-  // console.log(`http://localhost:5000/search/${keyword}`);
   return axios.get(`http://localhost:5000/search/${keyword}`)
   .then(res => res.data);
 }

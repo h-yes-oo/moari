@@ -6,15 +6,6 @@ export enum SearchMenu {
     NAME = 'NAME',
 }
 
-// export interface ClubInfo {
-//     id: number;
-//     name: string;
-//     description: string;
-//     image: string; // need change
-//     // status: Status;    
-//     // tags: Array<string>;
-// }
-
 export enum RegisterButton {
     CLUB_REGISTER = 'CLUB_REGISTER',
     RECRUIT_REGISTER = 'RECRUIT_REGISTER'
@@ -26,7 +17,12 @@ export enum RegisterFormType {
     TEXT_AREA = 'TEXT_AREA',
     SELECT_BOX = 'SELECT_BOX',
     FILE = 'FILE',
-    CALENDAR = 'CALENDAR',   
+    CALENDAR = 'CALENDAR',
+}
+
+export enum LoginFormType {
+    INPUT = 'INPUT', 
+    PASSWORD = 'PASSWORD',
 }
 
 export enum Category {

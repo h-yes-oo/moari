@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, ReactNode, SetStateAction, useState, useMemo, useEffect } from 'react';
+import React, { Dispatch, FC, ReactNode, SetStateAction, useState } from 'react';
 import styled from 'styled-components';
 import Select from 'react-select'
 
@@ -139,7 +139,7 @@ interface FormFactoryProps {
     description: string;
     height: string; 
     options?: string[]; // type should be changed
-    setValue?: Dispatch<SetStateAction<any>>;
+    setValue?: Dispatch<SetStateAction<any>> | ((e: any) => void);
 }
 
 // 여기 말고 아래에 main component 있음 (RegisterForm)
@@ -240,13 +240,19 @@ const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options,
                 </FlexContainer>
             );
         case T.RegisterFormType.SELECT_BOX:
-            // if (!options) return null; 
+            if (!options) return null; 
             if (setValue === undefined) return null;
-            const options = [
-                { value: 'first', label: '첫 번째 항목' },
-                { value: 'second', label: '두 번째 항목' },
-                { value: 'third', label: '세 번째 항목' },
-            ]
+
+            const selectOptions = options.map(option => {
+                return {
+                    value: option,
+                    label: option,
+                }              
+            })
+
+            const selectChange: (e: any) => void = (e) => {
+                setValue(e.value);
+            }
 
             const customStyles = {
                 valueContainer: (provided: any, state: { isSelected: any; }) => ({
@@ -286,7 +292,6 @@ const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options,
                 // singleValue: (provided: any, state: { isDisabled: any; }) => {
                 //   const opacity = state.isDisabled ? 0.5 : 1;
                 //   const transition = 'opacity 300ms';
-              
                 //   return { ...provided, opacity, transition };
                 // }
             }
@@ -294,7 +299,8 @@ const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options,
             return (
                 <Select
                     styles={customStyles}
-                    options={options}
+                    options={selectOptions}
+                    onChange={(e) => selectChange(e)}
                     placeholder={description}
                 />
             )
@@ -312,13 +318,12 @@ interface Props {
     guide?: string;
     description: string;
     type: T.RegisterFormType;  
+    options?: string[];
     height: string; 
     setValue?: Dispatch<SetStateAction<any>>;
 }
 
-const RegisterForm: FC<Props> = ({ title, guide, description, type, height, setValue }) => {
-    // const registerForm: ReactNode = <FormFactory type={type} description={description} height={height} onChange={onChange} />
-
+const RegisterForm: FC<Props> = ({ title, guide, description, type, options, height, setValue }) => {
     return (
         <Root>
             <TextWrapper>
@@ -326,8 +331,7 @@ const RegisterForm: FC<Props> = ({ title, guide, description, type, height, setV
                 <OptionText>필수 항목</OptionText>
             </TextWrapper>
             <GuideText>{guide}</GuideText>
-            {/* {registerForm} */}
-            <FormFactory type={type} description={description} height={height} setValue={setValue} />
+            <FormFactory type={type} description={description} height={height} options={options} setValue={setValue} />
         </Root>
     );
 }

@@ -9,20 +9,40 @@ import alwaysSvg from 'assets/icons/stat-always.svg';
 import openSvg from 'assets/icons/stat-open.svg';
 import closedSvg from 'assets/icons/stat-closed.svg';
 import logoPng from 'assets/images/logo.png';
+import { start } from 'repl';
 
 const Root = styled.div<{ image?: string | undefined }>`
-    background-image: url(${(props) => props.image ? props.image : logoPng });
-    // background-size: cover;
-    background-position: center;
+    // background: url(${(props) => props.image ? props.image : logoPng }) no-repeat center top;    
+    // background-size: contain; // cover
     width: 358px;
     height: 512px;
     border-radius: 20px;
     background-color: #EEEEEE;
-    position: relative;
+    position: relative;s
     cursor: pointer;
     margin: 0 72px;
     flex-shrink: 0;
 ` 
+
+const CardImage = styled.img`
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 50%;
+    border-radius: 20px 20px 0 0;
+`
+
+const CardDescription = styled.div`
+    // object-fit: cover;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 50%;
+    border-radius: 0 0 20px 20px;
+    padding: 18px;
+    box-sizing: border-box;
+`
 
 const StatusLabel = styled.img`
     width: 108px;
@@ -32,19 +52,27 @@ const StatusLabel = styled.img`
     top: 16px;
 `
 
+const ClubNameText = styled.div`
+    font-size: 24px;
+    font-weight: bold;
+`
+
+const ClubDescription = styled.div`
+    margin-top: 20px;
+    line-height: 1.6;  
+`
 interface Props {
     key: string;
     id: string;
     name: string;
     description: string;
     image?: any; // need change
-    status?: T.Status;
-    // tags?: Array<string>; // types에 tag 정의
+    status: T.Status;
     category?: T.Category;
     tags?: string[];
 }
 
-const ClubCard: FC<Props & RouteComponentProps> = ({ id, status, image, history }) => {
+const ClubCard: FC<Props & RouteComponentProps> = ({ id, name, description, image, status, history }) => {
     // const goClubDetail: (e: React.MouseEvent<HTMLDivElement>) => void = (e) => {
     const goClubDetail: (id: string) => void = (id) => {
         history.push(`/club/${id}`);
@@ -54,10 +82,11 @@ const ClubCard: FC<Props & RouteComponentProps> = ({ id, status, image, history 
     const imageConverterPrefix = "data:image/png;base64,"
     const imageElem = image ? imageConverterPrefix + btoa(String.fromCharCode.apply(null, imageBuffer)) : "";
     // console.log(imageElem);
-    
+
     // need refactoring: switch-case
     return (
         <Root id="clubcard-root" onClick={() => goClubDetail(id)} image={imageElem}>
+            <CardImage src={imageElem} />
             {(() => {
                 switch (status) {
                     case T.Status.PREPARE:
@@ -72,6 +101,10 @@ const ClubCard: FC<Props & RouteComponentProps> = ({ id, status, image, history 
                         return null;
                 }
             })()}
+            <CardDescription>
+                <ClubNameText>{name}</ClubNameText>
+                <ClubDescription>{description}</ClubDescription>
+            </CardDescription>
         </Root>
     );
 }
