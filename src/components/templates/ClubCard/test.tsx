@@ -15,7 +15,7 @@ describe('<ClubCard />', () => {
     message: "",
   });
 
-  const mockProps = {
+  let mockProps = {
     key: "1",
     id: "1",
     name: "mock",
@@ -45,6 +45,5 @@ describe('<ClubCard />', () => {
 
     wrapper.find("#clubcard-root").hostNodes().simulate("click");
     expect(history.entries[history.entries.length-1].pathname).toBe('/club/1');
-    // console.log(wrapper.debug());
   })
 })

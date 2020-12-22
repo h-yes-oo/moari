@@ -44,7 +44,7 @@ const ClubList: FC<Props> = ({ keyword, category, tag, status }) => {
     }
     else if (status !== undefined) {
       // console.log("status searching...");
-      return clubs.filter((club) => club.recruit === status);
+      return clubs.filter((club) => club.status === status);
     }
     else return clubs;
   }
@@ -63,6 +63,7 @@ const ClubList: FC<Props> = ({ keyword, category, tag, status }) => {
             name={club.name}
             description={club.description}
             image={club.photos ? club.photos[0] : undefined}
+            status={club.status}
         />
       </CardWrapper>
     )

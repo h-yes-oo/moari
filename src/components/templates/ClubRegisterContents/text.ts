@@ -15,7 +15,7 @@ export default {
         title: '대표 사진',
         description: '메인페이지에 등록될 동아리 사진입니다',
     },
-    recruit: {
+    status: {
         title: '모집 방법',
         description: '상시 모집 / 기수별 모집 중 선택해주세요',
     },
@@ -25,7 +25,7 @@ export default {
     },
     tag: {
         title: '태그',
-        description: '동아리의 태그를 선택해주세요 (최대 5개)',
+        description: '동아리의 태그를 입력해 주세요(ex. #개발 #춤 #데이식스 #김선호)',
     },
     managerId: {
         title: '담당자 아이디',
