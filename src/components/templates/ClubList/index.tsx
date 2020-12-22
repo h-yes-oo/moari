@@ -2,6 +2,7 @@ import React, { FC, ReactNode, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
+import * as T from 'types';
 import ClubCard from 'components/templates/ClubCard';
 import { RootState } from 'reducers';
 import { Club } from 'store/types';
@@ -36,7 +37,8 @@ const ClubList: FC<Props> = ({ keyword, category, tag, status }) => {
     // TODO: erase console logs and shorten return statements
     if (category !== undefined) {
       // console.log("category searching...");
-      return clubs.filter((club) => club.category === category);
+      const categoryString = T.Category[category.toUpperCase() as keyof typeof T.Category];
+      return clubs.filter((club) => club.category === categoryString);
     }
     else if (tag !== undefined) {
       // console.log("tag searching...");
@@ -44,7 +46,8 @@ const ClubList: FC<Props> = ({ keyword, category, tag, status }) => {
     }
     else if (status !== undefined) {
       // console.log("status searching...");
-      return clubs.filter((club) => club.status === status);
+      const statusString = T.Status[status.toUpperCase() as keyof typeof T.Status];
+      return clubs.filter((club) => club.status === statusString);
     }
     else return clubs;
   }
