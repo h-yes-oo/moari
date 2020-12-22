@@ -67,9 +67,9 @@ const FilteringButtons: FC<Props & RouteComponentProps> = ({ filter, history }) 
     const isSelected: boolean = selected === key ? true : false;
 
     return (
-      <TagButtonContainer onClick={() => handleClick(key)}>
+      <TagButtonContainer onClick={() => handleClick(key)} key={key}>
         <TagButtonImg src={tagImg} />
-        <TagButtonText isSelected={isSelected} >{text}</TagButtonText>
+        <TagButtonText isSelected={isSelected}>{text}</TagButtonText>
       </TagButtonContainer>
     )
   });
