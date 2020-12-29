@@ -2,21 +2,39 @@
   "name": "moari",
   "version": "0.1.0",
   "private": true,
+  "jest": {
+    "verbose": true,
+    "modulePaths": [
+      "src/"
+    ],
+    "preset": "ts-jest",
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/assetsTransformer.js",
+      "\\.(css|less)$": "<rootDir>/assetsTransformer.js"
+    },
+    "setupFilesAfterEnv": [
+      "./src/setupTests.ts"
+    ]
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "@types/color": "^3.0.1",
+    "@types/enzyme": "^3.10.8",
+    "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/jest": "^26.0.15",
     "@types/node": "^14.14.6",
     "@types/react-redux": "^7.1.10",
     "@types/react-router": "^5.1.8",
     "@types/react-router-dom": "^5.1.6",
     "@types/react-select": "^3.0.23",
+    "@types/redux-mock-store": "^1.0.2",
     "@types/redux-persist": "^4.3.1",
     "@types/redux-saga": "^0.10.5",
     "@types/styled-components": "^5.1.4",
     "axios": "^0.21.0",
+    "babel-jest": "^26.6.3",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "color": "^3.1.3",
@@ -24,6 +42,8 @@
     "cors": "^2.8.5",
     "cross-env": "^7.0.2",
     "dotenv": "^8.2.0",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.5",
     "express": "^4.17.1",
     "http-proxy-middleware": "^1.0.6",
     "jsonwebtoken": "^8.5.1",
@@ -31,16 +51,18 @@
     "multer": "^1.4.2",
     "nodemon": "^2.0.6",
     "npm-run-all": "^4.1.5",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
     "react-redux": "^7.2.2",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.0",
     "react-select": "^3.1.0",
+    "redux-mock-store": "^1.5.4",
     "redux-persist": "^6.0.0",
     "redux-saga": "^1.1.3",
     "static": "^2.0.0",
     "styled-components": "^5.2.1",
+    "ts-jest": "^26.4.4",
     "typesafe-actions": "^5.1.0",
     "typescript": "~4.0.5"
   },
@@ -49,7 +71,7 @@
     "start:client": "react-scripts start",
     "start:server": "nodemon ./server/index.js",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -71,8 +93,11 @@
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "index.js",
   "devDependencies": {
+    "@babel/plugin-syntax-jsx": "^7.12.1",
+    "@babel/preset-react": "^7.12.5",
     "@types/react": "^16.9.55",
-    "@types/react-dom": "^16.9.9"
+    "@types/react-dom": "^16.9.9",
+    "babel-core": "^7.0.0-bridge.0"
   },
   "keywords": [],
   "author": "",

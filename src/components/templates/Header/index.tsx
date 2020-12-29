@@ -100,7 +100,6 @@ interface Props {
 const Header: FC<Props & RouteComponentProps> = ({ campusName, username, history }) => {    
     const dispatch = useDispatch();
     const [searchKeyword, setSearchKeyword] = useState<string>("");
-    const searchedClubs = useSelector((state: RootState) => state.search.clubs);
         
     const goMainPage: () => void = () => {
         history.push('/');
@@ -129,7 +128,10 @@ const Header: FC<Props & RouteComponentProps> = ({ campusName, username, history
     // 마지막 한 글자가 한번 더 쳐짐 ㅠㅠ
     const enterSearch: (e: React.KeyboardEvent<HTMLInputElement>) => void = (e) => {
         if (e.key === "Enter") {
-            if (searchKeyword === "") alert("검색어를 입력해주세요");        
+            if (searchKeyword === "") {
+                alert("검색어를 입력해주세요");        
+                return;
+            }
             console.log(searchKeyword);
             setSearchKeyword("");
             dispatch(searchClub.request({ keyword: searchKeyword }));
@@ -142,14 +144,16 @@ const Header: FC<Props & RouteComponentProps> = ({ campusName, username, history
             <LogoCampusIcon src={logoCampusSvg} onClick={() => goMainPage()}/>
             <SearchBoxWrapper>
                 <SearchIcon
+                    id="search-icon"
                     src={searchSvg}
                     onClick={() => clickSearch()}
                 />
                 <SearchBox
+                    id="search-box"
                     placeholder="동아리 이름이나 태그로 검색해보세요"
                     value={searchKeyword}
                     onChange={(e) => setSearchKeyword(e.target.value)}
-                    onKeyDown={(e) => enterSearch(e)}
+                    onKeyPress={(e) => enterSearch(e)}
                 />
             </SearchBoxWrapper>
             <ProfileWrapper>
