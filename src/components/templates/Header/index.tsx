@@ -153,7 +153,7 @@ const Header: FC<Props & RouteComponentProps> = ({ campusName, username, history
                     placeholder="동아리 이름이나 태그로 검색해보세요"
                     value={searchKeyword}
                     onChange={(e) => setSearchKeyword(e.target.value)}
-                    onKeyDown={(e) => enterSearch(e)}
+                    onKeyPress={(e) => enterSearch(e)}
                 />
             </SearchBoxWrapper>
             <ProfileWrapper>
