@@ -29,18 +29,21 @@ const ClubRegisterContents: FC<Props> = () => {
                     title={text.clubName.title}
                     description={text.clubName.description}
                     type={T.RegisterFormType.SELECT_BOX}
+                    required={true}
                     height={'48px'}
                 />
                 <RegisterForm
                     title={text.recruitTitle.title}
                     description={text.recruitTitle.description}
                     type={T.RegisterFormType.INPUT}
+                    required={true}
                     height={'100px'}
                 />
                 <RegisterForm 
                     title={text.recruitPeriod.title}
                     description={text.recruitPeriod.description1}
                     type={T.RegisterFormType.INPUT}
+                    required={true}
                     height={'600px'}
                 />
             </LeftSection>
@@ -49,6 +52,7 @@ const ClubRegisterContents: FC<Props> = () => {
                     title={text.recruitDetails.title}
                     description={text.recruitDetails.description}
                     type={T.RegisterFormType.TEXT_AREA}
+                    required={true}
                     height={'600px'}
                 />
             </RightSection>
