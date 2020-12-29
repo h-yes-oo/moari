@@ -1,14 +1,13 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'reducers';
-import { RouteComponentProps, withRouter } from 'react-router-dom';
-
-import { postClub } from 'actions/club';
 import RegisterForm from '../RegisterForm';
 import * as T from 'types';
 import text from './text';
 import registerButtonSvg from 'assets/icons/register-button.svg';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from 'reducers';
+import { postClub } from 'actions/club';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 const Root = styled.div`
     display: flex;
@@ -34,12 +33,12 @@ interface Props {
 }
 
 const ClubRegisterContents: FC<Props & RouteComponentProps> = ({ history }) => {
-    const [name, setName] = useState<string>(''); // required
-    const [school, setSchool] = useState<string>(''); // required
+    const [name, setName] = useState<string>('');
+    const [school, setSchool] = useState<string>('');
     const [description, setDescription] = useState<string>('');
     const [photos, setPhotos] = useState<FileList>();
-    const [status, setStatus] = useState<string>(''); // required
-    const [category, setCategory] = useState<string>(''); // required
+    const [status, setStatus] = useState<string>('');
+    const [category, setCategory] = useState<string>('');
     const [tags, setTags] = useState<string[]>([]);
     const [managerIds, setManagerIds] = useState<string[]>([]);
 
@@ -47,23 +46,10 @@ const ClubRegisterContents: FC<Props & RouteComponentProps> = ({ history }) => {
     const dispatch = useDispatch();
 
     const handlePostClub: () => void = () => {
-        if (name === '') return requiredAlert(name, '이름');
-        else if (school === '') return requiredAlert(school, '학교 정보');
-        else if (status === '') return requiredAlert(status, '모집 방법');
-        else if (category === '') return requiredAlert(category, '분류');
-
+        // 실패 alert 필요
         dispatch(postClub.request({ name, school, description, photos, category, tags, status })); 
         alert('동아리 등록 성공! 😆');
         // history.push('/');
-    }
-
-    const requiredAlert: (type: any, text: string) => void = (type, text) => {
-        alert(`[${text}]은/는 필수 항목입니다.`);
-        return;
-    }
-
-    const isRequiredEmpty: (input: string) => boolean = (input) => {
-        return input === '';
     }
 
     return (
@@ -76,8 +62,6 @@ const ClubRegisterContents: FC<Props & RouteComponentProps> = ({ history }) => {
                         description={text.clubName.description}
                         type={T.RegisterFormType.INPUT}
                         height={'48px'}
-                        required={true}
-                        highlight={isRequiredEmpty(name)}
                         setValue={setName}
                     />
                     <RegisterForm
@@ -85,8 +69,6 @@ const ClubRegisterContents: FC<Props & RouteComponentProps> = ({ history }) => {
                         description={text.clubInfo.description}
                         type={T.RegisterFormType.INPUT}
                         height={'100px'}
-                        required={true}
-                        highlight={isRequiredEmpty(school)}
                         setValue={setSchool}
                     />
                     <RegisterForm 
@@ -94,7 +76,6 @@ const ClubRegisterContents: FC<Props & RouteComponentProps> = ({ history }) => {
                         description={text.clubDetail.description}
                         type={T.RegisterFormType.TEXT_AREA}
                         height={'600px'}
-                        required={false}
                         setValue={setDescription}
                     />
                 </Section>
@@ -104,7 +85,6 @@ const ClubRegisterContents: FC<Props & RouteComponentProps> = ({ history }) => {
                         description={text.photo.description}
                         type={T.RegisterFormType.FILE}
                         height={'48px'}
-                        required={false}
                         setValue={setPhotos}
                     />
                     <RegisterForm 
@@ -113,8 +93,6 @@ const ClubRegisterContents: FC<Props & RouteComponentProps> = ({ history }) => {
                         type={T.RegisterFormType.SELECT_BOX}
                         options={Object.values(T.Status)}
                         height={'48px'}
-                        required={true}
-                        highlight={isRequiredEmpty(status)}
                         setValue={setStatus}
                     />
                     <RegisterForm 
@@ -123,8 +101,6 @@ const ClubRegisterContents: FC<Props & RouteComponentProps> = ({ history }) => {
                         type={T.RegisterFormType.SELECT_BOX}
                         options={Object.values(T.Category)}
                         height={'48px'}
-                        required={true}
-                        highlight={isRequiredEmpty(category)}
                         setValue={setCategory}
                     />
                     <RegisterForm 
@@ -132,7 +108,6 @@ const ClubRegisterContents: FC<Props & RouteComponentProps> = ({ history }) => {
                         description={text.tag.description}
                         type={T.RegisterFormType.INPUT}
                         height={'48px'}
-                        required={false}
                         setValue={setTags}
                     />
                     <RegisterForm 
@@ -141,7 +116,6 @@ const ClubRegisterContents: FC<Props & RouteComponentProps> = ({ history }) => {
                         description={"jieun hyesoo"}
                         type={T.RegisterFormType.INPUT_ADDABLE}
                         height={'48px'}
-                        required={false}
                         setValue={setManagerIds}
                     />
                 </Section>

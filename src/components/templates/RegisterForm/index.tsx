@@ -33,9 +33,8 @@ const FormTitle = styled.div`
     font-weight: bold;
 `
 
-const OptionText = styled.div<{ required: boolean, highlight?: boolean }>`
-    display: ${(props) => props.required ? '' : 'none'};
-    color: ${(props) => props.highlight ? palette.primaryViolet.toString() : palette.greyNumber.toString()};
+const OptionText = styled.div`
+    color: ${palette.greyNumber.toString()};
     position: absolute;
     right: 0;
 `
@@ -321,17 +320,15 @@ interface Props {
     type: T.RegisterFormType;  
     options?: string[];
     height: string; 
-    required: boolean;
-    highlight?: boolean;
     setValue?: Dispatch<SetStateAction<any>>;
 }
 
-const RegisterForm: FC<Props> = ({ title, guide, description, type, options, height, required, highlight, setValue }) => {
+const RegisterForm: FC<Props> = ({ title, guide, description, type, options, height, setValue }) => {
     return (
         <Root>
             <TextWrapper>
                 <FormTitle>{title}</FormTitle>
-                <OptionText required={required} highlight={highlight} >필수 항목</OptionText>
+                <OptionText>필수 항목</OptionText>
             </TextWrapper>
             <GuideText>{guide}</GuideText>
             <FormFactory type={type} description={description} height={height} options={options} setValue={setValue} />
