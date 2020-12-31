@@ -44,11 +44,11 @@ app.post('/signup',(req,res)=>{
 
 app.post('/login',(req,res) => {
     //요청에서 입력된 이메일이 데이터베이스에 있는지 확인
-    User.findOne({email: req.body.email},(err,user)=>{
+    User.findOne({id: req.body.id},(err,user)=>{
         if(!user){
             return res.json({
                 loginSuccess: false,
-                message: "이메일에 해당하는 유저가 없습니다."
+                message: "아이디에 해당하는 유저가 없습니다."
             })
         }
         //이메일이 데이터베이스에 있는 경우, 비밀번호가 사용자가 입력한 비밀번호와 일치하는지 확인
