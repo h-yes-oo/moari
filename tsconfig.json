@@ -20,10 +20,11 @@
     "noEmit": true,
     "jsx": "react",
     "baseUrl": "src",
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "experimentalDecorators": true
   },
   "include": [
     "src",
     "custom.d.ts"
-  ]
+, "server/exceptions", "server/authentication", "server/interfaces", "server/middleware/validation.middleware.ts", "server/user"  ]
 }

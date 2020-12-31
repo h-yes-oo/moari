@@ -7,6 +7,10 @@ import * as T from 'types';
 import loginButtonSvg from 'assets/icons/login-button.svg';
 import logo from 'assets/icons/logo.svg';
 import moariLogin from 'assets/icons/moari-login.svg';
+import { useDispatch } from 'react-redux';
+import { loginUser } from 'actions/user';
+import { RouteComponentProps, withRouter, useHistory } from 'react-router-dom';
+import { History, LocationState } from "history";
 
 const Root = styled.div`
     display: flex;
@@ -113,11 +117,22 @@ interface Props {
 }
 
 const LoginPage: FC<Props> = () => {
-    const [Id,setId] = useState<string>('');
-    const [Password,setPassword] = useState<string>('');
+    const [id,setId] = useState<string>('');
+    const [password,setPassword] = useState<string>('');
 
-    const handleLogin: () => void = () => {
-        //TODO
+    const dispatch = useDispatch();
+    let history = useHistory();
+
+    const handleLogin: (event : React.MouseEvent<HTMLImageElement, MouseEvent>) => void = (event) => {
+        event.preventDefault();
+        console.log("handleLogin");
+        const response = dispatch(loginUser.request({id,password}))
+        console.log(response);
+        ////TODO : redirect to previous page
+        //if success
+        history.push('/');
+        //if fail alerts
+
     }
 
     return (
@@ -140,7 +155,7 @@ const LoginPage: FC<Props> = () => {
                         height={'60px'}
                         setValue={setPassword}
                     />
-                    <RegisterButton src={loginButtonSvg} onClick={() => handleLogin()} />
+                    <RegisterButton src={loginButtonSvg} onClick={handleLogin} />
                     <BottomWrapper>
                         <Label><CheckBox type="checkbox" name="maintainLogin" value="maintain"/> 로그인 유지</Label>
                         <Find href="/">아이디 비밀번호 찾기</Find>
@@ -152,4 +167,4 @@ const LoginPage: FC<Props> = () => {
     );
 }
 
-export default LoginPage;
+export default withRouter(LoginPage);

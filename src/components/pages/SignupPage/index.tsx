@@ -9,6 +9,9 @@ import logo from 'assets/icons/logo.svg';
 import moariSignUp from 'assets/icons/moari-signup.svg';
 import duplicateCheckSvg from 'assets/icons/duplicate-check.svg';
 import palette from 'constants/palette';
+import { useDispatch } from 'react-redux';
+import { signupUser } from 'actions/user';
+import { RouteComponentProps, withRouter, useHistory } from 'react-router-dom';
 
 const Root = styled.div`
     display: flex;
@@ -88,23 +91,41 @@ const CheckBox = styled.input`
 interface Props {
 }
 
-const SignupPage: FC<Props> = () => {
-    const [Id,setId] = useState<string>('');
-    const [Password,setPassword] = useState<string>('');
-    const [Email,setEmail] = useState<string>('');
-    const [Nickname,setNickname] = useState<string>('');
-    const [ConfirmPassword,setConfirmPassword] = useState<string>('');
+const SignupPage: FC<Props & RouteComponentProps> = () => {
+    const [id,setId] = useState<string>('');
+    const [password,setPassword] = useState<string>('');
+    const [email,setEmail] = useState<string>('');
+    const [name,setNickname] = useState<string>('');
+    const [confirmPassword,setConfirmPassword] = useState<string>('');
+    const [agreement,setAgreement] = useState<boolean>(false);
     
+    const dispatch = useDispatch();
+
+    let history = useHistory();
 
     const handleSignup: () => void = () => {
-        //TODO
+        console.log("handleSignup");
+        if(agreement === false) {
+            alert("약관에 동의해주세요");
+            return;
+        }
+        if(password !== confirmPassword){
+            alert("비밀번호가 같지 않습니다");
+            return;
+        }
+        const response = dispatch(signupUser.request({id,password,email,name}));
+        if(response.payload.id === ""){
+            alert("회원가입에 실패하였습니다.")
+            return;
+        }
+        history.push('/login');
     }
 
     const duplicateCheck: () => void = () => {
         //TODO
     }
 
-    const AgreementText = text.agreement.text;
+    const agreementText = text.agreement.text;
 
     return (
         <BaseLayout>
@@ -147,8 +168,8 @@ const SignupPage: FC<Props> = () => {
                         height={'60px'}
                         setValue={setConfirmPassword}
                     />
-                    <Agreement value={AgreementText}></Agreement>
-                    <Label><CheckBox type="checkbox" name="maintainLogin" value="maintain"/> 약관 동의</Label>
+                    <Agreement value={agreementText} readOnly disabled></Agreement>
+                    <Label><CheckBox type="checkbox" name="maintainLogin" checked={agreement} onClick={()=>{setAgreement(!agreement);}}/> 약관 동의</Label>
                     <RegisterButton src={signUpButtonSvg} onClick={() => handleSignup()} />
                 </Wrapper>
             </Root>
@@ -156,4 +177,4 @@ const SignupPage: FC<Props> = () => {
     );
 }
 
-export default SignupPage;
+export default withRouter(SignupPage);

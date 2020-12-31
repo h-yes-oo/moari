@@ -14,3 +14,13 @@ export interface Club {
 export interface ClubList {
   clubs: Club[]
 }
+
+export interface User {
+  _id: string
+  id: string
+  name: string
+  email: string
+  password: string
+  token: string
+  tokenExp: number
+}
