@@ -12,8 +12,6 @@ import logoPng from 'assets/images/logo.png';
 import { start } from 'repl';
 
 const Root = styled.div<{ image?: string | undefined }>`
-    // background: url(${(props) => props.image ? props.image : logoPng }) no-repeat center top;    
-    // background-size: contain; // cover
     width: 358px;
     height: 512px;
     border-radius: 20px;
@@ -31,10 +29,10 @@ const CardImage = styled.img`
     width: 100%;
     height: 50%;
     border-radius: 20px 20px 0 0;
+    cursor: pointer;
 `
 
 const CardDescription = styled.div`
-    // object-fit: cover;
     position: absolute;
     bottom: 0;
     width: 100%;
@@ -42,6 +40,7 @@ const CardDescription = styled.div`
     border-radius: 0 0 20px 20px;
     padding: 18px;
     box-sizing: border-box;
+    cursor: pointer;
 `
 
 const StatusLabel = styled.img`

@@ -53,5 +53,12 @@ export enum Status {
     PREPARE = '모집 준비 중',
 }
 
+export enum ClubDetailTab {
+    CLUB_INTRO = '동아리 소개',
+    RECRUIT_NOTICE = '모집 공고',
+    CLUB_NEWS = '동아리 소식',
+    QNA = '묻고 답하기',
+};
+
 // how to reduce code? 
 export type FilterType = typeof Category | typeof Tag | typeof Status;

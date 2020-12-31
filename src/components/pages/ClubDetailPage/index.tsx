@@ -1,9 +1,11 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC, ReactNode, useEffect, useState } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 
+import * as T from 'types';
 import { BoldLargeText, TagText } from 'constants/styles';
 import BaseLayout from 'components/templates/BaseLayout';
+import RecruitNotice from 'components/templates/RecruitNotice';
 import likeSvg from 'assets/icons/like.svg';
 import eyesSvg from 'assets/icons/eyes.svg';
 import exampleContentPng from 'assets/images/club_explanation_example.png';
@@ -45,11 +47,11 @@ interface ClubInfoMenuProps {
     isSelected?: boolean;
 }
 
-const ClubInfoMenuWrapper = styled.div`
+const ClubDetailMenuWrapper = styled.div`
     display: flex;
     justify-content: center;
 `
-const ClubInfoMenuItem = styled.div<ClubInfoMenuProps>(({ isSelected }) => ({
+const ClubDetailMenuItem = styled.div<ClubInfoMenuProps>(({ isSelected }) => ({
     width: '300px',
     height: '40px',
     fontSize: '20px',
@@ -62,6 +64,8 @@ const ClubInfoMenuItem = styled.div<ClubInfoMenuProps>(({ isSelected }) => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+
+    cursor: 'pointer',
 }))
 
 const ClubInfoContent = styled.img`
@@ -69,7 +73,7 @@ const ClubInfoContent = styled.img`
     width: 100%;
 `
 
-interface ClubInfoProps {
+interface Props {
 
 }
 
@@ -77,11 +81,34 @@ interface ClubInfoRouterProps {
     id: string;
 }
 
-const ClubInfoPage: FC<ClubInfoProps & RouteComponentProps<ClubInfoRouterProps>> = ({ match }) => {
+const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ match }) => {
+    const [selectedTab, setSelectedTab] = useState<keyof T.ClubDetailTab>('CLUB_INTRO' as keyof T.ClubDetailTab);
+
     useEffect(() => {
         console.log(match.params.id);
     }, [match.params]);
-    
+
+
+    const handleTabClick: (type: keyof T.ClubDetailTab) => void = (type) => {
+        setSelectedTab(type);
+    };
+
+    const isSelectedTab: (type: keyof T.ClubDetailTab) => boolean = (type) => {
+        return selectedTab === type;
+    }
+
+    const menuItems: ReactNode =  
+        Object.entries(T.ClubDetailTab).map(([key, value]) => {
+            return (
+                <ClubDetailMenuItem 
+                    isSelected={isSelectedTab(key as keyof T.ClubDetailTab)} 
+                    onClick={() => handleTabClick(key as keyof T.ClubDetailTab)}
+                >
+                {value}
+                </ClubDetailMenuItem>
+            );
+        })
+
     return (
         <BaseLayout>
             <Root>
@@ -101,17 +128,13 @@ const ClubInfoPage: FC<ClubInfoProps & RouteComponentProps<ClubInfoRouterProps>>
                         <TagText>#논문읽기</TagText>
                     </TagWrapper>
                 </IconTagWrapper>
-                <ClubInfoMenuWrapper>
-                    {/* array.map으로 전환 필요*/}
-                    <ClubInfoMenuItem isSelected={true}>동아리 소개</ClubInfoMenuItem>
-                    <ClubInfoMenuItem>모집공고</ClubInfoMenuItem>
-                    <ClubInfoMenuItem>동아리 소식</ClubInfoMenuItem>
-                    <ClubInfoMenuItem>묻고 답하기</ClubInfoMenuItem>
-                </ClubInfoMenuWrapper>
+                <ClubDetailMenuWrapper>
+                    {menuItems}
+                </ClubDetailMenuWrapper>
                 <ClubInfoContent src={exampleContentPng} />
             </Root>
         </BaseLayout>
     );
 }
 
-export default withRouter(ClubInfoPage);
+export default withRouter(ClubDetailPage);
