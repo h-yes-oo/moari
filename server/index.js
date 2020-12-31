@@ -103,7 +103,7 @@ app.route('/register/club')
 
 app.get('/search/:keyword', (req, res) => {
     console.log("searching...");
-    Club.find({ name: req.params.keyword }, (err, club) => {
+    Club.find({ name: { $regex: req.params.keyword, $options: 'i' } }, (err, club) => {
         if (err) return res.status(500).json({ error: err });
         if (!club) return res.status(404).json({ error: "찾는 동아리가 없습니다." });
         res.json(club);
