@@ -7,7 +7,7 @@ import BaseLayout from 'components/templates/BaseLayout';
 import ClubList from 'components/templates/ClubList';
 import FilteringButtons from 'components/templates/FilteringButtons';
 import { useDispatch } from 'react-redux';
-import { fetchClubList } from 'actions/club';
+import { fetchClubsAll } from 'actions/club';
 
 const Root = styled.div`
 
@@ -28,7 +28,7 @@ const FilteredPage: FC<Props & RouteComponentProps<MatchParams>> = ({ match }) =
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchClubList.request());
+    dispatch(fetchClubsAll.request());
   }, []);
 
   const getFilterType: () => T.FilterType = () => {

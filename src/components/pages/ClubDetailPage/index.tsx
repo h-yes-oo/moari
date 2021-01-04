@@ -10,6 +10,9 @@ import likeSvg from 'assets/icons/like.svg';
 import eyesSvg from 'assets/icons/eyes.svg';
 import exampleContentPng from 'assets/images/club_explanation_example.png';
 import palette from 'constants/palette';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from 'reducers';
+import { fetchClub } from 'actions/club';
 
 const Root = styled.div`
     margin: 36px 144px;
@@ -83,11 +86,18 @@ interface ClubInfoRouterProps {
 
 const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ match }) => {
     const [selectedTab, setSelectedTab] = useState<keyof T.ClubDetailTab>('CLUB_INTRO' as keyof T.ClubDetailTab);
+    const club = useSelector((state: RootState) => state.fetchSingle.clubs[0]);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        console.log(match.params.id);
-    }, [match.params]);
+        // console.log(match.params.id);
+        dispatch(fetchClub.request({ id: match.params.id }));
+    }, [match.params.id]);
 
+    useEffect(() => {
+        console.log(club);
+    }, [club]);
 
     const handleTabClick: (type: keyof T.ClubDetailTab) => void = (type) => {
         setSelectedTab(type);
@@ -101,6 +111,7 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
         Object.entries(T.ClubDetailTab).map(([key, value]) => {
             return (
                 <ClubDetailMenuItem 
+                    key={key}
                     isSelected={isSelectedTab(key as keyof T.ClubDetailTab)} 
                     onClick={() => handleTabClick(key as keyof T.ClubDetailTab)}
                 >
@@ -109,10 +120,10 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
             );
         })
 
-    return (
+    return club ? (
         <BaseLayout>
             <Root>
-                <BoldLargeText>동아리 이름 들어갈 곳</BoldLargeText>
+                <BoldLargeText>{club.name}</BoldLargeText>
                 <IconTagWrapper>
                     <IconCountWrapper>
                         <Icon src={likeSvg} />
@@ -134,7 +145,7 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
                 <ClubInfoContent src={exampleContentPng} />
             </Root>
         </BaseLayout>
-    );
+    ) : null;
 }
 
 export default withRouter(ClubDetailPage);
