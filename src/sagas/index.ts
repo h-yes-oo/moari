@@ -1,6 +1,7 @@
 import { takeEvery, call, put } from 'redux-saga/effects'
 
 import { fetchClubListRequest, postClub, postClubRequest, searchClub, searchClubRequest } from 'actions/club'
+import { loginUser, loginUserRequest, signupUser, signupUserRequest} from 'actions/user'
 import { AxiosResponse } from 'axios'
 import { Club } from 'store/types'
 
@@ -33,6 +34,24 @@ function* searchClubSaga(action: ReturnType<typeof searchClub.request>): Generat
   }
 }
 
+function* signupUserSaga(action: ReturnType<typeof signupUser.request>): Generator {
+  try{
+    const user = yield call(signupUserRequest, action.payload);
+    yield put({ type: 'USER_SIGNUP_SUCCESS', payload: { user: user}});
+  } catch (e) {
+    yield put({ type:'USER_SIGNUP_FAILURE', payload: { message: e.message } });
+  }
+}
+
+function* loginUserSaga(action: ReturnType<typeof loginUser.request>): Generator {
+  try{
+    const user = yield call(loginUserRequest, action.payload);
+    yield put({ type: 'USER_LOGIN_SUCCESS'});
+  } catch(e) {
+    yield put({ type: 'USER_LOGIN_FAILURE', payload: {message: e.message }});
+  }
+}
+
 function* addManagerToClubSaga(): Generator {
   try {
 
@@ -54,6 +73,8 @@ export default function* sagas() {
   yield takeEvery("CLUB_FETCH_REQUEST", fetchClubSaga)
   yield takeEvery("CLUB_POST_REQUEST", postClubSaga)
   yield takeEvery("CLUB_SEARCH_REQUEST", searchClubSaga)
+  yield takeEvery("USER_SIGNUP_REQUEST", signupUserSaga)
+  yield takeEvery("USER_LOGIN_REQUEST", loginUserSaga)
   // yield takeEvery("ADD_MANAGER", addManagerToClubSaga)
   // yield takeEvery("REMOVE_MANAGER", removeManagerFromClubSaga)
 }
