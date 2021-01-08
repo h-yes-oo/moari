@@ -5,10 +5,8 @@ import styled from 'styled-components';
 import * as T from 'types';
 import { BoldLargeText, TagText } from 'constants/styles';
 import BaseLayout from 'components/templates/BaseLayout';
-import RecruitNotice from 'components/templates/RecruitNotice';
 import likeSvg from 'assets/icons/like.svg';
 import eyesSvg from 'assets/icons/eyes.svg';
-import exampleContentPng from 'assets/images/club_explanation_example.png';
 import palette from 'constants/palette';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'reducers';
@@ -71,9 +69,30 @@ const ClubDetailMenuItem = styled.div<ClubInfoMenuProps>(({ isSelected }) => ({
     cursor: 'pointer',
 }))
 
-const ClubInfoContent = styled.img`
-    transform: translateY(32px);
-    width: 100%;
+const ClubContentsContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`
+
+const ClubImageContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    padding: 72px;
+`
+
+const ClubImage = styled.img`
+    width: 480px;
+    height: auto;
+    margin: 24px;
+`
+
+const ClubDescription = styled.div`
+    border: 1px solid ${palette.primaryViolet.toString()};
+    border-radius: 4px;
+    padding: 12px;
+    width: 1200px;
+    text-align: center;
 `
 
 interface Props {
@@ -91,7 +110,6 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        // console.log(match.params.id);
         dispatch(fetchClub.request({ id: match.params.id }));
     }, [match.params.id]);
 
@@ -120,6 +138,15 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
             );
         })
 
+    const clubImages: ReactNode =
+        club ? club.photos.map(photo => {
+            const imageConverterPrefix = "data:image/png;base64,"
+            const imageElem = imageConverterPrefix + btoa(String.fromCharCode.apply(null, photo.img.data.data));
+            return (
+                <ClubImage src={imageElem} />
+            )
+        }) : null;
+
     return club ? (
         <BaseLayout>
             <Root>
@@ -142,7 +169,14 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
                 <ClubDetailMenuWrapper>
                     {menuItems}
                 </ClubDetailMenuWrapper>
-                <ClubInfoContent src={exampleContentPng} />
+                <ClubContentsContainer>
+                    <ClubImageContainer>
+                        {clubImages}
+                    </ClubImageContainer>
+                    <ClubDescription>
+                        {club ? club.description : null}
+                    </ClubDescription>
+                </ClubContentsContainer>
             </Root>
         </BaseLayout>
     ) : null;
