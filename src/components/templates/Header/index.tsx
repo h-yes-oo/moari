@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'reducers';
 import { Club, ClubList } from 'store/types';
 import { searchClub } from 'actions/club';
+import axios from 'axios';
 
 const Root = styled.div`
     position: fixed;
@@ -100,7 +101,13 @@ interface Props {
 const Header: FC<Props & RouteComponentProps> = ({ campusName, username, history }) => {    
     const dispatch = useDispatch();
     const [searchKeyword, setSearchKeyword] = useState<string>("");
-        
+    
+    const userData = useSelector((state: RootState) => state.userData.data);
+    const isAuth = userData?.isAuth;
+    const name = userData?.name;
+    const userImage = userData?.image;
+
+
     const goMainPage: () => void = () => {
         history.push('/');
     }
@@ -123,6 +130,18 @@ const Header: FC<Props & RouteComponentProps> = ({ campusName, username, history
         setSearchKeyword("");
         dispatch(searchClub.request({ keyword: searchKeyword }));
         goSearchResult();
+    }
+
+    const logout: () => void = () => {
+        axios.get('http://localhost:5000/logout', { withCredentials: true })
+        .then(response => {
+            console.log(response.data);
+            if(response.data.success){
+                history.push('/login');
+            } else {
+                alert('로그아웃에 실패했습니다')
+            }
+        })
     }
 
     // 마지막 한 글자가 한번 더 쳐짐 ㅠㅠ
@@ -156,10 +175,12 @@ const Header: FC<Props & RouteComponentProps> = ({ campusName, username, history
                     onKeyPress={(e) => enterSearch(e)}
                 />
             </SearchBoxWrapper>
+            { isAuth &&
             <ProfileWrapper>
-                <ProfileName>{username}님</ProfileName>
-                <ProfileImage src={tempProfile} />
+                <ProfileName>{name}님</ProfileName>
+                <ProfileImage src={userImage} />
             </ProfileWrapper>
+            }
             <ButtonsWrapper>
                 {/* if user logged in */}
                 <HeaderButton src={likeSvg} />
@@ -167,8 +188,10 @@ const Header: FC<Props & RouteComponentProps> = ({ campusName, username, history
                 {/* <HeaderButton src={mypageSvg} />
                 <HeaderButton src={logoutSvg} /> */}
                 {/* else */}
-                <HeaderButton src={signupSvg} onClick={() => goSignup()} />
-                <HeaderButton src={loginSvg} onClick={() => goLogin()} />
+                { !isAuth && <HeaderButton src={signupSvg} onClick={() => goSignup()} />}
+                { !isAuth && <HeaderButton src={loginSvg} onClick={() => goLogin()} />}
+                { isAuth && <HeaderButton src={mypageSvg} onClick={() => logout()} /> }
+                { isAuth && <HeaderButton src={logoutSvg} onClick={() => logout()} /> }
             </ButtonsWrapper>
         </Root>
     );

@@ -1,9 +1,11 @@
 import { takeEvery, call, put } from 'redux-saga/effects'
 
 import { fetchClubListRequest, postClub, postClubRequest, searchClub, searchClubRequest } from 'actions/club'
-import { loginUser, loginUserRequest, signupUser, signupUserRequest} from 'actions/user'
+import { LOGIN_USER, loginUserRequest, loginUser } from 'actions/login';
+import { SIGNUP_USER, signupUser, signupUserRequest } from 'actions/signup'
+import { AUTH, auth, authRequest } from 'actions/auth';
 import { AxiosResponse } from 'axios'
-import { Club } from 'store/types'
+import { AuthResponse, Club, LoginResponse, SignupResponse } from 'store/types'
 
 function* fetchClubSaga(): Generator {
   try {
@@ -34,21 +36,33 @@ function* searchClubSaga(action: ReturnType<typeof searchClub.request>): Generat
   }
 }
 
-function* signupUserSaga(action: ReturnType<typeof signupUser.request>): Generator {
+function* signupUserSaga(action: ReturnType<typeof signupUser.request>) {
   try{
-    const user = yield call(signupUserRequest, action.payload);
-    yield put({ type: 'USER_SIGNUP_SUCCESS', payload: { user: user}});
+    const signupResponse : SignupResponse = yield call(signupUserRequest, action.payload);
+    yield put(signupUser.success(signupResponse));
+    const { history } = action.payload;
+    if(signupResponse.success === true){
+      history.push('/login');
+    } else {
+      alert('회원가입에 실패했습니다. 다시 시도해주세요');
+    }
   } catch (e) {
-    yield put({ type:'USER_SIGNUP_FAILURE', payload: { message: e.message } });
+    yield put(signupUser.failure(e));
   }
 }
 
-function* loginUserSaga(action: ReturnType<typeof loginUser.request>): Generator {
+function* loginUserSaga(action: ReturnType<typeof loginUser.request>) {
   try{
-    const user = yield call(loginUserRequest, action.payload);
-    yield put({ type: 'USER_LOGIN_SUCCESS'});
+    const loginResponse : LoginResponse = yield call(loginUserRequest, action.payload);
+    const { history } = action.payload;
+    yield put(loginUser.success(loginResponse));
+    if(loginResponse.loginSuccess === true){
+      history.push('/');
+    } else {
+      alert(loginResponse.message);
+    }
   } catch(e) {
-    yield put({ type: 'USER_LOGIN_FAILURE', payload: {message: e.message }});
+    yield put(loginUser.failure(e));
   }
 }
 
@@ -68,13 +82,40 @@ function* removeManagerFromClubSaga(): Generator {
   }
 }
 
+function* authSaga(action: ReturnType<typeof auth.request>) {
+  try{
+    const authResponse : AuthResponse = yield call(authRequest, action.payload);
+    yield put(auth.success(authResponse));
+    const { history, option, adminRoute } = action.payload;
+    console.log(authResponse.isAuth);
+    if(!authResponse.isAuth) {
+      if(option) {
+        history.push('/login');
+      }
+    } else {
+      // if (adminRoute && !authResponse.isAdmin) {
+      //   history.push('/');
+      // }
+      // else {
+      if(option === false ) {
+        history.push('/');
+      }
+      // }
+    }
+  } catch(e) {
+    yield put(auth.failure(e));
+  }
+}
+
+
 export default function* sagas() {
   // takeEvery로 CLUB_FETCH_REQUEST를 지속적으로 감시
   yield takeEvery("CLUB_FETCH_REQUEST", fetchClubSaga)
   yield takeEvery("CLUB_POST_REQUEST", postClubSaga)
   yield takeEvery("CLUB_SEARCH_REQUEST", searchClubSaga)
-  yield takeEvery("USER_SIGNUP_REQUEST", signupUserSaga)
-  yield takeEvery("USER_LOGIN_REQUEST", loginUserSaga)
+  yield takeEvery(SIGNUP_USER.REQUEST, signupUserSaga)
+  yield takeEvery(LOGIN_USER.REQUEST, loginUserSaga)
+  yield takeEvery(AUTH.REQUEST, authSaga)
   // yield takeEvery("ADD_MANAGER", addManagerToClubSaga)
   // yield takeEvery("REMOVE_MANAGER", removeManagerFromClubSaga)
 }

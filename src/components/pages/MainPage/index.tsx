@@ -4,8 +4,9 @@ import { ProposeClubText } from 'components/templates/SimpleText';
 import TopClubList from 'components/templates/TopClubList';
 import BaseLayout from 'components/templates/BaseLayout';
 import ClubList from 'components/templates/ClubList';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchClubList, searchClub } from 'actions/club';
+import { RootState } from 'reducers';
 
 interface Props {
 
