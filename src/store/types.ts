@@ -24,3 +24,23 @@ export interface User {
   token: string
   tokenExp: number
 }
+
+export interface LoginResponse {
+  loginSuccess: boolean,
+  userId: string | null,
+  message: string | null
+}
+
+export interface SignupResponse {
+  success: boolean;
+  err : any | null;
+}
+
+export interface AuthResponse {
+  _id: string,
+  isAuth: boolean,
+  email: string,
+  name: string,
+  image: string,
+  error: boolean | null
+}

@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 //JSON web token 생성 및 검증을 위한 모듈
 const jwt = require('jsonwebtoken');
+const moment = require("moment");
 
 const userSchema = mongoose.Schema({
     id: {
@@ -23,6 +24,7 @@ const userSchema = mongoose.Schema({
         type: String,
         minlength: 5
     },
+    image: String,
     /*
     //본인이 구성원으로 속한 동아리
     belonging: {
@@ -78,7 +80,10 @@ userSchema.methods.generateToken = function(cb) {
     var user = this;
     //jwt.sign 의 첫 인자는 payload, 두번째 인자는 비밀키 값
     //유저 아이디로 'secretToken'이라는 토큰 생성
-    var token = jwt.sign(user._id.toHexString(),'secretToken');
+    var token = jwt.sign(user._id.toHexString(),'secret');
+    var oneHour = moment().add(1, 'hour').valueOf();
+
+    user.tokenExp = oneHour;
     user.token = token;
     user.save(function(err,user){
         if(err) return cb(err);
@@ -91,7 +96,7 @@ userSchema.methods.generateToken = function(cb) {
 userSchema.statics.findByToken = function(token,cb){
     var user = this;
     //토큰을 decode하는 jwt.verify
-    jwt.verify(token, 'secretToken',function(err,decoded){
+    jwt.verify(token, 'secret',function(err,decoded){
         //유저 아이디를 이용하여 유저를 찾고, 클라이언트에서 가져온 토큰과 데이터베이스에 보관된 토큰이 일치하는지 확인
         user.findOne({"_id":decoded, "token":token},function(err,user){
             if(err) return cb(err);

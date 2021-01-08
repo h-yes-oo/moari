@@ -13,7 +13,10 @@ const { User } = require("./models/User");
 const { Club } = require("./models/Club");
 const { auth } = require("./middleware/auth");
 
-app.use(cors());
+app.use(cors({
+    origin: true,
+    credentials: true
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(cookieParser());
@@ -63,7 +66,9 @@ app.post('/login',(req,res) => {
             user.generateToken((err,user) => {
                 if(err) return res.status(400).send(err);
                 //x_auth 라는 이름으로 쿠키에 토큰을 저장함
-                res.cookie("x_auth",user.token).status(200).json({loginSuccess:true,userId:user._id});
+                res.cookie("x_auth",user.token).status(200).json({
+                    loginSuccess: true,
+                    userId: user._id});
             })
         })
     })
@@ -75,7 +80,8 @@ app.get('/auth', auth, (req,res) => {
         _id: req.user._id,
         isAuth: true,
         email: req.user.email,
-        name: req.user.name
+        name: req.user.name,
+        image: req.user.image
     })
 })
 
@@ -83,7 +89,7 @@ app.get('/logout', auth, (req,res)=>{
     //미들웨어를 통과하여 이 콜백함수에 왔다는 것은 Authentication이 True라는 의미
     //req에 담긴 user와 _id가 같은 user를 찾아서 token을 지워준다.
     User.findOneAndUpdate({_id: req.user._id},
-        { token: ""},
+        { token: "", tokenExp: "" },
         (err, user) =>{
             if(err) return res.json({success:false, err})
             return res.status(200).send({
