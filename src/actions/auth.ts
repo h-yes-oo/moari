@@ -1,6 +1,7 @@
 import { AuthResponse } from 'store/types';
 import axios, { AxiosError } from 'axios';
 import { createAsyncAction } from 'typesafe-actions';
+import { USER_SERVER } from '../components/Config';
 
 export const AUTH = {
     REQUEST: 'AUTH_REQUEST',
@@ -22,6 +23,6 @@ export const auth =
     )<AuthPayload, AuthResponse, AxiosError>();
 
 export async function authRequest({history, option, adminRoute}: AuthPayload) {
-    const response = await axios.get('http://localhost:5000/auth',  { withCredentials: true });
+    const response = await axios.get(`${USER_SERVER}/auth`,  { withCredentials: true });
     return response.data;
 }

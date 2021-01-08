@@ -1,6 +1,7 @@
-import { User, SignupResponse } from 'store/types';
+import { SignupResponse } from 'store/types';
 import axios, { AxiosError } from 'axios';
 import { createAsyncAction } from 'typesafe-actions';
+import { USER_SERVER } from 'components/Config';
 
 export const SIGNUP_USER = {
     REQUEST: 'USER_SIGNUP_REQUEST',
@@ -22,7 +23,7 @@ export const signupUser =
 )<SignupUserPayload, SignupResponse, AxiosError>()
 
 export async function signupUserRequest ({id, name, email, password}: SignupUserPayload) {
-    const response = await axios.post<SignupResponse>('http://localhost:5000/signup', {
+    const response = await axios.post<SignupResponse>(`${USER_SERVER}/signup`, {
         id,name,email,password
     });
     return response.data;
