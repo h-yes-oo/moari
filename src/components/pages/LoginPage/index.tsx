@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState, useRef } from 'react';
 import BaseLayout from 'components/templates/BaseLayout';
 import styled from 'styled-components';
 import LoginForm from '../../templates/LoginForm';
@@ -7,10 +7,12 @@ import * as T from 'types';
 import loginButtonSvg from 'assets/icons/login-button.svg';
 import logo from 'assets/icons/logo.svg';
 import moariLogin from 'assets/icons/moari-login.svg';
-import { useDispatch } from 'react-redux';
-import { loginUser } from 'actions/user';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from 'actions/login';
 import { RouteComponentProps, withRouter, useHistory } from 'react-router-dom';
 import { History, LocationState } from "history";
+import { RootState } from 'reducers';
+import { LoginResponse } from 'store/types';
 
 const Root = styled.div`
     display: flex;
@@ -116,23 +118,15 @@ const ToSignUp = styled.a`
 interface Props {
 }
 
-const LoginPage: FC<Props> = () => {
+
+const LoginPage: FC<Props & RouteComponentProps> = ({ history }) => {
     const [id,setId] = useState<string>('');
     const [password,setPassword] = useState<string>('');
 
     const dispatch = useDispatch();
-    let history = useHistory();
-
-    const handleLogin: (event : React.MouseEvent<HTMLImageElement, MouseEvent>) => void = (event) => {
+    const handleLogin: (event : React.MouseEvent<HTMLImageElement, MouseEvent>) => void =  (event) => {
         event.preventDefault();
-        console.log("handleLogin");
-        const response = dispatch(loginUser.request({id,password}))
-        console.log(response);
-        ////TODO : redirect to previous page
-        //if success
-        history.push('/');
-        //if fail alerts
-
+        dispatch(loginUser.request({id,password,history}));
     }
 
     return (
@@ -167,4 +161,4 @@ const LoginPage: FC<Props> = () => {
     );
 }
 
-export default withRouter(LoginPage);
+export default LoginPage;

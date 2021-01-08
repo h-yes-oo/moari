@@ -10,7 +10,7 @@ import moariSignUp from 'assets/icons/moari-signup.svg';
 import duplicateCheckSvg from 'assets/icons/duplicate-check.svg';
 import palette from 'constants/palette';
 import { useDispatch } from 'react-redux';
-import { signupUser } from 'actions/user';
+import { signupUser } from 'actions/signup';
 import { RouteComponentProps, withRouter, useHistory } from 'react-router-dom';
 
 const Root = styled.div`
@@ -91,7 +91,7 @@ const CheckBox = styled.input`
 interface Props {
 }
 
-const SignupPage: FC<Props & RouteComponentProps> = () => {
+const SignupPage: FC<Props & RouteComponentProps> = ({ history }) => {
     const [id,setId] = useState<string>('');
     const [password,setPassword] = useState<string>('');
     const [email,setEmail] = useState<string>('');
@@ -100,8 +100,6 @@ const SignupPage: FC<Props & RouteComponentProps> = () => {
     const [agreement,setAgreement] = useState<boolean>(false);
     
     const dispatch = useDispatch();
-
-    let history = useHistory();
 
     const handleSignup: () => void = () => {
         console.log("handleSignup");
@@ -113,12 +111,7 @@ const SignupPage: FC<Props & RouteComponentProps> = () => {
             alert("비밀번호가 같지 않습니다");
             return;
         }
-        const response = dispatch(signupUser.request({id,password,email,name}));
-        if(response.payload.id === ""){
-            alert("회원가입에 실패하였습니다.")
-            return;
-        }
-        history.push('/login');
+        dispatch(signupUser.request({id,password,email,name, history}));
     }
 
     const duplicateCheck: () => void = () => {

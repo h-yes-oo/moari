@@ -4,7 +4,9 @@ import storage from 'redux-persist/lib/storage';
 
 import { fetchReducer, postReducer, searchReducer } from './clubReducer';
 
-import { signupReducer, loginReducer } from './userReducer';
+import { authReducer } from './authReducer';
+import { signupReducer } from './signupReducer';
+import { loginReducer } from './loginReducer';
 
 const persistConfig = {
     key: 'root',
@@ -17,7 +19,8 @@ const rootReducer = combineReducers({
     post: postReducer,
     search: searchReducer,
     signup: signupReducer,
-    login: loginReducer
+    login: loginReducer,
+    userData: authReducer,
 });
 
 export default persistReducer(persistConfig, rootReducer)
