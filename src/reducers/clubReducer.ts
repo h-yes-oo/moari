@@ -1,18 +1,18 @@
 import { ActionType, createReducer, createAsyncAction, action } from 'typesafe-actions'
 
-import { Club, ClubList } from "store/types"
-import { fetchClubList, postClub, searchClub } from "actions/club"
-import { Status } from 'types'
+import { Club } from "store/types"
+import { fetchClubsAll, fetchClub, postClub, searchClub } from "actions/club"
 
 const actions = {
-  fetchClubList,
+  fetchClubsAll,
+  fetchClub,
   postClub,
   searchClub
 }
 
 type Actions = ActionType<typeof actions>
 type State = {
-  clubs: Club[],
+  clubs: Club[]
   message: string
 }
 
@@ -21,19 +21,31 @@ const initialState: State = {
   message: "",
 }
 
-export const fetchReducer = createReducer<State, Actions>(initialState)
-  .handleAction(fetchClubList.request, (state) => ({
+export const fetchAllReducer = createReducer<State, Actions>(initialState)
+  .handleAction(fetchClubsAll.request, (state) => ({
     ...state
   }))
-  .handleAction(fetchClubList.success, (state, action) => ({
+  .handleAction(fetchClubsAll.success, (state, action) => ({
     ...state,
     ...action.payload
   }))
-  .handleAction(fetchClubList.failure, (state, action) => ({
+  .handleAction(fetchClubsAll.failure, (state, action) => ({
     ...state,
     message: action.payload.message
   }))
 
+export const fetchSingleReducer = createReducer<State, Actions>(initialState)
+  .handleAction(fetchClub.request, (state) => ({
+    ...state
+  }))
+  .handleAction(fetchClub.success, (state, action) => ({
+    ...state,
+    clubs: [action.payload]
+  }))
+  .handleAction(fetchClub.failure, (state, action) => ({
+    ...state,
+    message: action.payload.message
+  }))
 
 export const postReducer = createReducer<State, Actions>(initialState)
   .handleAction(postClub.request, (state) => ({
@@ -53,12 +65,9 @@ export const searchReducer = createReducer<State, Actions>(initialState)
     ...state
   }))
   .handleAction(searchClub.success, (state, action) => {
-    // ...state,
-    // console.log("search reducer working");
-    // console.log(action.payload.clubs);
     return {
       ...state,
-      clubs: action.payload.clubs,
+      clubs: action.payload,
       message: ''  
     }
   })
@@ -66,7 +75,3 @@ export const searchReducer = createReducer<State, Actions>(initialState)
     ...state,
     message: action.payload.message
   }))
-
-
-
-

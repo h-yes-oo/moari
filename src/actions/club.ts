@@ -1,11 +1,17 @@
-import { Club, ClubList } from "store/types";
+import { Club } from "store/types";
 import axios, { AxiosError, AxiosResponse } from 'axios';
 import { createAsyncAction } from "typesafe-actions";
 
-export const FETCH_CLUB = {
-  REQUEST: 'CLUB_FETCH_REQUEST',
-  SUCCESS: 'CLUB_FETCH_SUCCESS',
-  FAILURE: 'CLUB_FETCH_FAILURE'
+export const FETCH_CLUBS_ALL = {
+  REQUEST: 'CLUBS_ALL_FETCH_REQUEST',
+  SUCCESS: 'CLUBS_ALL_FETCH_SUCCESS',
+  FAILURE: 'CLUBS_ALL_FETCH_FAILURE'
+}
+
+export const FETCH_CLUB_SINGLE = {
+  REQUEST: 'CLUB_SINGLE_FETCH_REQUEST',
+  SUCCESS: 'CLUB_SINGLE_FETCH_SUCCESS',
+  FAILURE: 'CLUB_SINGLE_FETCH_FAILURE'
 }
 
 export const POST_CLUB = {
@@ -20,19 +26,31 @@ export const SEARCH_CLUB = {
   FAILURE: 'CLUB_SEARCH_FAILURE'
 }
 
-export const fetchClubList =
+export const fetchClubsAll =
   createAsyncAction(
-    FETCH_CLUB.REQUEST, FETCH_CLUB.SUCCESS, FETCH_CLUB.FAILURE
-  // AxiosResponse<ClubList>?
-  )<void, ClubList, AxiosError>()
+    FETCH_CLUBS_ALL.REQUEST, FETCH_CLUBS_ALL.SUCCESS, FETCH_CLUBS_ALL.FAILURE
+  // AxiosResponse<Club[]>?
+  )<void, Club[], AxiosError>()
 
-export const fetchClubListRequest = (): Promise<ClubList> => {
-  // console.log("fetch action working");
+export const fetchClubsAllRequest = (): Promise<Club[]> => {
   return axios.get('http://localhost:5000/clubs')
   // res.json()
   .then(res => res.data);
 }
 
+interface FetchClubPayload {
+  id: string;
+}
+
+export const fetchClub =
+  createAsyncAction(
+    FETCH_CLUB_SINGLE.REQUEST, FETCH_CLUB_SINGLE.SUCCESS, FETCH_CLUB_SINGLE.FAILURE
+  )<FetchClubPayload, Club, AxiosError>()
+
+export const fetchClubSingleRequest = ({ id }: FetchClubPayload): Promise<Club> => {
+  return axios.get(`http://localhost:5000/clubs/${id}`)
+  .then(res => res.data);
+}
 interface PostClubPayload {
   name: string;
   school: string;
@@ -87,10 +105,10 @@ interface SearchClubPayload {
 export const searchClub = 
   createAsyncAction(
     SEARCH_CLUB.REQUEST, SEARCH_CLUB.SUCCESS, SEARCH_CLUB.FAILURE
-  // AxiosResponse<ClubList>
-  )<SearchClubPayload, ClubList, AxiosError>()
+  // AxiosResponse<Club[]>
+  )<SearchClubPayload, Club[], AxiosError>()
 
-export const searchClubRequest = ({ keyword }: SearchClubPayload): Promise<ClubList> => {
+export const searchClubRequest = ({ keyword }: SearchClubPayload): Promise<Club[]> => {
   // console.log("search action working");
   return axios.get(`http://localhost:5000/search/${keyword}`)
   .then(res => res.data);

@@ -7,7 +7,7 @@ import ClubCard from 'components/templates/ClubCard';
 import leftArrowSvg from 'assets/icons/left-arrow.svg';
 import rightArrowSvg from 'assets/icons/right-arrow.svg';
 import { RootState } from 'reducers';
-import { fetchClubList, searchClub } from 'actions/club';
+import { fetchClubsAll, searchClub } from 'actions/club';
 
 const Root = styled.div`
     display: flex;
@@ -40,7 +40,7 @@ interface Props {
 // }
 
 const TopClubList: FC<Props> = () => {    
-    const clubs = useSelector((state: RootState) => state.fetch.clubs);
+    const clubs = useSelector((state: RootState) => state.fetchAll.clubs);
     const searchedClubs = useSelector((state: RootState) => state.search.clubs);
     const dispatch = useDispatch();
     
@@ -64,7 +64,7 @@ const TopClubList: FC<Props> = () => {
     };
 
     useEffect(() => {
-        dispatch(fetchClubList.request()); 
+        dispatch(fetchClubsAll.request()); 
     }, []);
 
     // useEffect(() => {

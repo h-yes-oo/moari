@@ -1,18 +1,27 @@
 import { takeEvery, call, put } from 'redux-saga/effects'
 
-import { fetchClubListRequest, postClub, postClubRequest, searchClub, searchClubRequest } from 'actions/club'
 import { LOGIN_USER, loginUserRequest, loginUser } from 'actions/login';
 import { SIGNUP_USER, signupUser, signupUserRequest } from 'actions/signup'
 import { AUTH, auth, authRequest } from 'actions/auth';
+import { fetchClubsAllRequest, fetchClub, fetchClubSingleRequest, postClub, postClubRequest, searchClub, searchClubRequest } from 'actions/club'
 import { AxiosResponse } from 'axios'
 import { AuthResponse, Club, LoginResponse, SignupResponse } from 'store/types'
 
-function* fetchClubSaga(): Generator {
+function* fetchClubsAllSaga(): Generator {
   try {
-    const clubs = yield call(fetchClubListRequest)
-    yield put({ type: 'CLUB_FETCH_SUCCESS', payload: { clubs: clubs } })
+    const clubs = yield call(fetchClubsAllRequest)
+    yield put({ type: 'CLUBS_ALL_FETCH_SUCCESS', payload: { clubs: clubs } })
   } catch (e) {
-    yield put({ type: 'CLUB_FETCH_FAILURE', payload: { message: e.message } })
+    yield put({ type: 'CLUBS_ALL_FETCH_FAILURE', payload: { message: e.message } })
+  }
+}
+
+function* fetchClubSaga(action: ReturnType<typeof fetchClub.request>): Generator {
+  try {
+    const club = yield call(fetchClubSingleRequest, action.payload);
+    yield put({ type: 'CLUB_SINGLE_FETCH_SUCCESS', payload: club })
+  } catch (e) {
+    yield put({ type: 'CLUB_SINGLE_FETCH_FAILURE', payload: { message: e.message } })
   }
 }
 
@@ -30,7 +39,7 @@ function* postClubSaga(action: ReturnType<typeof postClub.request>): Generator {
 function* searchClubSaga(action: ReturnType<typeof searchClub.request>): Generator {
   try {
     const clubs = yield call(searchClubRequest, action.payload);
-    yield put({ type: 'CLUB_SEARCH_SUCCESS', payload: { clubs: clubs } });
+    yield put({ type: 'CLUB_SEARCH_SUCCESS', payload: clubs });
   } catch (e) {
     yield put({ type: 'CLUB_SEARCH_FAILURE', payload: { message: e.message } });
   }
@@ -110,7 +119,8 @@ function* authSaga(action: ReturnType<typeof auth.request>) {
 
 export default function* sagas() {
   // takeEvery로 CLUB_FETCH_REQUEST를 지속적으로 감시
-  yield takeEvery("CLUB_FETCH_REQUEST", fetchClubSaga)
+  yield takeEvery("CLUBS_ALL_FETCH_REQUEST", fetchClubsAllSaga)
+  yield takeEvery("CLUB_SINGLE_FETCH_REQUEST", fetchClubSaga)
   yield takeEvery("CLUB_POST_REQUEST", postClubSaga)
   yield takeEvery("CLUB_SEARCH_REQUEST", searchClubSaga)
   yield takeEvery(SIGNUP_USER.REQUEST, signupUserSaga)

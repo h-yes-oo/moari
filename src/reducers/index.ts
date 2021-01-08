@@ -2,7 +2,7 @@ import { combineReducers } from 'redux';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 
-import { fetchReducer, postReducer, searchReducer } from './clubReducer';
+import { fetchAllReducer, fetchSingleReducer, postReducer, searchReducer } from './clubReducer';
 
 import { authReducer } from './authReducer';
 import { signupReducer } from './signupReducer';
@@ -11,11 +11,12 @@ import { loginReducer } from './loginReducer';
 const persistConfig = {
     key: 'root',
     storage: storage,
-    whitelist: ["foodList"],
+    whitelist: [],
 };
 
 const rootReducer = combineReducers({
-    fetch: fetchReducer,
+    fetchAll: fetchAllReducer,
+    fetchSingle: fetchSingleReducer,
     post: postReducer,
     search: searchReducer,
     signup: signupReducer,
