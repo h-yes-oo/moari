@@ -17,6 +17,7 @@ import { RootState } from 'reducers';
 import { Club, ClubList } from 'store/types';
 import { searchClub } from 'actions/club';
 import axios from 'axios';
+import { USER_SERVER } from '../../Config';
 
 const Root = styled.div`
     position: fixed;
@@ -133,7 +134,7 @@ const Header: FC<Props & RouteComponentProps> = ({ campusName, username, history
     }
 
     const logout: () => void = () => {
-        axios.get('http://localhost:5000/logout', { withCredentials: true })
+        axios.get(`${USER_SERVER}/logout`, { withCredentials: true })
         .then(response => {
             console.log(response.data);
             if(response.data.success){
