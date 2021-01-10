@@ -5,7 +5,7 @@ import { addManager, removeManager } from "actions/clubDetail"
 
 const actions = {
   addManager,
-  removeManager
+  removeManager,
 }
 
 type Actions = ActionType<typeof actions>

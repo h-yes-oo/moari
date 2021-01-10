@@ -5,12 +5,14 @@ import styled from 'styled-components';
 import * as T from 'types';
 import { BoldLargeText, TagText } from 'constants/styles';
 import BaseLayout from 'components/templates/BaseLayout';
-import likeSvg from 'assets/icons/like.svg';
+import likeEmptySvg from 'assets/icons/like-empty.svg';
+import likeFilledSvg from 'assets/icons/like-filled.svg';
 import eyesSvg from 'assets/icons/eyes.svg';
 import palette from 'constants/palette';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'reducers';
 import { fetchClub } from 'actions/club';
+import { clubLike } from 'actions/user';
 
 const Root = styled.div`
     margin: 36px 144px;
@@ -32,6 +34,7 @@ const Icon = styled.img`
     width: 28px;
     height: auto;
     margin-right: 4px;
+    cursor: pointer;
 `
 
 const IconCount = styled.div`
@@ -106,6 +109,11 @@ interface ClubInfoRouterProps {
 const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ match }) => {
     const [selectedTab, setSelectedTab] = useState<keyof T.ClubDetailTab>('CLUB_INTRO' as keyof T.ClubDetailTab);
     const club = useSelector((state: RootState) => state.fetchSingle.clubs[0]);
+    const user = useSelector((state: RootState) => state.userData.data);
+
+    useEffect(() => {
+        console.log(user);
+    }, [user])
 
     const dispatch = useDispatch();
 
@@ -113,16 +121,16 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
         dispatch(fetchClub.request({ id: match.params.id }));
     }, [match.params.id]);
 
-    useEffect(() => {
-        console.log(club);
-    }, [club]);
-
     const handleTabClick: (type: keyof T.ClubDetailTab) => void = (type) => {
         setSelectedTab(type);
     };
 
     const isSelectedTab: (type: keyof T.ClubDetailTab) => boolean = (type) => {
         return selectedTab === type;
+    }
+
+    const handleLike: () => void = () => {
+        if (user) dispatch(clubLike.request({ clubId: club._id, userId: user._id }));
     }
 
     const menuItems: ReactNode =  
@@ -153,7 +161,7 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
                 <BoldLargeText>{club.name}</BoldLargeText>
                 <IconTagWrapper>
                     <IconCountWrapper>
-                        <Icon src={likeSvg} />
+                        <Icon src={likeEmptySvg} onClick={() => handleLike()} />
                         <IconCount>48</IconCount>
                         <Icon src={eyesSvg} />
                         <IconCount>1002</IconCount>

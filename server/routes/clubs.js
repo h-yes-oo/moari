@@ -109,7 +109,6 @@ router.post('/:clubId/like/:userId', async (req, res) => {
         const club = await Club.findById(req.params.clubId);
         const user = await User.findById(req.params.userId);
         if (user.likes.some(c => c.id === club.id)) {
-            console.log("what happened...");
             user.likes = user.likes.filter(c => c.id !== club.id);
         } else {
             user.likes.push(club);
