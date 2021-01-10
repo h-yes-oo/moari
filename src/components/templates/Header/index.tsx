@@ -14,7 +14,7 @@ import tempProfile from 'assets/images/temp-profile.jpg';
 // import { searchClub } from 'actions/club';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'reducers';
-import { Club, ClubList } from 'store/types';
+import { Club } from 'store/types';
 import { searchClub } from 'actions/club';
 import axios from 'axios';
 import { USER_SERVER } from '../../Config';

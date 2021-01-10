@@ -1,5 +1,5 @@
 import React, { FC, ReactNode, useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import * as T from 'types';
@@ -30,9 +30,9 @@ interface Props {
 
 const ClubList: FC<Props> = ({ keyword, category, tag, status }) => {    
   // const [clubsLoaded, setClubsLoaded] = useState<Boolean>(false);
-  const clubs = useSelector((state: RootState) => state.fetch.clubs);
+  const clubs = useSelector((state: RootState) => state.fetchAll.clubs);
   const searchedClubs = useSelector((state: RootState) => state.search.clubs);
-
+  
   const getFilteredClubs: () => Club[] = () => {
     // TODO: erase console logs and shorten return statements
     if (category !== undefined) {

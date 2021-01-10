@@ -11,9 +11,9 @@ export interface Club {
   // managerIds: string[]
 }
 
-export interface ClubList {
-  clubs: Club[]
-}
+// export interface ClubList {
+//   clubs: Club[]
+// }
 
 export interface User {
   _id: string

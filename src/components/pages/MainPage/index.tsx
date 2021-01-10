@@ -4,9 +4,8 @@ import { ProposeClubText } from 'components/templates/SimpleText';
 import TopClubList from 'components/templates/TopClubList';
 import BaseLayout from 'components/templates/BaseLayout';
 import ClubList from 'components/templates/ClubList';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchClubList, searchClub } from 'actions/club';
-import { RootState } from 'reducers';
+import { useDispatch } from 'react-redux';
+import { fetchClubsAll, searchClub } from 'actions/club';
 
 interface Props {
 
@@ -27,7 +26,7 @@ const MainPage: FC<Props & RouteComponentProps<MatchParams>> = ({ match }) => {
     }, []);
 
     useEffect(() => {
-        dispatch(fetchClubList.request());
+        dispatch(fetchClubsAll.request());
     }, []);
 
     const isFilteredPage: boolean = Object.keys(match.params).length > 0;
