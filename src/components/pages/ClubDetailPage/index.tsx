@@ -12,7 +12,7 @@ import palette from 'constants/palette';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'reducers';
 import { fetchClub } from 'actions/club';
-import { clubLike } from 'actions/user';
+import { clubLike, getUser } from 'actions/user';
 
 const Root = styled.div`
     margin: 36px 144px;
@@ -108,18 +108,28 @@ interface ClubInfoRouterProps {
 
 const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ match }) => {
     const [selectedTab, setSelectedTab] = useState<keyof T.ClubDetailTab>('CLUB_INTRO' as keyof T.ClubDetailTab);
+    const [likeImg, setLikeImg] = useState<string>('');
     const club = useSelector((state: RootState) => state.fetchSingle.clubs[0]);
-    const user = useSelector((state: RootState) => state.userData.data);
-
-    useEffect(() => {
-        console.log(user);
-    }, [user])
+    const auth = useSelector((state: RootState) => state.userData.data);
+    const user = useSelector((state: RootState) => state.getUser);
 
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(fetchClub.request({ id: match.params.id }));
     }, [match.params.id]);
+
+    useEffect(() => {
+        if (auth) {
+            // 처음 1번만 실행됨
+            dispatch(getUser.request({ userId: auth._id }))
+        }
+    }, [auth])
+    
+    useEffect(() => {
+        if (user.likes && user.likes.some(c => c._id === club._id)) setLikeImg(likeFilledSvg);
+        else setLikeImg(likeEmptySvg);
+    }, [user])
 
     const handleTabClick: (type: keyof T.ClubDetailTab) => void = (type) => {
         setSelectedTab(type);
@@ -129,8 +139,10 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
         return selectedTab === type;
     }
 
-    const handleLike: () => void = () => {
-        if (user) dispatch(clubLike.request({ clubId: club._id, userId: user._id }));
+    const handleLike: () => void = async () => {
+        if (!auth) return;
+        dispatch(clubLike.request({ clubId: club._id, userId: auth._id }));
+        console.log(user.likes);
     }
 
     const menuItems: ReactNode =  
@@ -151,7 +163,7 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
             const imageConverterPrefix = "data:image/png;base64,"
             const imageElem = imageConverterPrefix + btoa(String.fromCharCode.apply(null, photo.img.data.data));
             return (
-                <ClubImage src={imageElem} />
+                <ClubImage key={photo} src={imageElem} />
             )
         }) : null;
 
@@ -161,7 +173,7 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
                 <BoldLargeText>{club.name}</BoldLargeText>
                 <IconTagWrapper>
                     <IconCountWrapper>
-                        <Icon src={likeEmptySvg} onClick={() => handleLike()} />
+                        <Icon src={likeImg} onClick={() => handleLike()} />
                         <IconCount>48</IconCount>
                         <Icon src={eyesSvg} />
                         <IconCount>1002</IconCount>

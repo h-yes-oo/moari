@@ -7,6 +7,7 @@ import { fetchAllReducer, fetchSingleReducer, postReducer, searchReducer } from 
 import { authReducer } from './authReducer';
 import { signupReducer } from './signupReducer';
 import { loginReducer } from './loginReducer';
+import { clubLikeReducer, userReducer } from './userReducer';
 
 const persistConfig = {
     key: 'root',
@@ -21,7 +22,8 @@ const rootReducer = combineReducers({
     search: searchReducer,
     signup: signupReducer,
     login: loginReducer,
-    userData: authReducer,
+    userData: authReducer, // userAuth로 바꾸면 어떨까?
+    getUser: userReducer, // userData로 바꾸면 어떨까?
 });
 
 export default persistReducer(persistConfig, rootReducer)
