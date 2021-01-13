@@ -63,9 +63,15 @@ function* signupUserSaga(action: ReturnType<typeof signupUser.request>) {
 function* loginUserSaga(action: ReturnType<typeof loginUser.request>) {
   try{
     const loginResponse : LoginResponse = yield call(loginUserRequest, action.payload);
-    const { history } = action.payload;
+    const { history, rememberMe } = action.payload;
     yield put(loginUser.success(loginResponse));
     if(loginResponse.loginSuccess === true){
+      window.localStorage.setItem('userId', loginResponse.userId);
+      if (rememberMe === true){
+        window.localStorage.setItem('rememberMe', loginResponse.loginId);
+      } else {
+        localStorage.removeItem('rememberMe');
+      }
       history.push('/');
     } else {
       alert(loginResponse.message);

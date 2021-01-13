@@ -13,6 +13,7 @@ interface LoginUserPayload {
     id: string;
     password: string;
     history: any;
+    rememberMe: boolean;
 }
 
 export const loginUser = 
