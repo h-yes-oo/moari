@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState, useRef } from 'react';
+import React, { FC, useState } from 'react';
 import BaseLayout from 'components/templates/BaseLayout';
 import styled from 'styled-components';
 import LoginForm from '../../templates/LoginForm';
@@ -7,12 +7,9 @@ import * as T from 'types';
 import loginButtonSvg from 'assets/icons/login-button.svg';
 import logo from 'assets/icons/logo.svg';
 import moariLogin from 'assets/icons/moari-login.svg';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { loginUser } from 'actions/login';
-import { RouteComponentProps, withRouter, useHistory } from 'react-router-dom';
-import { History, LocationState } from "history";
-import { RootState } from 'reducers';
-import { LoginResponse } from 'store/types';
+import { RouteComponentProps } from 'react-router-dom';
 
 const Root = styled.div`
     display: flex;
@@ -120,13 +117,20 @@ interface Props {
 
 
 const LoginPage: FC<Props & RouteComponentProps> = ({ history }) => {
-    const [id,setId] = useState<string>('');
+    const rememberMeChecked = localStorage.getItem("rememberMe") ? true : false;
+    const handleRememberMe = () => {
+        setRememberMe(!rememberMe);
+    }
+    const initialId :string = localStorage.getItem("rememberMe") ? localStorage.getItem("rememberMe")! : '';
+    const [id,setId] = useState<string>(initialId);
     const [password,setPassword] = useState<string>('');
+    const [rememberMe, setRememberMe] = useState<boolean>(rememberMeChecked);
+
 
     const dispatch = useDispatch();
     const handleLogin: (event : React.MouseEvent<HTMLImageElement, MouseEvent>) => void =  (event) => {
         event.preventDefault();
-        dispatch(loginUser.request({id,password,history}));
+        dispatch(loginUser.request({id,password,history,rememberMe}));
     }
 
     return (
@@ -142,6 +146,8 @@ const LoginPage: FC<Props & RouteComponentProps> = ({ history }) => {
                         type={T.LoginFormType.INPUT}
                         height={'60px'}
                         setValue={setId}
+                        initialValue={initialId}
+                        value={id}
                     />
                     <LoginForm
                         description={text.password.description}
@@ -151,7 +157,7 @@ const LoginPage: FC<Props & RouteComponentProps> = ({ history }) => {
                     />
                     <RegisterButton src={loginButtonSvg} onClick={handleLogin} />
                     <BottomWrapper>
-                        <Label><CheckBox type="checkbox" name="maintainLogin" value="maintain"/> 로그인 유지</Label>
+                        <Label><CheckBox type="checkbox" name="maintainLogin" onChange={handleRememberMe} checked={rememberMe}/> 아이디 기억하기</Label>
                         <Find href="/">아이디 비밀번호 찾기</Find>
                     </BottomWrapper>
                     <SignUp> 모아리에 처음이신가요 ?<ToSignUp href="/signup"> 회원가입</ToSignUp> </SignUp>

@@ -109,6 +109,7 @@ const Header: FC<Props & RouteComponentProps> = ({ campusName, username, history
     const userImage = userData?.image;
 
 
+
     const goMainPage: () => void = () => {
         history.push('/');
     }
@@ -138,6 +139,7 @@ const Header: FC<Props & RouteComponentProps> = ({ campusName, username, history
         .then(response => {
             console.log(response.data);
             if(response.data.success){
+                localStorage.removeItem('userId');
                 history.push('/login');
             } else {
                 alert('로그아웃에 실패했습니다')
