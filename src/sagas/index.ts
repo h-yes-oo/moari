@@ -66,6 +66,7 @@ function* loginUserSaga(action: ReturnType<typeof loginUser.request>) {
     const { history } = action.payload;
     yield put(loginUser.success(loginResponse));
     if(loginResponse.loginSuccess === true){
+      window.localStorage.setItem('userId', loginResponse.userId);
       history.push('/');
     } else {
       alert(loginResponse.message);

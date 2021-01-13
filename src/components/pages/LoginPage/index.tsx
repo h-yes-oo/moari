@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState, useRef } from 'react';
+import React, { FC, useState } from 'react';
 import BaseLayout from 'components/templates/BaseLayout';
 import styled from 'styled-components';
 import LoginForm from '../../templates/LoginForm';
@@ -7,12 +7,9 @@ import * as T from 'types';
 import loginButtonSvg from 'assets/icons/login-button.svg';
 import logo from 'assets/icons/logo.svg';
 import moariLogin from 'assets/icons/moari-login.svg';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { loginUser } from 'actions/login';
-import { RouteComponentProps, withRouter, useHistory } from 'react-router-dom';
-import { History, LocationState } from "history";
-import { RootState } from 'reducers';
-import { LoginResponse } from 'store/types';
+import { RouteComponentProps } from 'react-router-dom';
 
 const Root = styled.div`
     display: flex;

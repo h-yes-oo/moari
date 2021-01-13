@@ -46,6 +46,7 @@ router.post('/login',(req,res) => {
           user.generateToken((err,user) => {
               if(err) return res.status(400).send(err);
               //x_auth 라는 이름으로 쿠키에 토큰을 저장함
+              res.cookie("x_authExp", user.tokenExp);
               res.cookie("x_auth",user.token).status(200).json({
                   loginSuccess: true,
                   userId: user._id});

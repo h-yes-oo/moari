@@ -27,7 +27,7 @@ export interface User {
 
 export interface LoginResponse {
   loginSuccess: boolean,
-  userId: string | null,
+  userId: string,
   message: string | null
 }
 
