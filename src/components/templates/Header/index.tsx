@@ -109,6 +109,7 @@ const Header: FC<Props & RouteComponentProps> = ({ campusName, username, history
     const userImage = userData?.image;
 
 
+
     const goMainPage: () => void = () => {
         history.push('/');
     }

@@ -30,15 +30,17 @@ interface FormFactoryProps {
     height: string; 
     options?: string[]; // type should be changed
     setValue?: Dispatch<SetStateAction<any>>;
+    initialValue?: string;
+    value?: any;
 }
 
-const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options, setValue }) => {
+const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options, setValue, initialValue, value }) => {
 
     switch (type) {
         case T.LoginFormType.INPUT:
             if (setValue === undefined) return null;
             return (
-                <InputForm placeholder={description} onChange={(e) => setValue(e.target.value)}/>
+                <InputForm placeholder={description} value={value} onChange={(e) => setValue(e.target.value)}/>
             );
         case T.LoginFormType.PASSWORD:
             if (setValue === undefined) return null;
@@ -55,14 +57,16 @@ interface Props {
     type: T.LoginFormType;  
     height: string; 
     setValue?: Dispatch<SetStateAction<any>>;
+    initialValue?: string;
+    value?: any;
 }
 
-const RegisterForm: FC<Props> = ({ description, type, height, setValue }) => {
+const LoginForm: FC<Props> = ({ description, type, height, setValue, initialValue, value }) => {
     return (
         <Root>
-            <FormFactory type={type} description={description} height={height} setValue={setValue} />
+            <FormFactory type={type} description={description} initialValue={initialValue} height={height} setValue={setValue} value={value} />
         </Root>
     );
 }
 
-export default RegisterForm;
+export default LoginForm;

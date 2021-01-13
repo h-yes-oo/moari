@@ -49,7 +49,9 @@ router.post('/login',(req,res) => {
               res.cookie("x_authExp", user.tokenExp);
               res.cookie("x_auth",user.token).status(200).json({
                   loginSuccess: true,
-                  userId: user._id});
+                  userId: user._id,
+                  loginId: user.id
+                });
           });
       });
   });
