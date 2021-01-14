@@ -6,8 +6,6 @@ const saltRounds = 10;
 const jwt = require('jsonwebtoken');
 const moment = require("moment");
 
-const { clubSchema } = require("./Club");
-
 const userSchema = mongoose.Schema({
     id: {
         type: String,
@@ -27,9 +25,9 @@ const userSchema = mongoose.Schema({
         minlength: 5
     },
     image: String,
-    likes: [{
-        type: clubSchema,
-        ref: "Club"
+    likedClubs: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Club'
     }],
     /*
     //본인이 구성원으로 속한 동아리
