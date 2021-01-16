@@ -5,7 +5,8 @@ import { SIGNUP_USER, signupUser, signupUserRequest } from 'actions/signup'
 import { AUTH, auth, authRequest } from 'actions/auth';
 import { fetchClubsAllRequest, fetchClub, fetchClubSingleRequest, postClub, postClubRequest, searchClub, searchClubRequest } from 'actions/club'
 import { AxiosResponse } from 'axios'
-import { AuthResponse, Club, LoginResponse, SignupResponse } from 'store/types'
+import { AuthResponse, Club, LoginResponse, SignupResponse, User } from 'store/types'
+import { clubLike, clubLikeRequest, CLUB_LIKE, getUser, getUserRequest, GET_USER } from 'actions/user';
 
 function* fetchClubsAllSaga(): Generator {
   try {
@@ -122,6 +123,23 @@ function* authSaga(action: ReturnType<typeof auth.request>) {
   }
 }
 
+function* getUserSaga(action: ReturnType<typeof getUser.request>) {
+  try {
+    const user: User = yield call(getUserRequest, action.payload);
+    yield put(getUser.success(user));
+  } catch(e) {
+    yield put(getUser.failure(e));
+  }
+}
+
+function* clubLikeSaga(action: ReturnType<typeof clubLike.request>) {
+  try {
+    const user: User = yield call(clubLikeRequest, action.payload);
+    yield put(clubLike.success(user));
+  } catch(e) {
+    yield put(clubLike.failure(e));
+  }
+}
 
 export default function* sagas() {
   // takeEvery로 CLUB_FETCH_REQUEST를 지속적으로 감시
@@ -132,6 +150,8 @@ export default function* sagas() {
   yield takeEvery(SIGNUP_USER.REQUEST, signupUserSaga)
   yield takeEvery(LOGIN_USER.REQUEST, loginUserSaga)
   yield takeEvery(AUTH.REQUEST, authSaga)
+  yield takeEvery(GET_USER.REQUEST, getUserSaga)
+  yield takeEvery(CLUB_LIKE.REQUEST, clubLikeSaga)
   // yield takeEvery("ADD_MANAGER", addManagerToClubSaga)
   // yield takeEvery("REMOVE_MANAGER", removeManagerFromClubSaga)
 }

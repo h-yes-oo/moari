@@ -4,7 +4,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import logoCampusSvg from 'assets/icons/logo-campus.svg';
 import searchSvg from 'assets/icons/search.svg';
-import likeSvg from 'assets/icons/like.svg';
+import likeSvg from 'assets/icons/like-empty.svg';
 import alarmSvg from 'assets/icons/alarm.svg';
 import mypageSvg from 'assets/icons/mypage.svg';
 import signupSvg from 'assets/icons/signup.svg';

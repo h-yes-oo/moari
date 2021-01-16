@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const { Club, Image } = require("../models/Club");
+const { clubSchema, Club, Image } = require("../models/Club");
+const { User } = require("../models/User");
 
 // use for image upload
 const fs = require('fs'); 
@@ -103,8 +104,25 @@ router.patch('/:clubId', async (req, res) => {
     }
 })
 
+router.post('/:clubId/like/:userId', async (req, res) => {
+    try {
+        const club = await Club.findById(req.params.clubId);
+        const user = await User.findById(req.params.userId);
+        if (user.likes.some(c => c.id === club.id)) {
+            user.likes = user.likes.filter(c => c.id !== club.id);
+        } else {
+            user.likes.push(club);
+        }
+        user.save();
+        res.json(user);
+    } catch(err) {
+        res.json({ message: err });
+    }
+})
+
 router.get('/info', function(req, res) {
   res.send('clubs info');
 });
+
 
 module.exports = router; 

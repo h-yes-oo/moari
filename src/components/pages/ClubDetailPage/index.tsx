@@ -5,12 +5,14 @@ import styled from 'styled-components';
 import * as T from 'types';
 import { BoldLargeText, TagText } from 'constants/styles';
 import BaseLayout from 'components/templates/BaseLayout';
-import likeSvg from 'assets/icons/like.svg';
+import likeEmptySvg from 'assets/icons/like-empty.svg';
+import likeFilledSvg from 'assets/icons/like-filled.svg';
 import eyesSvg from 'assets/icons/eyes.svg';
 import palette from 'constants/palette';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'reducers';
 import { fetchClub } from 'actions/club';
+import { clubLike, getUser } from 'actions/user';
 
 const Root = styled.div`
     margin: 36px 144px;
@@ -32,6 +34,7 @@ const Icon = styled.img`
     width: 28px;
     height: auto;
     margin-right: 4px;
+    cursor: pointer;
 `
 
 const IconCount = styled.div`
@@ -105,7 +108,10 @@ interface ClubInfoRouterProps {
 
 const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ match }) => {
     const [selectedTab, setSelectedTab] = useState<keyof T.ClubDetailTab>('CLUB_INTRO' as keyof T.ClubDetailTab);
+    const [likeImg, setLikeImg] = useState<string>('');
     const club = useSelector((state: RootState) => state.fetchSingle.clubs[0]);
+    const auth = useSelector((state: RootState) => state.userData.data);
+    const user = useSelector((state: RootState) => state.getUser);
 
     const dispatch = useDispatch();
 
@@ -114,8 +120,16 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
     }, [match.params.id]);
 
     useEffect(() => {
-        console.log(club);
-    }, [club]);
+        if (auth) {
+            // 처음 1번만 실행됨
+            dispatch(getUser.request({ userId: auth._id }))
+        }
+    }, [auth])
+    
+    useEffect(() => {
+        if (user.likes && user.likes.some(c => c._id === club._id)) setLikeImg(likeFilledSvg);
+        else setLikeImg(likeEmptySvg);
+    }, [user])
 
     const handleTabClick: (type: keyof T.ClubDetailTab) => void = (type) => {
         setSelectedTab(type);
@@ -123,6 +137,12 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
 
     const isSelectedTab: (type: keyof T.ClubDetailTab) => boolean = (type) => {
         return selectedTab === type;
+    }
+
+    const handleLike: () => void = async () => {
+        if (!auth) return;
+        dispatch(clubLike.request({ clubId: club._id, userId: auth._id }));
+        console.log(user.likes);
     }
 
     const menuItems: ReactNode =  
@@ -143,7 +163,7 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
             const imageConverterPrefix = "data:image/png;base64,"
             const imageElem = imageConverterPrefix + btoa(String.fromCharCode.apply(null, photo.img.data.data));
             return (
-                <ClubImage src={imageElem} />
+                <ClubImage key={photo} src={imageElem} />
             )
         }) : null;
 
@@ -153,7 +173,7 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
                 <BoldLargeText>{club.name}</BoldLargeText>
                 <IconTagWrapper>
                     <IconCountWrapper>
-                        <Icon src={likeSvg} />
+                        <Icon src={likeImg} onClick={() => handleLike()} />
                         <IconCount>48</IconCount>
                         <Icon src={eyesSvg} />
                         <IconCount>1002</IconCount>

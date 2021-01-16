@@ -11,16 +11,13 @@ export interface Club {
   // managerIds: string[]
 }
 
-// export interface ClubList {
-//   clubs: Club[]
-// }
-
 export interface User {
   _id: string
   id: string
   name: string
   email: string
   password: string
+  likes: Club[]
   token: string
   tokenExp: number
 }

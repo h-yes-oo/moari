@@ -56,6 +56,7 @@ const clubSchema = mongoose.Schema({
 const Image = mongoose.model('Image', imageSchema); 
 const Club = mongoose.model('Club', clubSchema)
 module.exports = {
+    clubSchema,
     Club, 
     Image
 };

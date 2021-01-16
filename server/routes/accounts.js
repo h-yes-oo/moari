@@ -70,4 +70,11 @@ router.get('/logout', auth, (req,res)=>{
       });
 });
 
+router.get('/:userId', (req, res) => {
+    User.findById(req.params.userId, (err, user) => {
+        if (user) res.json(user)
+        else if (err) res.json({ message: err });
+    })
+}) 
+
 module.exports = router;
