@@ -24,7 +24,6 @@ const clubSchema = mongoose.Schema({
         type: String,
     },
     photos: [{
-        // type: mongoose.Schema.Types.ObjectId,
         type: imageSchema,
         ref: "Image"
     }],
@@ -39,6 +38,10 @@ const clubSchema = mongoose.Schema({
         type: String,
         required: true,
     },
+    likedUsers: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }],
     // managers: [{
     //     type: userSchema,
     //     ref: "User"
@@ -56,7 +59,6 @@ const clubSchema = mongoose.Schema({
 const Image = mongoose.model('Image', imageSchema); 
 const Club = mongoose.model('Club', clubSchema)
 module.exports = {
-    clubSchema,
     Club, 
     Image
 };
