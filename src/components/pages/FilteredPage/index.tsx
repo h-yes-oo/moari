@@ -8,6 +8,7 @@ import FilteringButtons from 'components/templates/FilteringButtons';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchClubsAll } from 'modules/fetchAll';
 import { RootState } from 'modules'
+import Loading from 'components/templates/Loading';
 
 interface Props {
 
@@ -43,7 +44,7 @@ const FilteredPage: FC<Props & RouteComponentProps<MatchParams>> = ({ match }) =
     return(
       <BaseLayout>
         <FilteringButtons filter={filterType} />
-        로딩중 ...
+        <Loading />
       </BaseLayout>
     )
   }

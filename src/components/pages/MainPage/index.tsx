@@ -8,6 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchClubsAll } from 'modules/fetchAll';
 import { searchClub } from 'modules/search'
 import { RootState } from 'modules/index';
+import Loading from 'components/templates/Loading';
 
 interface Props {
 
@@ -61,7 +62,7 @@ const MainPage: FC<Props & RouteComponentProps<MatchParams>> = ({ match }) => {
         if(fetchedData === null){
             return (
             <BaseLayout>
-                로딩중...
+                <Loading />
             </BaseLayout>
             )
         }

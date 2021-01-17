@@ -11,6 +11,7 @@ import palette from 'constants/palette';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'modules/index';
 import { fetchClub } from 'modules/fetchSingle';
+import Loading from '../../templates/Loading'
 
 const Root = styled.div`
     margin: 36px 144px;
@@ -114,7 +115,7 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
 
     if(fetchedData === null) {return (
         <BaseLayout>
-            로딩중 ...
+            <Loading />
         </BaseLayout>
     ) } else {
 
