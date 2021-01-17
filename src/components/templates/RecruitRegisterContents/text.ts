@@ -7,10 +7,14 @@ const text = {
         title: '공고 제목',
         description: `공고 제목을 입력하세요`
     },        
-    recruitPeriod: {
+    recruitDuration: {
         title: '모집 기간',
-        description1: '모집 시작 날짜를 선택해주세요',
-        description2: '모집 마감 날짜를 선택해주세요',
+        description1: '모집 시작 날짜',
+        description2: '모집 마감 날짜',
+    },
+    recruitContact: {
+        title: '대표 연락처',
+        description: '대표 연락처를 입력해주세요'
     },
     recruitDetails: {
         title: '상세 내용',
