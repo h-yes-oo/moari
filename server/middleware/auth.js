@@ -8,14 +8,12 @@ let auth = (req, res, next) => {
         if(err) throw err;
         //유저가 없으면 인증을 하지 않는다
         if(!user) {
-            console.log('cannot find user');
             return res.json({
                 isAuth: false, 
                 error: true
             });
         }
         //유저가 있으면 인증을 해주는데, request에 토큰과 유저를 넣어서 보내준다
-        console.log('found user');
         req.token = token;
         req.user = user;
         //next는 middleware에서 빠져나가게 해주는 역할

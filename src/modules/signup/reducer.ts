@@ -1,15 +1,6 @@
-import { ActionType, createReducer } from 'typesafe-actions';
-import { User, SignupResponse } from 'store/types';
-import { signupUser, SIGNUP_USER } from 'actions/signup';
-import * as actions from 'actions/signup';
-
-type SignupAction = ActionType<typeof actions>;
-
-type SignupState = {
-    loading: boolean;
-    data: SignupResponse | null;
-    error: Error | null;
-}
+import { createReducer } from 'typesafe-actions';
+import { SignupAction, SignupState } from './types';
+import { signupUser } from './actions';
 
 const initialState: SignupState = {
     loading: false,
@@ -17,7 +8,7 @@ const initialState: SignupState = {
     error: null
 };
 
-export const signupReducer = createReducer<SignupState, SignupAction> (initialState)
+const signup = createReducer<SignupState, SignupAction> (initialState)
     .handleAction(signupUser.request, (state) => ({
         ...state,
         loading: true,
@@ -36,3 +27,5 @@ export const signupReducer = createReducer<SignupState, SignupAction> (initialSt
         error: action.payload,
         data: null
     }))
+
+export default signup;

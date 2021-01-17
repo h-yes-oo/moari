@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { auth } from '../actions/auth';
+import { auth } from 'modules/userData';
 
 export default function Auth(SpecificComponent, option, adminRoute = null){
 

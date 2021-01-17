@@ -19,7 +19,7 @@ interface Props {
 
 }
 
-const Footer: FC<Props> = ({ }) => {
+const Footer: FC<Props> = () => {
     return (
         <Root>
             <FooterLogo src={logoSvg} />

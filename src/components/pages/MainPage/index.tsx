@@ -4,8 +4,10 @@ import { ProposeClubText } from 'components/templates/SimpleText';
 import TopClubList from 'components/templates/TopClubList';
 import BaseLayout from 'components/templates/BaseLayout';
 import ClubList from 'components/templates/ClubList';
-import { useDispatch } from 'react-redux';
-import { fetchClubsAll, searchClub } from 'actions/club';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchClubsAll } from 'modules/fetchAll';
+import { searchClub } from 'modules/search'
+import { RootState } from 'modules/index';
 
 interface Props {
 
@@ -33,18 +35,49 @@ const MainPage: FC<Props & RouteComponentProps<MatchParams>> = ({ match }) => {
     const topClubList: ReactNode = isFilteredPage ? null : <TopClubList />
     const proposeClubText: ReactNode = isFilteredPage ? null : <ProposeClubText />
 
-    return (
+    const fetchedData = useSelector((state: RootState) => state.fetchAll.data);
+    const searchedData = useSelector((state: RootState) => state.search.data);
+
+    if(isFilteredPage)
+    {
+        if(searchedData === null) {
+        return (
         <BaseLayout>
-            {proposeClubText}
-            {topClubList}
-            <ClubList
-                keyword={match.params.keyword}
-                category={match.params.category}
-                tag={match.params.tag}
-                status={match.params.status}
-            /> 
+            검색 결과를 가져오는 중...
         </BaseLayout>
-    );
+        )} else {
+            return (
+            <BaseLayout>
+                <ClubList
+                    keyword={match.params.keyword}
+                    category={match.params.category}
+                    tag={match.params.tag}
+                    status={match.params.status}
+                /> 
+            </BaseLayout>
+            )
+        }
+    } else{
+        if(fetchedData === null){
+            return (
+            <BaseLayout>
+                로딩중...
+            </BaseLayout>
+            )
+        }
+        return (
+            <BaseLayout>
+                {proposeClubText}
+                {topClubList}
+                <ClubList
+                    keyword={match.params.keyword}
+                    category={match.params.category}
+                    tag={match.params.tag}
+                    status={match.params.status}
+                /> 
+            </BaseLayout>
+        );
+    }
 }
 
 export default MainPage;

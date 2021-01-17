@@ -1,6 +1,5 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import * as T from 'types';
@@ -8,8 +7,6 @@ import prepareSvg from 'assets/icons/stat-prepare.svg';
 import alwaysSvg from 'assets/icons/stat-always.svg';
 import openSvg from 'assets/icons/stat-open.svg';
 import closedSvg from 'assets/icons/stat-closed.svg';
-import logoPng from 'assets/images/logo.png';
-import { start } from 'repl';
 
 const Root = styled.div<{ image?: string | undefined }>`
     width: 358px;

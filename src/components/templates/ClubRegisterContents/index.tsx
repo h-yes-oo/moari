@@ -1,10 +1,9 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'reducers';
+import { useDispatch } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
-import { postClub } from 'actions/club';
+import { postClub } from 'modules/post';
 import RegisterForm from '../RegisterForm';
 import * as T from 'types';
 import text from './text';
@@ -52,8 +51,8 @@ const ClubRegisterContents: FC<Props & RouteComponentProps> = ({ history }) => {
         else if (status === '') return requiredAlert(status, '모집 방법');
         else if (category === '') return requiredAlert(category, '분류');
 
-        dispatch(postClub.request({ name, school, description, photos, category, tags, status })); 
-        alert('동아리 등록 성공! 😆');
+        dispatch(postClub.request({ name, school, description, photos, category, tags, status, history })); 
+        //alert('동아리 등록 성공! 😆');
         // history.push('/');
     }
 

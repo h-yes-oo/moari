@@ -26,18 +26,25 @@ const upload_club = multer({
 // });
 
 router.get('/', async (req, res) => {
-  console.log('clubs index');
-  try {
-    const clubs = await Club.find();
-    // clubs.map(club => {
-    //     console.log(club.photos);
-    // })
+    Club.find()
+    .exec((err, clubs) => {
+        if(err) return res.status(400).json({ success: false, err});
+        res.status(200).json({ success: true, clubs });
+    }) 
 
-    res.json(clubs);
-    // res.send(clubs);    
-  } catch (err) {
-    res.json({ message: err });
-  }
+  //console.log('clubs index');
+//   try {
+//     const clubs = await Club.find();
+//     // clubs.map(club => {
+//     //     console.log(club.photos);
+//     // })
+
+//     res.json(clubs);
+//     // res.send(clubs);    
+//   } catch (err) {
+//     res.json({ message: err });
+//   }
+
 });
 
 // single - single file
@@ -66,21 +73,20 @@ router.post('/', upload_club.array('photos'), async (req, res) => {
         newImage.save();
         club.photos.push(newImage);
     }
-    try {
-        const newClub = await club.save();
-        res.json(newClub);
-    } catch(err) {
-        res.json({ message: err });
-    }
+    const newClub = await club.save((err, club) => {
+        if(err) return res.json({ success: false, err })
+        return res.status(200).json({
+            success: true,
+            club
+        })
+    })
 });
 
 router.get('/:clubId', async (req, res) => {
-    try {
-        const club = await Club.findById(req.params.clubId);
-        res.json(club);
-    } catch(err) {
-        res.json({ message: err });
-    }
+    Club.findById(req.params.clubId, (err, club) => {
+        if(err) return res.status(400).json({ success: false, err});
+        res.status(200).json({ success: true, club})
+    });
 });
 
 router.delete('/:clubId', async (req, res) => {

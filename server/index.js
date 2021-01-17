@@ -25,14 +25,14 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-const { Club } = require("./models/Club");
-
 const accountsRoute = require('./routes/accounts');
 const clubsRoute = require('./routes/clubs');
+const searchRoute = require('./routes/search');
 // const clubsImageRoute = require('./routes/uploads/clubs');
 
 app.use('/api/users', accountsRoute);
-app.use('/clubs', clubsRoute);
+app.use('/api/clubs', clubsRoute);
+app.use('/api/search', searchRoute);
 
 app.route('/register/club')
     .get(function(req, res) {
@@ -42,15 +42,6 @@ app.route('/register/club')
     .post(function(req, res) {
         res.send('Add a book');
 })
-
-app.get('/search/:keyword', (req, res) => {
-    console.log("searching...");
-    Club.find({ name: { $regex: req.params.keyword, $options: 'i' } }, (err, club) => {
-        if (err) return res.status(500).json({ error: err });
-        if (!club) return res.status(404).json({ error: "찾는 동아리가 없습니다." });
-        res.json(club);
-    });
-});
 
 //const port = process.env.PORT || 5000;
 const port = 5000;

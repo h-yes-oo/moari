@@ -1,11 +1,11 @@
-import React, { FC, ReactNode, useEffect, useState } from 'react';
+import React, { FC, ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import * as T from 'types';
 import ClubCard from 'components/templates/ClubCard';
-import { RootState } from 'reducers';
-import { Club } from 'store/types';
+import { RootState } from 'modules/index';
+import Club from 'types';
 
 
 const Root = styled.div`
@@ -30,9 +30,11 @@ interface Props {
 
 const ClubList: FC<Props> = ({ keyword, category, tag, status }) => {    
   // const [clubsLoaded, setClubsLoaded] = useState<Boolean>(false);
-  const clubs = useSelector((state: RootState) => state.fetchAll.clubs);
-  const searchedClubs = useSelector((state: RootState) => state.search.clubs);
-  
+  const fetchedData = useSelector((state: RootState) => state.fetchAll.data);
+  const searchedData = useSelector((state: RootState) => state.search.data);
+
+  const clubs = fetchedData === null? [] : fetchedData!.clubs;
+  const searchedClubs = searchedData === null? [] : searchedData!.clubs;
   const getFilteredClubs: () => Club[] = () => {
     // TODO: erase console logs and shorten return statements
     if (category !== undefined) {
@@ -57,9 +59,9 @@ const ClubList: FC<Props> = ({ keyword, category, tag, status }) => {
   const clubsToShow = keyword !== undefined ? searchedClubs :
     (category !== undefined || tag !== undefined || status !== undefined) ? filteredClubs : clubs;
   
-  const clubList: ReactNode = clubsToShow.map((club) => {  
+  const clubList: ReactNode = clubsToShow.map((club : Club, index) => {  
     return (
-      <CardWrapper>
+      <CardWrapper key={index}>
         <ClubCard
             key={club._id}
             id={club._id}

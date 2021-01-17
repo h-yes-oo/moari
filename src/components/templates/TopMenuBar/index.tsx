@@ -4,7 +4,6 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import * as T from 'types';
 import palette from 'constants/palette';
-import { searchClub } from 'actions/club';
 import UnfoldTopMenu from '../UnfoldTopMenu';
 
 const Root = styled.div`

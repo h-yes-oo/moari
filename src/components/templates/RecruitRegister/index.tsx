@@ -1,6 +1,4 @@
-import React, { FC, ReactNode } from 'react';
-import styled from 'styled-components';
-
+import React, { FC } from 'react';
 interface Props {
 
 }

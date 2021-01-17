@@ -9,8 +9,8 @@ import likeSvg from 'assets/icons/like.svg';
 import eyesSvg from 'assets/icons/eyes.svg';
 import palette from 'constants/palette';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'reducers';
-import { fetchClub } from 'actions/club';
+import { RootState } from 'modules/index';
+import { fetchClub } from 'modules/fetchSingle';
 
 const Root = styled.div`
     margin: 36px 144px;
@@ -105,81 +105,84 @@ interface ClubInfoRouterProps {
 
 const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ match }) => {
     const [selectedTab, setSelectedTab] = useState<keyof T.ClubDetailTab>('CLUB_INTRO' as keyof T.ClubDetailTab);
-    const club = useSelector((state: RootState) => state.fetchSingle.clubs[0]);
-
+    const fetchedData = useSelector((state: RootState) => state.fetchSingle.data);
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(fetchClub.request({ id: match.params.id }));
     }, [match.params.id]);
 
-    useEffect(() => {
-        console.log(club);
-    }, [club]);
-
-    const handleTabClick: (type: keyof T.ClubDetailTab) => void = (type) => {
-        setSelectedTab(type);
-    };
-
-    const isSelectedTab: (type: keyof T.ClubDetailTab) => boolean = (type) => {
-        return selectedTab === type;
-    }
-
-    const menuItems: ReactNode =  
-        Object.entries(T.ClubDetailTab).map(([key, value]) => {
-            return (
-                <ClubDetailMenuItem 
-                    key={key}
-                    isSelected={isSelectedTab(key as keyof T.ClubDetailTab)} 
-                    onClick={() => handleTabClick(key as keyof T.ClubDetailTab)}
-                >
-                {value}
-                </ClubDetailMenuItem>
-            );
-        })
-
-    const clubImages: ReactNode =
-        club ? club.photos.map(photo => {
-            const imageConverterPrefix = "data:image/png;base64,"
-            const imageElem = imageConverterPrefix + btoa(String.fromCharCode.apply(null, photo.img.data.data));
-            return (
-                <ClubImage src={imageElem} />
-            )
-        }) : null;
-
-    return club ? (
+    if(fetchedData === null) {return (
         <BaseLayout>
-            <Root>
-                <BoldLargeText>{club.name}</BoldLargeText>
-                <IconTagWrapper>
-                    <IconCountWrapper>
-                        <Icon src={likeSvg} />
-                        <IconCount>48</IconCount>
-                        <Icon src={eyesSvg} />
-                        <IconCount>1002</IconCount>
-                    </IconCountWrapper>
-                    <TagWrapper>
-                        {/* array.map으로 전환 필요*/}  
-                        <TagText>#학회</TagText>
-                        <TagText>#생명과학</TagText>
-                        <TagText>#화학</TagText>
-                        <TagText>#논문읽기</TagText>
-                    </TagWrapper>
-                </IconTagWrapper>
-                <ClubDetailMenuWrapper>
-                    {menuItems}
-                </ClubDetailMenuWrapper>
-                <ClubContentsContainer>
-                    <ClubImageContainer>
-                        {clubImages}
-                    </ClubImageContainer>
-                    <ClubDescription>
-                        {club ? club.description : null}
-                    </ClubDescription>
-                </ClubContentsContainer>
-            </Root>
+            로딩중 ...
         </BaseLayout>
-    ) : null;
+    ) } else {
+
+        const club = fetchedData!.club;
+        const handleTabClick: (type: keyof T.ClubDetailTab) => void = (type) => {
+            setSelectedTab(type);
+        };
+
+        const isSelectedTab: (type: keyof T.ClubDetailTab) => boolean = (type) => {
+            return selectedTab === type;
+        }
+
+        const menuItems: ReactNode =  
+            Object.entries(T.ClubDetailTab).map(([key, value]) => {
+                return (
+                    <ClubDetailMenuItem 
+                        key={key}
+                        isSelected={isSelectedTab(key as keyof T.ClubDetailTab)} 
+                        onClick={() => handleTabClick(key as keyof T.ClubDetailTab)}
+                    >
+                    {value}
+                    </ClubDetailMenuItem>
+                );
+            })
+
+        const clubImages: ReactNode =
+            club ? club.photos.map((photo,index) => {
+                const imageConverterPrefix = "data:image/png;base64,"
+                const imageElem = imageConverterPrefix + btoa(String.fromCharCode.apply(null, photo.img.data.data));
+                return (
+                    <ClubImage key={index} src={imageElem} />
+                )
+            }) : null;
+
+        return club ? (
+            <BaseLayout>
+                <Root>
+                    <BoldLargeText>{club.name}</BoldLargeText>
+                    <IconTagWrapper>
+                        <IconCountWrapper>
+                            <Icon src={likeSvg} />
+                            <IconCount>48</IconCount>
+                            <Icon src={eyesSvg} />
+                            <IconCount>1002</IconCount>
+                        </IconCountWrapper>
+                        <TagWrapper>
+                            {/* array.map으로 전환 필요*/}  
+                            <TagText>#학회</TagText>
+                            <TagText>#생명과학</TagText>
+                            <TagText>#화학</TagText>
+                            <TagText>#논문읽기</TagText>
+                        </TagWrapper>
+                    </IconTagWrapper>
+                    <ClubDetailMenuWrapper>
+                        {menuItems}
+                    </ClubDetailMenuWrapper>
+                    <ClubContentsContainer>
+                        <ClubImageContainer>
+                            {clubImages}
+                        </ClubImageContainer>
+                        <ClubDescription>
+                            {club ? club.description : null}
+                        </ClubDescription>
+                    </ClubContentsContainer>
+                </Root>
+            </BaseLayout>
+        ) : null;
+    }
 }
 
 export default withRouter(ClubDetailPage);
