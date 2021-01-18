@@ -1,21 +1,18 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import logoCampusSvg from 'assets/icons/logo-campus.svg';
 import searchSvg from 'assets/icons/search.svg';
-import likeSvg from 'assets/icons/like.svg';
+import likeSvg from 'assets/icons/like-empty.svg';
 import alarmSvg from 'assets/icons/alarm.svg';
 import mypageSvg from 'assets/icons/mypage.svg';
 import signupSvg from 'assets/icons/signup.svg';
 import loginSvg from 'assets/icons/login.svg';
 import logoutSvg from 'assets/icons/logout.svg';
-import tempProfile from 'assets/images/temp-profile.jpg';
-// import { searchClub } from 'actions/club';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'reducers';
-import { Club } from 'store/types';
-import { searchClub } from 'actions/club';
+import { RootState } from 'modules/index';
+import { searchClub } from 'modules/search';
 import axios from 'axios';
 import { USER_SERVER } from '../../Config';
 
@@ -137,7 +134,7 @@ const Header: FC<Props & RouteComponentProps> = ({ campusName, username, history
     const logout: () => void = () => {
         axios.get(`${USER_SERVER}/logout`, { withCredentials: true })
         .then(response => {
-            console.log(response.data);
+            //console.log(response.data);
             if(response.data.success){
                 localStorage.removeItem('userId');
                 history.push('/login');
@@ -185,9 +182,8 @@ const Header: FC<Props & RouteComponentProps> = ({ campusName, username, history
             </ProfileWrapper>
             }
             <ButtonsWrapper>
-                {/* if user logged in */}
-                <HeaderButton src={likeSvg} />
-                <HeaderButton src={alarmSvg} />
+                { isAuth && <HeaderButton src={likeSvg} /> }
+                { isAuth && <HeaderButton src={alarmSvg} /> }
                 {/* <HeaderButton src={mypageSvg} />
                 <HeaderButton src={logoutSvg} /> */}
                 {/* else */}

@@ -6,9 +6,9 @@ import palette from 'constants/palette';
 
 const Root = styled.div`
     border-top: 1px solid ${palette.greyNumber.toString()};
-
     padding: 20px;
     margin-top: 72px;
+    height: 60px;
 `
 
 const FooterLogo = styled.img`
@@ -19,7 +19,7 @@ interface Props {
 
 }
 
-const Footer: FC<Props> = ({ }) => {
+const Footer: FC<Props> = () => {
     return (
         <Root>
             <FooterLogo src={logoSvg} />

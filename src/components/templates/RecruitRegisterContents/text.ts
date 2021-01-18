@@ -1,4 +1,4 @@
-export default {
+const text = {
     clubName: {
         title: '동아리 이름',
         description: '내가 담당자로 등록된 동아리만 선택이 가능합니다',
@@ -17,3 +17,5 @@ export default {
         description: `\n모집 공고를 최대한 상세히 올려주세요\n\n예> 모집 인원, 모집 대상, 지원 방법`
     }
 }
+
+export default text;

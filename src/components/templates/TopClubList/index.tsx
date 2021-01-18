@@ -1,13 +1,11 @@
 import React, { FC, ReactNode, useEffect, useRef, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import * as T from 'types';
 import ClubCard from 'components/templates/ClubCard';
 import leftArrowSvg from 'assets/icons/left-arrow.svg';
 import rightArrowSvg from 'assets/icons/right-arrow.svg';
-import { RootState } from 'reducers';
-import { fetchClubsAll, searchClub } from 'actions/club';
+import { RootState } from 'modules/index';
 
 const Root = styled.div`
     display: flex;
@@ -39,11 +37,11 @@ interface Props {
 //     [key: number]: T.ClubInfo; // key refers to id
 // }
 
-const TopClubList: FC<Props> = () => {    
-    const clubs = useSelector((state: RootState) => state.fetchAll.clubs);
-    const searchedClubs = useSelector((state: RootState) => state.search.clubs);
-    const dispatch = useDispatch();
+const TopClubList: FC<Props> = () => {
+    const fetchedData = useSelector((state: RootState) => state.fetchAll.data);
+    // const dispatch = useDispatch();
     
+    const clubs = fetchedData !== null? fetchedData!.clubs : [];
     // clubs.length === 0인 경우?
     const TOTAL_SLIDES: number = Math.floor((clubs.length - 1) / 3);
     // const TOTAL_SLIDES: number = 5;
@@ -62,14 +60,6 @@ const TopClubList: FC<Props> = () => {
         if (currentSlide === 0) setCurrentSlide(TOTAL_SLIDES);
         else setCurrentSlide(currentSlide - 1);
     };
-
-    useEffect(() => {
-        dispatch(fetchClubsAll.request()); 
-    }, []);
-
-    // useEffect(() => {
-    //     console.log(clubs);
-    // }, [clubs]);
 
     useEffect(() => {
         slideRef.current.style.transition = "all 0.5s ease-in-out";

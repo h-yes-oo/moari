@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components';
 import RecruitRegisterContents from 'components/templates/RecruitRegisterContents';
 
