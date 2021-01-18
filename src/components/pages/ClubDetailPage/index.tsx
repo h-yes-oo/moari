@@ -13,8 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'modules/index';
 import { fetchClub } from 'modules/fetchSingle';
 import Loading from '../../templates/Loading';
-import axios from 'axios';
-import { CLUB_SERVER } from 'components/Config';
+import { likeClub } from 'modules/like'
 
 const Root = styled.div`
     margin: 36px 144px;
@@ -147,14 +146,7 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
 
         const handleLike: () => void = async () => {
             if(user!.isAuth ){
-                axios.post(`${CLUB_SERVER}/${club._id}/like/${user!._id}`)
-                    .then(response => {
-                        if(response.data.success){
-                            setLikeImg(!likeImg);
-                        } else {
-                            alert('좋아요 누르기에 실패했습니다')
-                        }
-                    });
+                dispatch(likeClub.request({ cludId: club._id, userId: user!._id, setLikeImg, likeImg}));
             } else {
                 alert('로그인해주세요')
             }
