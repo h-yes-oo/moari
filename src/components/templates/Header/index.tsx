@@ -13,8 +13,7 @@ import logoutSvg from 'assets/icons/logout.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'modules/index';
 import { searchClub } from 'modules/search';
-import axios from 'axios';
-import { USER_SERVER } from '../../Config';
+import { logoutUser } from 'modules/logout/actions';
 
 const Root = styled.div`
     position: fixed;
@@ -105,8 +104,6 @@ const Header: FC<Props & RouteComponentProps> = ({ campusName, username, history
     const name = userData?.name;
     const userImage = userData?.image;
 
-
-
     const goMainPage: () => void = () => {
         history.push('/');
     }
@@ -132,16 +129,7 @@ const Header: FC<Props & RouteComponentProps> = ({ campusName, username, history
     }
 
     const logout: () => void = () => {
-        axios.get(`${USER_SERVER}/logout`, { withCredentials: true })
-        .then(response => {
-            //console.log(response.data);
-            if(response.data.success){
-                localStorage.removeItem('userId');
-                history.push('/login');
-            } else {
-                alert('로그아웃에 실패했습니다')
-            }
-        })
+        dispatch(logoutUser.request({ history }));
     }
 
     // 마지막 한 글자가 한번 더 쳐짐 ㅠㅠ
