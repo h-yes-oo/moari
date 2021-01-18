@@ -123,8 +123,7 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
     
     useEffect(() => {
         if(fetchedData !== null && user !== null){
-            const club = fetchedData!.club;
-            if (user!.likes && user!.likes.some(c => c._id === club._id)) setLikeImg(true);
+            if (user!.likes && user!.likes.some(c => c === match.params.id )) setLikeImg(true);
             else setLikeImg(false);
         }
     }, [user])
@@ -134,7 +133,6 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
             <Loading />
         </BaseLayout>
     ) } else {
-
         const club = fetchedData!.club;
         const handleTabClick: (type: keyof T.ClubDetailTab) => void = (type) => {
             setSelectedTab(type);

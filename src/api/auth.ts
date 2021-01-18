@@ -20,5 +20,5 @@ export interface AuthResponse {
     name: string,
     image: string,
     error: boolean | null,
-    likes: [any]
+    likes: any[]
   }
