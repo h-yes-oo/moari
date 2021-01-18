@@ -114,12 +114,18 @@ router.post('/:clubId/like/:userId', async (req, res) => {
     try {
         const club = await Club.findById(req.params.clubId);
         const user = await User.findById(req.params.userId);
-        if (user.likes.some(c => c.id === club.id)) {
-            user.likes = user.likes.filter(c => c.id !== club.id);
+        if (user.likedClubs.some(cid => cid.toString() === club.id)) {
+            console.log('already exists...')
+            user.likedClubs = user.likedClubs.filter(cid => cid.toString() !== club.id);
+            club.likedUsers = club.likedUsers.filter(uid => uid.toString() !== user._id.toString());
         } else {
-            user.likes.push(club);
+            console.log('new like!')
+            user.likedClubs.push(club);
+            club.likedUsers.push(user);
         }
         user.save();
+        club.save();
+
         res.status(200).json({ success: true });
     } catch(err) {
         res.status(400).json({ success: false, err });
