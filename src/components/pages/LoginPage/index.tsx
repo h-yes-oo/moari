@@ -8,7 +8,7 @@ import loginButtonSvg from 'assets/icons/login-button.svg';
 import logo from 'assets/icons/logo.svg';
 import moariLogin from 'assets/icons/moari-login.svg';
 import { useDispatch } from 'react-redux';
-import { loginUser } from 'actions/login';
+import { loginUser } from 'modules/login';
 import { RouteComponentProps } from 'react-router-dom';
 
 const Root = styled.div`

@@ -1,4 +1,4 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState } from 'react';
 import BaseLayout from 'components/templates/BaseLayout';
 import styled from 'styled-components';
 import LoginForm from '../../templates/LoginForm';
@@ -10,8 +10,8 @@ import moariSignUp from 'assets/icons/moari-signup.svg';
 import duplicateCheckSvg from 'assets/icons/duplicate-check.svg';
 import palette from 'constants/palette';
 import { useDispatch } from 'react-redux';
-import { signupUser } from 'actions/signup';
-import { RouteComponentProps, withRouter, useHistory } from 'react-router-dom';
+import { signupUser } from 'modules/signup';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 const Root = styled.div`
     display: flex;
@@ -102,7 +102,6 @@ const SignupPage: FC<Props & RouteComponentProps> = ({ history }) => {
     const dispatch = useDispatch();
 
     const handleSignup: () => void = () => {
-        console.log("handleSignup");
         if(agreement === false) {
             alert("약관에 동의해주세요");
             return;
@@ -162,7 +161,7 @@ const SignupPage: FC<Props & RouteComponentProps> = ({ history }) => {
                         setValue={setConfirmPassword}
                     />
                     <Agreement value={agreementText} readOnly disabled></Agreement>
-                    <Label><CheckBox type="checkbox" name="maintainLogin" checked={agreement} onClick={()=>{setAgreement(!agreement);}}/> 약관 동의</Label>
+                    <Label><CheckBox type="checkbox" name="maintainLogin" checked={agreement} onChange={()=>{setAgreement(!agreement);}}/> 약관 동의</Label>
                     <RegisterButton src={signUpButtonSvg} onClick={() => handleSignup()} />
                 </Wrapper>
             </Root>

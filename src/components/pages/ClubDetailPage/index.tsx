@@ -10,9 +10,11 @@ import likeFilledSvg from 'assets/icons/like-filled.svg';
 import eyesSvg from 'assets/icons/eyes.svg';
 import palette from 'constants/palette';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'reducers';
-import { fetchClub } from 'actions/club';
-import { clubLike, getUser } from 'actions/user';
+import { RootState } from 'modules/index';
+import { fetchClub } from 'modules/fetchSingle';
+import Loading from '../../templates/Loading';
+import axios from 'axios';
+import { CLUB_SERVER } from 'components/Config';
 
 const Root = styled.div`
     margin: 36px 144px;
@@ -108,98 +110,112 @@ interface ClubInfoRouterProps {
 
 const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ match }) => {
     const [selectedTab, setSelectedTab] = useState<keyof T.ClubDetailTab>('CLUB_INTRO' as keyof T.ClubDetailTab);
-    const [likeImg, setLikeImg] = useState<string>('');
-    const club = useSelector((state: RootState) => state.fetchSingle.clubs[0]);
-    const auth = useSelector((state: RootState) => state.userData.data);
-    const user = useSelector((state: RootState) => state.getUser);
+    const [likeImg, setLikeImg] = useState<boolean>(false);
+    const user = useSelector((state: RootState) => state.userData.data);
 
+
+    const fetchedData = useSelector((state: RootState) => state.fetchSingle.data);
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(fetchClub.request({ id: match.params.id }));
     }, [match.params.id]);
 
-    useEffect(() => {
-        if (auth) {
-            // 처음 1번만 실행됨
-            dispatch(getUser.request({ userId: auth._id }))
-        }
-    }, [auth])
     
     useEffect(() => {
-        if (user.likes && user.likes.some(c => c._id === club._id)) setLikeImg(likeFilledSvg);
-        else setLikeImg(likeEmptySvg);
+        if(fetchedData !== null && user !== null){
+            const club = fetchedData!.club;
+            if (user!.likes && user!.likes.some(c => c._id === club._id)) setLikeImg(true);
+            else setLikeImg(false);
+        }
     }, [user])
 
-    const handleTabClick: (type: keyof T.ClubDetailTab) => void = (type) => {
-        setSelectedTab(type);
-    };
-
-    const isSelectedTab: (type: keyof T.ClubDetailTab) => boolean = (type) => {
-        return selectedTab === type;
-    }
-
-    const handleLike: () => void = async () => {
-        if (!auth) return;
-        dispatch(clubLike.request({ clubId: club._id, userId: auth._id }));
-        console.log(user.likes);
-    }
-
-    const menuItems: ReactNode =  
-        Object.entries(T.ClubDetailTab).map(([key, value]) => {
-            return (
-                <ClubDetailMenuItem 
-                    key={key}
-                    isSelected={isSelectedTab(key as keyof T.ClubDetailTab)} 
-                    onClick={() => handleTabClick(key as keyof T.ClubDetailTab)}
-                >
-                {value}
-                </ClubDetailMenuItem>
-            );
-        })
-
-    const clubImages: ReactNode =
-        club ? club.photos.map(photo => {
-            const imageConverterPrefix = "data:image/png;base64,"
-            const imageElem = imageConverterPrefix + btoa(String.fromCharCode.apply(null, photo.img.data.data));
-            return (
-                <ClubImage key={photo} src={imageElem} />
-            )
-        }) : null;
-
-    return club ? (
+    if(fetchedData === null || user === null) {return (
         <BaseLayout>
-            <Root>
-                <BoldLargeText>{club.name}</BoldLargeText>
-                <IconTagWrapper>
-                    <IconCountWrapper>
-                        <Icon src={likeImg} onClick={() => handleLike()} />
-                        <IconCount>48</IconCount>
-                        <Icon src={eyesSvg} />
-                        <IconCount>1002</IconCount>
-                    </IconCountWrapper>
-                    <TagWrapper>
-                        {/* array.map으로 전환 필요*/}  
-                        <TagText>#학회</TagText>
-                        <TagText>#생명과학</TagText>
-                        <TagText>#화학</TagText>
-                        <TagText>#논문읽기</TagText>
-                    </TagWrapper>
-                </IconTagWrapper>
-                <ClubDetailMenuWrapper>
-                    {menuItems}
-                </ClubDetailMenuWrapper>
-                <ClubContentsContainer>
-                    <ClubImageContainer>
-                        {clubImages}
-                    </ClubImageContainer>
-                    <ClubDescription>
-                        {club ? club.description : null}
-                    </ClubDescription>
-                </ClubContentsContainer>
-            </Root>
+            <Loading />
         </BaseLayout>
-    ) : null;
+    ) } else {
+
+        const club = fetchedData!.club;
+        const handleTabClick: (type: keyof T.ClubDetailTab) => void = (type) => {
+            setSelectedTab(type);
+        };
+
+        const isSelectedTab: (type: keyof T.ClubDetailTab) => boolean = (type) => {
+            return selectedTab === type;
+        }
+
+        const handleLike: () => void = async () => {
+            if(user!.isAuth ){
+                axios.post(`${CLUB_SERVER}/${club._id}/like/${user!._id}`)
+                    .then(response => {
+                        if(response.data.success){
+                            setLikeImg(!likeImg);
+                        } else {
+                            alert('좋아요 누르기에 실패했습니다')
+                        }
+                    });
+            } else {
+                alert('로그인해주세요')
+            }
+        }
+
+        const menuItems: ReactNode =  
+            Object.entries(T.ClubDetailTab).map(([key, value]) => {
+                return (
+                    <ClubDetailMenuItem 
+                        key={key}
+                        isSelected={isSelectedTab(key as keyof T.ClubDetailTab)} 
+                        onClick={() => handleTabClick(key as keyof T.ClubDetailTab)}
+                    >
+                    {value}
+                    </ClubDetailMenuItem>
+                );
+            })
+
+        const clubImages: ReactNode =
+            club ? club.photos.map((photo,index) => {
+                const imageConverterPrefix = "data:image/png;base64,"
+                const imageElem = imageConverterPrefix + btoa(String.fromCharCode.apply(null, photo.img.data.data));
+                return (
+                    <ClubImage key={index} src={imageElem} />
+                )
+            }) : null;
+
+        return club ? (
+            <BaseLayout>
+                <Root>
+                    <BoldLargeText>{club.name}</BoldLargeText>
+                    <IconTagWrapper>
+                        <IconCountWrapper>
+                            <Icon src={likeImg? likeFilledSvg : likeEmptySvg} onClick={() => handleLike()} />
+                            <IconCount>48</IconCount>
+                            <Icon src={eyesSvg} />
+                            <IconCount>1002</IconCount>
+                        </IconCountWrapper>
+                        <TagWrapper>
+                            {/* array.map으로 전환 필요*/}  
+                            <TagText>#학회</TagText>
+                            <TagText>#생명과학</TagText>
+                            <TagText>#화학</TagText>
+                            <TagText>#논문읽기</TagText>
+                        </TagWrapper>
+                    </IconTagWrapper>
+                    <ClubDetailMenuWrapper>
+                        {menuItems}
+                    </ClubDetailMenuWrapper>
+                    <ClubContentsContainer>
+                        <ClubImageContainer>
+                            {clubImages}
+                        </ClubImageContainer>
+                        <ClubDescription>
+                            {club ? club.description : null}
+                        </ClubDescription>
+                    </ClubContentsContainer>
+                </Root>
+            </BaseLayout>
+        ) : null;
+    }
 }
 
 export default withRouter(ClubDetailPage);

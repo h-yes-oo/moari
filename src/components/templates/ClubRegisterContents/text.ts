@@ -1,4 +1,4 @@
-export default {
+const text = {
     clubName: {
         title: '동아리 이름',
         description: '동아리 이름을 입력해주세요',
@@ -32,3 +32,5 @@ export default {
         description: `담당자는 최대 10명까지 추가할 수 있습니다.\n담당자만 동아리 정보 수정, 소식 업데이트, 공고 등록이 가능합니다.\n문의글에 답변시 담당자 뱃지가 표시됩니다.`
     }
 }
+
+export default text;

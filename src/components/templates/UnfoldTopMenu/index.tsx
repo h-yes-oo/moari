@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, ReactNode, SetStateAction, useEffect } from 'react';
+import React, { Dispatch, FC, ReactNode, SetStateAction } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -8,15 +8,15 @@ import * as T from 'types';
 const Root = styled.div`
   position: fixed;
   width: 100%;
-  // height: 368px;
+  height: 368px;
   background-color: #ffffff;
   border: 2px solid ${palette.greyBorder.toString()};
   opacity: 0.9;
-  z-index: 200;
+  z-index: 180;
 
   display: flex;
   // tamppang;
-  transform: translateY(-32px);
+  transform: translateY(180px);
 `
 
 const TabSection = styled.div<{ tabWidth: number }>` 

@@ -6,11 +6,15 @@ import Footer from '../Footer';
 
 const Root = styled.div`
     width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 `
 
 const ContentsWrapper = styled.div`
     position: relative;
     margin-top: 208px;
+    flex: 1;
 `
 
 interface LayoutProps {
@@ -22,9 +26,9 @@ const BaseLayout: FC<LayoutProps> = ({ children }) => {
         <Root>
             <Header campusName={'SNU'} username={'zig'} />
             <TopMenuBar />
-                <ContentsWrapper>
-                    {children}
-                </ContentsWrapper>
+            <ContentsWrapper>
+                {children}
+            </ContentsWrapper>
             <Footer />
         </Root>
     );

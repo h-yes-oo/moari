@@ -8,10 +8,12 @@ router.get('/auth', auth, (req,res) => {
   //미들웨어를 통과하여 이 콜백함수에 도달했다는 것은 Authentication이 True라는 의미이다.
   res.status(200).json({
       _id: req.user._id,
+      id: req.user.id,
       isAuth: true,
       email: req.user.email,
       name: req.user.name,
-      image: req.user.image
+      image: req.user.image,
+      likes: req.user.likes
   });
 });
 

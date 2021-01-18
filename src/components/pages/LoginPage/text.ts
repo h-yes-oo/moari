@@ -1,4 +1,4 @@
-export default {
+const text =  {
     loginId: {
         description: '아이디',
     },
@@ -6,3 +6,5 @@ export default {
         description: `비밀번호`
     }
 }
+
+export default text;

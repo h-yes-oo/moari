@@ -1,6 +1,6 @@
 import { ActionType, createReducer } from 'typesafe-actions'
 
-import { Club } from "store/types"
+import  Club  from "types"
 import { addManager, removeManager } from "actions/clubDetail"
 
 const actions = {

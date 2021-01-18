@@ -60,5 +60,17 @@ export enum ClubDetailTab {
     QNA = '묻고 답하기',
 };
 
+export default interface Club {
+    _id: string
+    name: string
+    school: string
+    description: string
+    photos: any[]
+    status: Status;
+    category?: string
+    tags?: string[]
+    // managerIds: string[]
+  }
+
 // how to reduce code? 
 export type FilterType = typeof Category | typeof Tag | typeof Status;

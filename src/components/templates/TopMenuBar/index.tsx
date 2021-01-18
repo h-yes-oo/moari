@@ -1,10 +1,9 @@
-import React, { FC, ReactNode, useState, useRef, RefObject, MutableRefObject, useEffect } from 'react';
+import React, { FC, ReactNode, useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 import * as T from 'types';
 import palette from 'constants/palette';
-import { searchClub } from 'actions/club';
 import UnfoldTopMenu from '../UnfoldTopMenu';
 
 const Root = styled.div`

@@ -1,15 +1,6 @@
-import { ActionType, createReducer } from 'typesafe-actions';
-import { AuthResponse } from 'store/types';
-import { auth } from 'actions/auth';
-import * as actions from 'actions/auth';
-
-type AuthAction = ActionType<typeof actions>;
-
-type AuthState = {
-    loading: boolean;
-    error: Error | null;
-    data: AuthResponse | null;
-}
+import { createReducer } from 'typesafe-actions';
+import { AuthAction, AuthState } from './types';
+import { auth } from './actions';
 
 const initialState: AuthState = {
     loading: false,
@@ -17,7 +8,7 @@ const initialState: AuthState = {
     data: null
 }
 
-export const authReducer = createReducer<AuthState, AuthAction> (initialState)
+const userData = createReducer<AuthState, AuthAction> (initialState)
     .handleAction(auth.request, (state) => ({
         ...state,
         loading: true,
@@ -36,3 +27,5 @@ export const authReducer = createReducer<AuthState, AuthAction> (initialState)
         error: action.payload,
         data: null
     }))
+
+export default userData;
