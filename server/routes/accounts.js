@@ -13,7 +13,7 @@ router.get('/auth', auth, (req,res) => {
       email: req.user.email,
       name: req.user.name,
       image: req.user.image,
-      likedClubs: req.user.likedClubs,
+      likes: req.user.likes
   });
 });
 

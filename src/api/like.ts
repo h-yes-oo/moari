@@ -1,4 +1,3 @@
-// not used
 import axios from 'axios';
 import { CLUB_SERVER } from 'components/Config'
 

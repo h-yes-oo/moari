@@ -69,7 +69,6 @@ export default interface Club {
     status: Status;
     category?: string
     tags?: string[]
-    likedUsers: string[]
     // managerIds: string[]
   }
 
