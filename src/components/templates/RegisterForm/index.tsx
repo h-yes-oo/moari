@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, ReactNode, SetStateAction, useState } from 'react';
+import React, { Dispatch, FC, ReactNode, SetStateAction, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Select from 'react-select'
 
@@ -9,6 +9,8 @@ import fileUploadSvg from 'assets/icons/upload-photo.svg';
 import personIcon from 'assets/icons/person-icon.svg';
 import plusIcon from 'assets/icons/id-add.svg';
 import removeIcon from 'assets/icons/id-remove.svg';
+import pencilIcon from 'assets/icons/form-pencil.svg';
+import calendarIcon from 'assets/icons/form-calendar.svg';
 
 const Root = styled.div`
     width: 32vw;
@@ -19,6 +21,7 @@ const FlexContainer = styled.div<{ type?: string}>`
     display: flex;
     position: relative;
     align-items: center;
+    justify-content: space-between;
     margin: ${(props) => props.type === "addableInput" ? '4px 0' : ''};
 `
 
@@ -73,12 +76,12 @@ const InputForm = styled.input<{ addable?: boolean }>`
 
 const InputIcon = styled.img<{ type: string }>`
     position: absolute;
-    width: ${(props) => props.type === 'person' ? '20px' : '28px'};
+    width: ${(props) => props.type === 'leading' ? '20px' : '28px'};
     height: auto;
 
-    left: ${(props) => props.type === 'person' ? '18px' : 'none'};
-    right: ${(props) => props.type === 'plus' ? '18px' : props.type === 'minus' ? '52px' : 'none'};
-    cursor: ${(props) => props.type === 'person' ? '' : 'pointer'};
+    left: ${(props) => props.type === 'leading' ? '18px' : 'none'};
+    right: ${(props) => props.type === 'trailing' ? '18px' : props.type === 'minus' ? '52px' : 'none'};
+    cursor: ${(props) => props.type === 'leading' ? '' : 'pointer'};
 `
 
 const FileForm = styled.input`
@@ -118,7 +121,7 @@ const SelectBoxContainer = styled.select`
 `
 
 const CalendarForm = styled.input`
-    width: 100%;
+    width: 49%; // 수정 필요
     height: 48px;
     padding: 16px;
     box-sizing: border-box;
@@ -126,6 +129,14 @@ const CalendarForm = styled.input`
     border-radius: 4px;
     color: ${palette.greyText.toString()};
     font-size: 16px;
+    &:before {
+        content: attr(placeholder) !important;
+    }
+    &::-webkit-datetime-edit,
+    &::-webkit-datetime-edit-year-field,
+    &::-webkit-datetime-edit-text {
+        color: transparent;
+    }
 `
 
 const GuideText = styled.div`
@@ -137,7 +148,7 @@ const GuideText = styled.div`
 
 interface FormFactoryProps {
     type: T.RegisterFormType;  
-    description: string;
+    description: string | string[];
     height: string; 
     options?: string[]; // type should be changed
     setValue?: Dispatch<SetStateAction<any>> | ((e: any) => void);
@@ -145,10 +156,15 @@ interface FormFactoryProps {
 
 // 여기 말고 아래에 main component 있음 (RegisterForm)
 const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options, setValue }) => {
-    const [text, setText] = useState<string>(description);
+    const [text, setText] = useState<string | string[]>(description);
     const [selectedFiles, setSelectedFiles] = useState<FileList>();
     const [currInput, setCurrInput] = useState<string>("");
     const [currManagerIds, setCurrManagerIds] = useState<string[]>([]);
+    const [currDuration, setCurrDuration] = useState<string[]>([]);
+
+    useEffect(() => {
+        console.log(currDuration);
+    }, [currDuration])
 
     const handleTextArea: (value: string, setValue: Dispatch<SetStateAction<string>>) => void = (value, setValue) => {
         setText(value);
@@ -166,14 +182,16 @@ const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options,
     }
 
     const leaveInput: (e: React.FocusEvent<HTMLTextAreaElement>) => void = (e) => {
-        if (e.target.value === "") e.target.value = description;
+        if (e.target.value === "") e.target.value = description as string;
     }
 
     switch (type) {
         case T.RegisterFormType.INPUT:
             if (setValue === undefined) return null;
             return (
-                <InputForm placeholder={description} onChange={(e) => setValue(e.target.value)} />
+                <FlexContainer>
+                    <InputForm placeholder={description as string} onChange={(e) => setValue(e.target.value)} />
+                </FlexContainer>
             );
         case T.RegisterFormType.INPUT_ADDABLE:
             if (setValue === undefined) return null;
@@ -196,8 +214,8 @@ const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options,
                     <FlexContainer>
                         {/* TODO: onChange event throttling */}
                         <InputForm addable={true} onChange={(e) => handleInput(e)} />
-                        <InputIcon src={personIcon} type={'person'} />
-                        <InputIcon src={plusIcon} type={'plus'} onClick={() => addInput()} />
+                        <InputIcon src={personIcon} type={'leading'} />
+                        <InputIcon src={plusIcon} type={'trailing'} onClick={() => addInput()} />
                     </FlexContainer>
                     <hr style={{ border: `1px solid ${palette.primaryGradient.toString()}` }}/>
                 </>
@@ -307,7 +325,18 @@ const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options,
             )
         case T.RegisterFormType.CALENDAR:
             return (
-                <CalendarForm />
+                <FlexContainer>
+                    <CalendarForm 
+                        type='date' 
+                        placeholder={currDuration[0] ? currDuration[0] : description[0]} 
+                        onChange={(e) => setCurrDuration([e.target.value, currDuration[1]])} 
+                    />
+                    <CalendarForm 
+                        type='date' 
+                        placeholder={currDuration[1] ? currDuration[1] : description[1]} 
+                        onChange={(e) => setCurrDuration([currDuration[0], e.target.value])} 
+                    />
+                </FlexContainer>
             );        
         default:
             return null;
@@ -317,7 +346,7 @@ const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options,
 interface Props {
     title: string;
     guide?: string;
-    description: string;
+    description: string | string[];
     type: T.RegisterFormType;  
     options?: string[];
     height: string; 
