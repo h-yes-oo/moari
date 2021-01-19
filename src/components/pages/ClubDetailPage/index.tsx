@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'modules/index';
 import { fetchClub } from 'modules/fetchSingle';
 import Loading from '../../templates/Loading';
-import { likeClub } from 'modules/like'
+import { likeClub } from 'modules/userData';
 
 const Root = styled.div`
     margin: 36px 144px;
@@ -110,31 +110,34 @@ interface ClubInfoRouterProps {
 const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ match }) => {
     const [selectedTab, setSelectedTab] = useState<keyof T.ClubDetailTab>('CLUB_INTRO' as keyof T.ClubDetailTab);
     const [likeImg, setLikeImg] = useState<boolean>(false);
+    const [likeCount, setLikeCount] = useState<number | undefined>(undefined);
     const user = useSelector((state: RootState) => state.userData.data);
 
-
     const fetchedData = useSelector((state: RootState) => state.fetchSingle.data);
+    const club = fetchedData?.club;
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(fetchClub.request({ id: match.params.id }));
     }, [match.params.id]);
-
     
     useEffect(() => {
-        if(fetchedData !== null && user !== null){
-            const club = fetchedData!.club;
-            if (user!.likes && user!.likes.some(c => c._id === club._id)) setLikeImg(true);
+        if(fetchedData && user) {
+            if (user.likedClubs && user.likedClubs.some(cid => cid === club?._id)) {
+                setLikeImg(true);
+            }
             else setLikeImg(false);
+            setLikeCount(club?.likedUsers.length);
         }
-    }, [user])
+    }, [user, club])
 
-    if(fetchedData === null || user === null) {return (
-        <BaseLayout>
-            <Loading />
-        </BaseLayout>
-    ) } else {
-
+    if (fetchedData === null || user === null) {
+        return (
+            <BaseLayout>
+                <Loading />
+            </BaseLayout>
+        ) 
+    } else {
         const club = fetchedData!.club;
         const handleTabClick: (type: keyof T.ClubDetailTab) => void = (type) => {
             setSelectedTab(type);
@@ -145,7 +148,9 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
         }
 
         const handleLike: () => void = async () => {
-            if(user!.isAuth ){
+            if (likeImg) setLikeCount(likeCount!-1);
+            else setLikeCount(likeCount!+1);
+            if(user!.isAuth) {
                 dispatch(likeClub.request({ cludId: club._id, userId: user!._id, setLikeImg, likeImg}));
             } else {
                 alert('로그인해주세요')
@@ -180,8 +185,8 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
                     <BoldLargeText>{club.name}</BoldLargeText>
                     <IconTagWrapper>
                         <IconCountWrapper>
-                            <Icon src={likeImg? likeFilledSvg : likeEmptySvg} onClick={() => handleLike()} />
-                            <IconCount>48</IconCount>
+                            <Icon src={likeImg ? likeFilledSvg : likeEmptySvg} onClick={() => handleLike()} />
+                            <IconCount>{likeCount}</IconCount>
                             <Icon src={eyesSvg} />
                             <IconCount>1002</IconCount>
                         </IconCountWrapper>
