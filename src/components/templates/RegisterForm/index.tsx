@@ -162,10 +162,6 @@ const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options,
     const [currManagerIds, setCurrManagerIds] = useState<string[]>([]);
     const [currDuration, setCurrDuration] = useState<string[]>([]);
 
-    useEffect(() => {
-        console.log(currDuration);
-    }, [currDuration])
-
     const handleTextArea: (value: string, setValue: Dispatch<SetStateAction<string>>) => void = (value, setValue) => {
         setText(value);
         setValue(value);

@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
@@ -38,12 +38,11 @@ interface Props {
 }
 
 const RegisterButton: FC<Props & RouteComponentProps> = ({ history }) => {
-    const [selectedButton, setSelectedButton] = useState<T.RegisterButton>(T.RegisterButton.CLUB_REGISTER);
-    const isClubSelected: boolean  = selectedButton === T.RegisterButton.CLUB_REGISTER;
+    const isClubSelected: boolean = history.location.pathname.includes('club');
 
-    const goRegisterForm: (buttonType: T.RegisterButton) => void = (buttonType) => {
+
+    const showRegisterForm: (buttonType: T.RegisterButton) => void = (buttonType) => {
         buttonType === T.RegisterButton.CLUB_REGISTER ? history.push('/register/club') : history.push('/register/recruit');
-        setSelectedButton(buttonType);
     }
 
     return (
@@ -51,14 +50,14 @@ const RegisterButton: FC<Props & RouteComponentProps> = ({ history }) => {
             <Button
                 buttonType={T.RegisterButton.CLUB_REGISTER}
                 isSelected={isClubSelected}
-                onClick={() => goRegisterForm(T.RegisterButton.CLUB_REGISTER)}
+                onClick={() => showRegisterForm(T.RegisterButton.CLUB_REGISTER)}
             >
                 동아리 등록하기
             </Button>
             <Button
                 buttonType={T.RegisterButton.RECRUIT_REGISTER}
                 isSelected={!isClubSelected}
-                onClick={() => goRegisterForm(T.RegisterButton.RECRUIT_REGISTER)}
+                onClick={() => showRegisterForm(T.RegisterButton.RECRUIT_REGISTER)}
             >
                 모집공고 등록하기
             </Button>
