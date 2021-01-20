@@ -8,7 +8,7 @@ import alwaysSvg from 'assets/icons/stat-always.svg';
 import openSvg from 'assets/icons/stat-open.svg';
 import closedSvg from 'assets/icons/stat-closed.svg';
 import likeEmptySvg from 'assets/icons/like-empty.svg';
-import likeFilledSvg from 'assets/icons/like-filled.svg';
+//import likeFilledSvg from 'assets/icons/like-filled.svg';
 import eyesSvg from 'assets/icons/eyes.svg';
 
 const Root = styled.div<{ image?: string | undefined }>`
@@ -41,7 +41,7 @@ const CardDescription = styled.div`
     width: 100%;
     height: 50%;
     border-radius: 0 0 20px 20px;
-    padding: 18px;
+    padding: 25px 30px;
     box-sizing: border-box;
     cursor: pointer;
 `
@@ -55,13 +55,40 @@ const StatusLabel = styled.img`
 `
 
 const ClubNameText = styled.div`
-    font-size: 24px;
+    font-size: 21px;
     font-weight: bold;
 `
 
 const ClubDescription = styled.div`
-    margin-top: 20px;
+    margin-top: 10px;
     line-height: 1.6;  
+`
+
+const ClubInfo = styled.div`
+    margin-top: 5px;
+    display: flex;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+    align-items: center;
+    text-align: center;
+    color: rgba(31, 32, 65, 0.5);
+`
+const HeartImg = styled.img`
+    margin-left: -1px;
+    margin-right: 6px;
+    width: 24px;
+    height: 20px
+`
+
+const EyeImg = styled.img`
+    margin-left: 10px;
+    margin-right: 5px;
+    margin-bottom: 2px;
+    width: 25px;
+    height: 25px
 `
 interface Props {
     key: string;
@@ -72,9 +99,11 @@ interface Props {
     status: T.Status;
     category?: T.Category;
     tags?: string[];
+    likes: number;
+    views: number;
 }
 
-const ClubCard: FC<Props & RouteComponentProps> = ({ id, name, description, image, status, history }) => {
+const ClubCard: FC<Props & RouteComponentProps> = ({ id, name, description, image, status, likes, views, history }) => {
     // const goClubDetail: (e: React.MouseEvent<HTMLDivElement>) => void = (e) => {
     const goClubDetail: (id: string) => void = (id) => {
         history.push(`/club/${id}`);
@@ -105,6 +134,10 @@ const ClubCard: FC<Props & RouteComponentProps> = ({ id, name, description, imag
             })()}
             <CardDescription>
                 <ClubNameText>{name}</ClubNameText>
+                <ClubInfo>
+                    <HeartImg src={likeEmptySvg} /> {likes}
+                    <EyeImg src={eyesSvg} /> {views}
+                </ClubInfo>
                 <ClubDescription>{description}</ClubDescription>
             </CardDescription>
         </Root>

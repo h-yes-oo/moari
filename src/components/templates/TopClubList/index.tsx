@@ -76,6 +76,8 @@ const TopClubList: FC<Props> = () => {
                 description={club.description}
                 image={club.photos ? club.photos[0] : undefined}
                 status={club.status}
+                likes={club.likedUsers.length}
+                views={club.views}
             />
         )
     });
