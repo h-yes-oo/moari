@@ -14,7 +14,6 @@ router.get('/auth', auth, (req,res) => {
       name: req.user.name,
       image: req.user.image,
       likedClubs: req.user.likedClubs,
-
   });
 });
 

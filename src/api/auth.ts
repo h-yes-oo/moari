@@ -39,4 +39,3 @@ export interface LikeClubResponse {
     success: boolean,
     err: any | null
 }
-
