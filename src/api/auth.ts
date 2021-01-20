@@ -20,7 +20,7 @@ export interface AuthResponse {
     name: string,
     image: string,
     likedClubs: any[], // string[]
-    error: boolean | null,
+    error: boolean | null
 }
 
 export async function likeClubRequest({cludId, userId}: LikeClubPayload) {
@@ -32,7 +32,9 @@ export interface LikeClubPayload {
     cludId: string,
     userId: string,
     setLikeImg : React.Dispatch<React.SetStateAction<boolean>>,
-    likeImg : boolean
+    likeImg : boolean,
+    setLikeCount : React.Dispatch<React.SetStateAction<number>>,
+    likeCount : number
 }
 
 export interface LikeClubResponse {
