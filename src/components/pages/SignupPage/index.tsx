@@ -1,14 +1,14 @@
 import React, { FC, useState } from 'react';
 import BaseLayout from 'components/templates/BaseLayout';
 import styled from 'styled-components';
-import LoginForm from '../../templates/LoginForm';
+//import LoginForm from '../../templates/LoginForm';
 import SignupForm from '../../templates/SignupForm';
 import text from './text';
 import * as T from 'types';
 import signUpButtonSvg from 'assets/icons/signup-button.svg';
 import logo from 'assets/icons/logo.svg';
 import moariSignUp from 'assets/icons/moari-signup.svg';
-import duplicateCheckSvg from 'assets/icons/duplicate-check.svg';
+//import duplicateCheckSvg from 'assets/icons/duplicate-check.svg';
 import palette from 'constants/palette';
 import { useDispatch } from 'react-redux';
 import { signupUser } from 'modules/signup';
@@ -114,27 +114,33 @@ const SignupPage: FC<Props & RouteComponentProps> = ({ history }) => {
     const [confirmPassword,setConfirmPassword] = useState<string>('');
     const [agreement,setAgreement] = useState<boolean>(false);
     const [idChecked, setIdChecked] = useState<boolean>(false);
-    const [idText, setIdText] = useState<string>("");
+    const [idText, setIdText] = useState<string>(text.loginId.require);
     const [nicknameChecked, setNicknameChecked] = useState<boolean>(false);
-    const [nicknameText, setNicknameText] = useState<string>("");
+    const [nicknameText, setNicknameText] = useState<string>(text.nickname.require);
+    const [passwordChecked, setPasswordChecked] = useState<boolean>(false);
+    const [passwordText, setPasswordText] = useState<string>(text.password.require);
     
     const dispatch = useDispatch();
 
     const handleSignup: () => void = () => {
         if(!idChecked){
-            alert("이미 사용중인 아이디입니다");
+            alert(text.loginId.check);
             return
         }
         if(!nicknameChecked){
-            alert("이미 사용중인 닉네임입니다");
+            alert(text.nickname.check);
+            return
+        }
+        if(!passwordChecked){
+            alert(text.password.check);
             return
         }
         if(password !== confirmPassword){
-            alert("비밀번호가 같지 않습니다");
+            alert(text.confirmPassword.check);
             return;
         }
         if(agreement === false) {
-            alert("약관에 동의해주세요");
+            alert(text.agreement.require);
             return;
         }
         dispatch(signupUser.request({id,password,email,name, history}));
@@ -153,17 +159,17 @@ const SignupPage: FC<Props & RouteComponentProps> = ({ history }) => {
 
     async function onChangeId (e:React.ChangeEvent<HTMLInputElement>) {
         setId(e.target.value);
-        if(e.target.value === "") {
-            setIdText("");
-            setIdChecked(false);
+        if(!/^[a-zA-Z0-9]{6,16}$/.test(e.target.value)){
+            setIdText(text.loginId.require);
+            setIdChecked(false);            
         } else {
             const response = await Axios.post<DuplicateResponse>(`${USER_SERVER}/duplicateCheckId`,{id : e.target.value}).then(response => response.data);
             if(response.success){
                 if(response.duplicate){
-                    setIdText("이미 사용중인 아이디입니다");
+                    setIdText(text.loginId.duplicate);
                     setIdChecked(false);
                 } else {
-                    setIdText("사용가능한 아이디입니다")
+                    setIdText(text.loginId.availabe)
                     setIdChecked(true);
                 }
             }
@@ -172,8 +178,8 @@ const SignupPage: FC<Props & RouteComponentProps> = ({ history }) => {
 
     async function onChangeNickname(e:React.ChangeEvent<HTMLInputElement>){
         setNickname(e.target.value);
-        if(e.target.value === "") {
-            setNicknameText("");
+        if(!/^[가-힣a-zA-Z0-9]{2,16}$/.test(e.target.value)) {
+            setNicknameText("닉네임은 2~16자로 설정해주세요");
             setNicknameChecked(false);
         } else {
             const response = await Axios.post<DuplicateResponse>(`${USER_SERVER}/duplicateCheckNickname`,{name : e.target.value}).then(response => response.data);
@@ -189,6 +195,17 @@ const SignupPage: FC<Props & RouteComponentProps> = ({ history }) => {
         }
     }
 
+    function onChangePassword(e:React.ChangeEvent<HTMLInputElement>){
+        setPassword(e.target.value);
+        if(!/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/.test(e.target.value)) {
+            setPasswordText("비밀번호는 8~16자로 설정해주세요");
+            setPasswordChecked(false);
+        } else{
+            setPasswordText("사용가능한 비밀번호입니다");
+            setPasswordChecked(true);
+        }
+    }
+
     return (
         <BaseLayout>
             <Root>
@@ -197,27 +214,41 @@ const SignupPage: FC<Props & RouteComponentProps> = ({ history }) => {
                         <Logo src={logo} />
                         <Title src={moariSignUp}/>
                     </TopWrapper>
-                    <NickNameWrapper>
+                    {/* <NickNameWrapper>
                         <SignupForm
                             description={text.loginId.description}
                             value={id}
                             onChange={onChangeId}
-                            width='250px'
+                            width='180px'
                         />
                         {idChecked && <VioletTextDiv>{idText}</VioletTextDiv>}
                         {!idChecked && <RedTextDiv>{idText}</RedTextDiv>}
-                    </NickNameWrapper>
-                    <NickNameWrapper>
+                    </NickNameWrapper> */}
+                    <SignupForm
+                        description={text.loginId.description}
+                        value={id}
+                        onChange={onChangeId}
+                    />
+                    {idChecked && <VioletTextDiv>{idText}</VioletTextDiv>}
+                    {!idChecked && <RedTextDiv>{idText}</RedTextDiv>}
+                    {/* <NickNameWrapper>
                         <SignupForm
                             description={text.nickname.description}
                             value={name}
                             onChange={onChangeNickname}
-                            width='250px'
+                            width='180px'
                         />
-                        {/* <DuplicateButton src={duplicateCheckSvg} onClick={() => duplicateCheck()} /> */}
                         {nicknameChecked && <VioletTextDiv>{nicknameText}</VioletTextDiv>}
                         {!nicknameChecked && <RedTextDiv>{nicknameText}</RedTextDiv>}
-                    </NickNameWrapper>
+                    </NickNameWrapper> */}
+                    <SignupForm
+                            description={text.nickname.description}
+                            value={name}
+                            onChange={onChangeNickname}
+                        />
+                        {/* <DuplicateButton src={duplicateCheckSvg} onClick={() => duplicateCheck()} /> */}
+                    {nicknameChecked && <VioletTextDiv>{nicknameText}</VioletTextDiv>}
+                    {!nicknameChecked && <RedTextDiv>{nicknameText}</RedTextDiv>}
                     <SignupForm
                         description={text.email.description}
                         value={email}
@@ -227,9 +258,11 @@ const SignupPage: FC<Props & RouteComponentProps> = ({ history }) => {
                     <SignupForm
                         description={text.password.description}
                         value={password}
-                        setValue={setPassword}
+                        onChange={onChangePassword}
                         type="password"
                     />
+                    {passwordChecked && <VioletTextDiv>{passwordText}</VioletTextDiv>}
+                    {!passwordChecked && <RedTextDiv>{passwordText}</RedTextDiv>}
                     <SignupForm
                         description={text.confirmPassword.description}
                         value={confirmPassword}
