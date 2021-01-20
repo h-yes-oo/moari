@@ -126,7 +126,6 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
             if (user.likedClubs && user.likedClubs.some(cid => cid === club._id)) {
                 setLikeImg(true);
             }
-
             else setLikeImg(false);
             setLikeCount(club.likedUsers.length);
         }
@@ -139,7 +138,6 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
             </BaseLayout>
         ) 
     } else {
-
         const club = fetchedData!.club;
         const handleTabClick: (type: keyof T.ClubDetailTab) => void = (type) => {
             setSelectedTab(type);

@@ -20,7 +20,7 @@ export interface AuthResponse {
     name: string,
     image: string,
     likedClubs: any[], // string[]
-    error: boolean | null,
+    error: boolean | null
 }
 
 export async function likeClubRequest({cludId, userId}: LikeClubPayload) {
@@ -41,4 +41,3 @@ export interface LikeClubResponse {
     success: boolean,
     err: any | null
 }
-
