@@ -32,7 +32,9 @@ export interface LikeClubPayload {
     cludId: string,
     userId: string,
     setLikeImg : React.Dispatch<React.SetStateAction<boolean>>,
-    likeImg : boolean
+    likeImg : boolean,
+    setLikeCount : React.Dispatch<React.SetStateAction<number>>,
+    likeCount : number
 }
 
 export interface LikeClubResponse {

@@ -35,9 +35,14 @@ function* likeClubSaga(action: ReturnType<typeof likeClub.request>) {
   try {
     const likeClubResponse : LikeClubResponse = yield call(likeClubRequest, action.payload);
     yield put(likeClub.success(likeClubResponse));
-    const { setLikeImg, likeImg } = action.payload;
+    const { setLikeImg, likeImg, setLikeCount, likeCount } = action.payload;
     if(likeClubResponse.success) {
         setLikeImg(!likeImg);
+        if(likeImg){
+          setLikeCount(likeCount-1);
+        } else{
+          setLikeCount(likeCount+1);
+        }
     } else {
       alert('좋아요 누르기에 실패했습니다.')
     }
