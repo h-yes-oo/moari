@@ -1,17 +1,20 @@
 import React, { FC, useState } from 'react';
 import BaseLayout from 'components/templates/BaseLayout';
 import styled from 'styled-components';
-import LoginForm from '../../templates/LoginForm';
+//import LoginForm from '../../templates/LoginForm';
+import SignupForm from '../../templates/SignupForm';
 import text from './text';
-import * as T from 'types';
+//import * as T from 'types';
 import signUpButtonSvg from 'assets/icons/signup-button.svg';
 import logo from 'assets/icons/logo.svg';
 import moariSignUp from 'assets/icons/moari-signup.svg';
-import duplicateCheckSvg from 'assets/icons/duplicate-check.svg';
+//import duplicateCheckSvg from 'assets/icons/duplicate-check.svg';
 import palette from 'constants/palette';
 import { useDispatch } from 'react-redux';
 import { signupUser } from 'modules/signup';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
+import Axios from 'axios';
+import { USER_SERVER } from 'components/Config';
 
 const Root = styled.div`
     display: flex;
@@ -45,19 +48,6 @@ const TopWrapper = styled.div`
     margin: 5px 0px;
 `
 
-
-const NickNameWrapper = styled.div`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-`
-
-const DuplicateButton = styled.img`
-    margin-left : 10px;
-    &:hover {
-        cursor: pointer;
-    }
-`
 const Agreement = styled.textarea`
     border: ${palette.greyText.toString()};
     color: ${palette.greyText.toString()};
@@ -88,6 +78,18 @@ const CheckBox = styled.input`
     padding: 0px;
 `
 
+const VioletTextDiv = styled.div`
+    display: flex;
+    align-items: center;
+    color: ${palette.primaryViolet.toString()}
+`
+
+const RedTextDiv = styled.div`
+    display: flex;
+    align-items: center;
+    color: #cb240d
+`
+
 interface Props {
 }
 
@@ -98,26 +100,134 @@ const SignupPage: FC<Props & RouteComponentProps> = ({ history }) => {
     const [name,setNickname] = useState<string>('');
     const [confirmPassword,setConfirmPassword] = useState<string>('');
     const [agreement,setAgreement] = useState<boolean>(false);
+    const [idChecked, setIdChecked] = useState<boolean>(false);
+    const [idText, setIdText] = useState<string>(text.loginId.require);
+    const [nicknameChecked, setNicknameChecked] = useState<boolean>(false);
+    const [nicknameText, setNicknameText] = useState<string>(text.nickname.require);
+    const [passwordChecked, setPasswordChecked] = useState<boolean>(false);
+    const [passwordText, setPasswordText] = useState<string>(text.password.require);
+    const [emailChecked, setEmailChecked] = useState<boolean>(false);
+    const [emailText, setEmailText] = useState<string>(text.email.require);
+    const [confirmPasswordChecked, setConfirmPasswordChecked] = useState<boolean>(false);
+    const [confirmPasswordText, setConfirmPasswordText] = useState<string>(text.confirmPassword.check);
     
     const dispatch = useDispatch();
 
     const handleSignup: () => void = () => {
-        if(agreement === false) {
-            alert("약관에 동의해주세요");
+        if(!idChecked){
+            alert(text.loginId.check);
             return;
         }
-        if(password !== confirmPassword){
-            alert("비밀번호가 같지 않습니다");
+        if(!nicknameChecked){
+            alert(text.nickname.check);
+            return;
+        }
+        if(!emailChecked){
+            alert(text.email.check);
+            return;
+        }
+        if(!passwordChecked){
+            alert(text.password.check);
+            return;
+        }
+        if(!confirmPasswordChecked){
+            alert(text.confirmPassword.check);
+            return;
+        }
+        if(agreement === false) {
+            alert(text.agreement.require);
             return;
         }
         dispatch(signupUser.request({id,password,email,name, history}));
     }
 
-    const duplicateCheck: () => void = () => {
-        //TODO
+    const agreementText = text.agreement.text;
+
+    interface DuplicateResponse {
+        success: boolean,
+        duplicate: boolean
     }
 
-    const agreementText = text.agreement.text;
+    async function onChangeId (e:React.ChangeEvent<HTMLInputElement>) {
+        setId(e.target.value);
+        if(!/^[a-zA-Z0-9]{6,16}$/.test(e.target.value)){
+            setIdText(text.loginId.require);
+            setIdChecked(false);            
+        } else {
+            const response = await Axios.post<DuplicateResponse>(`${USER_SERVER}/duplicateCheckId`,{id : e.target.value}).then(response => response.data);
+            if(response.success){
+                if(response.duplicate){
+                    setIdText(text.loginId.duplicate);
+                    setIdChecked(false);
+                } else {
+                    setIdText(text.loginId.availabe)
+                    setIdChecked(true);
+                }
+            }
+        }
+    }
+
+    async function onChangeNickname(e:React.ChangeEvent<HTMLInputElement>){
+        setNickname(e.target.value);
+        if(!/^[가-힣a-zA-Z0-9]{2,16}$/.test(e.target.value)) {
+            setNicknameText(text.nickname.require);
+            setNicknameChecked(false);
+        } else {
+            const response = await Axios.post<DuplicateResponse>(`${USER_SERVER}/duplicateCheckNickname`,{name : e.target.value}).then(response => response.data);
+            if(response.success){
+                if(response.duplicate){
+                    setNicknameText(text.nickname.duplicate);
+                    setNicknameChecked(false);
+                } else {
+                    setNicknameText(text.nickname.availabe)
+                    setNicknameChecked(true);
+                }
+            }
+        }
+    }
+
+    function onChangePassword(e:React.ChangeEvent<HTMLInputElement>){
+        setPassword(e.target.value);
+        if(!/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/.test(e.target.value)) {
+            setPasswordText(text.password.require);
+            setPasswordChecked(false);
+        } else{
+            setPasswordText(text.password.availabe);
+            setPasswordChecked(true);
+        }
+    }
+
+    async function onChangeEmail(e:React.ChangeEvent<HTMLInputElement>){
+        setEmail(e.target.value);
+        const emailRegex = new RegExp('^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@'+text.email.school+'$','i')
+        if(!emailRegex.test(e.target.value)) {
+            setEmailText(text.email.require);
+            setEmailChecked(false);
+        } else{
+            const response = await Axios.post<DuplicateResponse>(`${USER_SERVER}/duplicateCheckEmail`,{email : e.target.value}).then(response => response.data);
+            if(response.success){
+                if(response.duplicate){
+                    setEmailText(text.email.duplicate);
+                    setEmailChecked(false);
+                } else {
+                    setEmailText(text.email.available);
+                    setEmailChecked(true);
+                }
+            }
+        
+        }
+    }
+
+    function onChangeConfirmPassword(e:React.ChangeEvent<HTMLInputElement>){
+        setConfirmPassword(e.target.value);
+        if(password !== e.target.value) {
+            setConfirmPasswordText(text.confirmPassword.check);
+            setConfirmPasswordChecked(false);
+        } else{
+            setConfirmPasswordText(text.confirmPassword.available);
+            setConfirmPasswordChecked(true);
+        }
+    }
 
     return (
         <BaseLayout>
@@ -127,39 +237,44 @@ const SignupPage: FC<Props & RouteComponentProps> = ({ history }) => {
                         <Logo src={logo} />
                         <Title src={moariSignUp}/>
                     </TopWrapper>
-                    <LoginForm
+                    <SignupForm
                         description={text.loginId.description}
-                        type={T.LoginFormType.INPUT}
-                        height={'60px'}
-                        setValue={setId}
+                        value={id}
+                        onChange={onChangeId}
                     />
-                    <LoginForm
+                    {idChecked && <VioletTextDiv>{idText}</VioletTextDiv>}
+                    {!idChecked && <RedTextDiv>{idText}</RedTextDiv>}
+                    <SignupForm
+                        description={text.nickname.description}
+                        value={name}
+                        onChange={onChangeNickname}
+                    />
+                    {nicknameChecked && <VioletTextDiv>{nicknameText}</VioletTextDiv>}
+                    {!nicknameChecked && <RedTextDiv>{nicknameText}</RedTextDiv>}
+                    <SignupForm
                         description={text.email.description}
-                        type={T.LoginFormType.INPUT}
-                        height={'60px'}
-                        setValue={setEmail}
+                        value={email}
+                        onChange={onChangeEmail}
+                        type="email"
                     />
-                    <NickNameWrapper>
-                        <LoginForm
-                            description={text.nickname.description}
-                            type={T.LoginFormType.INPUT}
-                            height={'60px'}
-                            setValue={setNickname}
-                        />
-                        <DuplicateButton src={duplicateCheckSvg} onClick={() => duplicateCheck()} />
-                    </NickNameWrapper>
-                    <LoginForm
+                    {emailChecked && <VioletTextDiv>{emailText}</VioletTextDiv>}
+                    {!emailChecked && <RedTextDiv>{emailText}</RedTextDiv>}
+                    <SignupForm
                         description={text.password.description}
-                        type={T.LoginFormType.PASSWORD}
-                        height={'60px'}
-                        setValue={setPassword}
+                        value={password}
+                        onChange={onChangePassword}
+                        type="password"
                     />
-                    <LoginForm
+                    {passwordChecked && <VioletTextDiv>{passwordText}</VioletTextDiv>}
+                    {!passwordChecked && <RedTextDiv>{passwordText}</RedTextDiv>}
+                    <SignupForm
                         description={text.confirmPassword.description}
-                        type={T.LoginFormType.PASSWORD}
-                        height={'60px'}
-                        setValue={setConfirmPassword}
+                        value={confirmPassword}
+                        onChange={onChangeConfirmPassword}
+                        type="password"
                     />
+                    {confirmPasswordChecked && <VioletTextDiv>{confirmPasswordText}</VioletTextDiv>}
+                    {!confirmPasswordChecked && <RedTextDiv>{confirmPasswordText}</RedTextDiv>}
                     <Agreement value={agreementText} readOnly disabled></Agreement>
                     <Label><CheckBox type="checkbox" name="maintainLogin" checked={agreement} onChange={()=>{setAgreement(!agreement);}}/> 약관 동의</Label>
                     <RegisterButton src={signUpButtonSvg} onClick={() => handleSignup()} />

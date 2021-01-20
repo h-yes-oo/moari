@@ -79,4 +79,55 @@ router.get('/:userId', (req, res) => {
     })
 }) 
 
+router.post('/duplicateCheckId', (req, res) => {
+    User.findOne({id: req.body.id},(err,user)=>{
+        if(err) return res.json({success: false})
+        if(!user){
+            return res.json({
+                success: true,
+                duplicate: false
+            });
+        } else {
+            return res.json({
+                success: true,
+                duplicate: true
+            })
+        }
+    })
+})
+
+router.post('/duplicateCheckNickname', (req, res) => {
+    User.findOne({name: req.body.name},(err,user)=>{
+        if(err) return res.json({success: false})
+        if(!user){
+            return res.json({
+                success: true,
+                duplicate: false
+            });
+        } else {
+            return res.json({
+                success: true,
+                duplicate: true
+            })
+        }
+    })
+})
+
+router.post('/duplicateCheckEmail', (req, res) => {
+    User.findOne({email: req.body.email},(err,user)=>{
+        if(err) return res.json({success: false})
+        if(!user){
+            return res.json({
+                success: true,
+                duplicate: false
+            });
+        } else {
+            return res.json({
+                success: true,
+                duplicate: true
+            })
+        }
+    })
+})
+
 module.exports = router;
