@@ -113,4 +113,21 @@ router.post('/duplicateCheckNickname', (req, res) => {
     })
 })
 
+router.post('/duplicateCheckEmail', (req, res) => {
+    User.findOne({email: req.body.email},(err,user)=>{
+        if(err) return res.json({success: false})
+        if(!user){
+            return res.json({
+                success: true,
+                duplicate: false
+            });
+        } else {
+            return res.json({
+                success: true,
+                duplicate: true
+            })
+        }
+    })
+})
+
 module.exports = router;
