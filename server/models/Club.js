@@ -42,6 +42,10 @@ const clubSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }],
+    views: {
+        type: Number,
+        default: 0
+    }
     // managers: [{
     //     type: userSchema,
     //     ref: "User"

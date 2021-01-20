@@ -69,6 +69,8 @@ const ClubList: FC<Props> = ({ keyword, category, tag, status }) => {
             description={club.description}
             image={club.photos ? club.photos[0] : undefined}
             status={club.status}
+            likes={club.likedUsers.length}
+            views={club.views}
         />
       </CardWrapper>
     )

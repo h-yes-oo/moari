@@ -46,4 +46,6 @@ app.route('/register/club')
 //const port = process.env.PORT || 5000;
 const port = 5000;
 
-app.listen(port,() => console.log(`Moari Server listening on port ${port}!`))
+app.set('trust proxy', true);
+
+app.listen(port, () => console.log(`Moari Server listening on port ${port}!`))

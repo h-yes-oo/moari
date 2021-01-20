@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { clubSchema, Club, Image } = require("../models/Club");
+const { ViewCount } = require("../models/ViewCount");
 const { User } = require("../models/User");
 
 // use for image upload
@@ -85,8 +86,66 @@ router.post('/', upload_club.array('photos'), async (req, res) => {
 router.get('/:clubId', async (req, res) => {
     Club.findById(req.params.clubId, (err, club) => {
         if(err) return res.status(400).json({ success: false, err});
-        res.status(200).json({ success: true, club})
-    });
+    //     const viewCount = new ViewCount({
+    //         clubId: req.params.clubId,
+    //         ip: req.ip
+    //     })
+    //     viewCount.save((err, viewCount)=> {
+    //         if(err) return res.status(400).json({ success: false, err});
+    //         res.status(200).json({ success: true, club})
+    //     });
+
+        if(!club) return res.status(200).json({ success: true });
+        try{
+            const oneDay = 24 * 60 * 60 * 1000;
+            if(req.cookies["viewedPages"]){
+                const viewedPagesCookie = req.cookies["viewedPages"];
+                const viewedPages = JSON.parse(viewedPagesCookie);
+                const index = viewedPages.indexOf(`${club._id}`);
+                if(index === -1){
+                    console.log('viewed for the first time !')
+                    const expiryDate = new Date(Date.now() + oneDay);
+                    viewedPages.push(club._id);
+                    viewedPages.push(expiryDate);
+                    res.cookie("viewedPages", JSON.stringify(viewedPages), { expires: expiryDate });
+                    Club.findByIdAndUpdate(club._id, { $inc: {views: 1}}, {new: true},(err, updated) => {
+                        if(err) return res.status(400).json({ success: false, err});
+                        return res.status(200).json({ success: true, club: updated})
+                    
+                    })
+                } else {
+                    if(viewedPages[index+1] < Date.now() ){
+                        console.log('viewed before one day !')
+                        viewedPages.splice(index,2);
+                        const expiryDate = new Date(Date.now() + oneDay);
+                        viewedPages.push(club._id);
+                        viewedPages.push(expiryDate);
+                        res.cookie("viewdPages", JSON.parse(viewedPages), { expires: expiryDate });
+                        Club.findByIdAndUpdate(club._id, { $inc: {views: 1}}, {new: true},(err, updated) => {
+                            if(err) return res.status(400).json({ success: false, err});
+                            return res.status(200).json({ success: true, club: updated})
+                        })
+                    } else {
+                        console.log('viewed in one day !')
+                        return res.status(200).json({ success: true, club})
+                    }
+                }
+            } else {
+                console.log('viewed for the first time !')
+                const expiryDate = new Date(Date.now() + oneDay);
+                const viewedPages = [ club._id , expiryDate ];
+                const viewedPagesJsonStr = JSON.stringify(viewedPages);
+                res.cookie("viewedPages", viewedPagesJsonStr, { expires: expiryDate });
+                Club.findByIdAndUpdate(club._id, { $inc: {views: 1}}, {new: true},(err, updated) => {
+                    if(err) return res.status(400).json({ success: false, err});
+                    return res.status(200).json({ success: true, club: updated})
+                })
+            }
+        } catch(e){
+            alert('쿠키 설정에 문제가 있습니다');
+            return res.status(200).json({ success: true, club})
+        }
+    })
 });
 
 router.delete('/:clubId', async (req, res) => {
@@ -137,4 +196,4 @@ router.get('/info', function(req, res) {
 });
 
 
-module.exports = router; 
+module.exports = router;

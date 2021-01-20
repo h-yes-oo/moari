@@ -110,11 +110,10 @@ interface ClubInfoRouterProps {
 const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ match }) => {
     const [selectedTab, setSelectedTab] = useState<keyof T.ClubDetailTab>('CLUB_INTRO' as keyof T.ClubDetailTab);
     const [likeImg, setLikeImg] = useState<boolean>(false);
-    const [likeCount, setLikeCount] = useState<number | undefined>(undefined);
+    const [likeCount, setLikeCount] = useState<number>(0);
     const user = useSelector((state: RootState) => state.userData.data);
 
     const fetchedData = useSelector((state: RootState) => state.fetchSingle.data);
-    const club = fetchedData?.club;
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -123,15 +122,14 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
     
     useEffect(() => {
         if(fetchedData && user) {
-            if (user.likedClubs && user.likedClubs.some(cid => cid === club?._id)) {
+            const club = fetchedData!.club;
+            if (user.likedClubs && user.likedClubs.some(cid => cid === club._id)) {
                 setLikeImg(true);
             }
-
-
             else setLikeImg(false);
-            setLikeCount(club?.likedUsers.length);
+            setLikeCount(club.likedUsers.length);
         }
-    }, [user, club])
+    }, [user, fetchedData])
 
     if (fetchedData === null || user === null) {
         return (
@@ -140,8 +138,6 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
             </BaseLayout>
         ) 
     } else {
-
-
         const club = fetchedData!.club;
         const handleTabClick: (type: keyof T.ClubDetailTab) => void = (type) => {
             setSelectedTab(type);
@@ -152,10 +148,8 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
         }
 
         const handleLike: () => void = async () => {
-            if (likeImg) setLikeCount(likeCount!-1);
-            else setLikeCount(likeCount!+1);
             if(user!.isAuth) {
-                dispatch(likeClub.request({ cludId: club._id, userId: user!._id, setLikeImg, likeImg}));
+                dispatch(likeClub.request({ cludId: club._id, userId: user!._id, setLikeImg, likeImg, setLikeCount, likeCount}));
             } else {
                 alert('로그인해주세요')
             }
@@ -192,7 +186,7 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
                             <Icon src={likeImg ? likeFilledSvg : likeEmptySvg} onClick={() => handleLike()} />
                             <IconCount>{likeCount}</IconCount>
                             <Icon src={eyesSvg} />
-                            <IconCount>1002</IconCount>
+                            <IconCount>{club.views}</IconCount>
                         </IconCountWrapper>
                         <TagWrapper>
                             {/* array.map으로 전환 필요*/}  

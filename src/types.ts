@@ -70,6 +70,7 @@ export default interface Club {
     category?: string
     tags?: string[]
     likedUsers: string[]
+    views: number
     // managerIds: string[]
   }
 
