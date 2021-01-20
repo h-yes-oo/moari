@@ -130,7 +130,7 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
             else setLikeImg(false);
             setLikeCount(club?.likedUsers.length);
         }
-    }, [user, club])
+    }, [user, fetchedData])
 
     if (fetchedData === null || user === null) {
         return (
@@ -190,7 +190,7 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
                             <Icon src={likeImg ? likeFilledSvg : likeEmptySvg} onClick={() => handleLike()} />
                             <IconCount>{likeCount}</IconCount>
                             <Icon src={eyesSvg} />
-                            <IconCount>1002</IconCount>
+                            <IconCount>{club.views}</IconCount>
                         </IconCountWrapper>
                         <TagWrapper>
                             {/* array.map으로 전환 필요*/}  
