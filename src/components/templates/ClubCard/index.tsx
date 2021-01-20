@@ -7,16 +7,22 @@ import prepareSvg from 'assets/icons/stat-prepare.svg';
 import alwaysSvg from 'assets/icons/stat-always.svg';
 import openSvg from 'assets/icons/stat-open.svg';
 import closedSvg from 'assets/icons/stat-closed.svg';
+import likeEmptySvg from 'assets/icons/like-empty.svg';
+import likeFilledSvg from 'assets/icons/like-filled.svg';
+import eyesSvg from 'assets/icons/eyes.svg';
 
 const Root = styled.div<{ image?: string | undefined }>`
     width: 358px;
     height: 512px;
     border-radius: 20px;
     background-color: #EEEEEE;
+    //background: #FFFFFF;
     position: relative;s
     cursor: pointer;
     margin: 0 72px;
     flex-shrink: 0;
+    /* drop shadow */
+    box-shadow: 10px 40px 50px rgba(229, 233, 246, 0.4);
 ` 
 
 const CardImage = styled.img`
