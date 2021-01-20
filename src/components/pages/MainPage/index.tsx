@@ -42,10 +42,10 @@ const MainPage: FC<Props & RouteComponentProps<MatchParams>> = ({ match }) => {
     if(isFilteredPage)
     {
         if(searchedData === null) {
-        return (
-        <BaseLayout>
-            검색 결과를 가져오는 중...
-        </BaseLayout>
+            return (
+            <BaseLayout>
+                <Loading/>
+            </BaseLayout>
         )} else {
             return (
             <BaseLayout>
