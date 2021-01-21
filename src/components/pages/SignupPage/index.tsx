@@ -188,6 +188,13 @@ const SignupPage: FC<Props & RouteComponentProps> = ({ history }) => {
 
     function onChangePassword(e:React.ChangeEvent<HTMLInputElement>){
         setPassword(e.target.value);
+        if(confirmPassword !== e.target.value) {
+            setConfirmPasswordText(text.confirmPassword.check);
+            setConfirmPasswordChecked(false);
+        } else {
+            setConfirmPasswordText(text.confirmPassword.available);
+            setConfirmPasswordChecked(true);
+        }
         if(!/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/.test(e.target.value)) {
             setPasswordText(text.password.require);
             setPasswordChecked(false);
