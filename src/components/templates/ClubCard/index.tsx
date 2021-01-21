@@ -8,8 +8,10 @@ import alwaysSvg from 'assets/icons/stat-always.svg';
 import openSvg from 'assets/icons/stat-open.svg';
 import closedSvg from 'assets/icons/stat-closed.svg';
 import likeEmptySvg from 'assets/icons/like-empty.svg';
-//import likeFilledSvg from 'assets/icons/like-filled.svg';
+import likeFilledSvg from 'assets/icons/like-filled.svg';
 import eyesSvg from 'assets/icons/eyes.svg';
+import { useSelector } from 'react-redux';
+import { RootState } from 'modules'
 
 const Root = styled.div<{ image?: string | undefined }>`
     width: 358px;
@@ -101,9 +103,10 @@ interface Props {
     tags?: string[];
     likes: number;
     views: number;
+    liked: boolean | undefined;
 }
 
-const ClubCard: FC<Props & RouteComponentProps> = ({ id, name, description, image, status, likes, views, history }) => {
+const ClubCard: FC<Props & RouteComponentProps> = ({ id, name, description, image, status, likes, views, history, liked }) => {
     // const goClubDetail: (e: React.MouseEvent<HTMLDivElement>) => void = (e) => {
     const goClubDetail: (id: string) => void = (id) => {
         history.push(`/club/${id}`);
@@ -135,7 +138,7 @@ const ClubCard: FC<Props & RouteComponentProps> = ({ id, name, description, imag
             <CardDescription>
                 <ClubNameText>{name}</ClubNameText>
                 <ClubInfo>
-                    <HeartImg src={likeEmptySvg} /> {likes}
+                    <HeartImg src={liked==true? likeFilledSvg : likeEmptySvg} /> {likes}
                     <EyeImg src={eyesSvg} /> {views}
                 </ClubInfo>
                 <ClubDescription>{description}</ClubDescription>
