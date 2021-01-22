@@ -8,7 +8,6 @@ import { RootState } from 'modules/index';
 import Club from 'types';
 import { AuthResponse } from 'api/auth';
 
-
 const Root = styled.div`
 ` 
 
@@ -31,25 +30,19 @@ interface Props {
 }
 
 const ClubList: FC<Props> = ({ keyword, category, tag, status, user }) => {    
-  // const [clubsLoaded, setClubsLoaded] = useState<Boolean>(false);
-  const fetchedData = useSelector((state: RootState) => state.fetchAll.data);
-  const searchedData = useSelector((state: RootState) => state.search.data);
+  const fetchedData = useSelector((state: RootState) => state.clubList.data);
+  const clubs = fetchedData ? fetchedData.clubs : [];
 
-  const clubs = fetchedData === null? [] : fetchedData!.clubs;
-  const searchedClubs = searchedData === null? [] : searchedData!.clubs;
   const getFilteredClubs: () => Club[] = () => {
     // TODO: erase console logs and shorten return statements
     if (category !== undefined) {
-      // console.log("category searching...");
       const categoryString = T.Category[category.toUpperCase() as keyof typeof T.Category];
       return clubs.filter((club) => club.category === categoryString);
     }
     else if (tag !== undefined) {
-      // console.log("tag searching...");
       return clubs.filter((club) => club.tags ? club.tags.includes(tag) : clubs);
     }
     else if (status !== undefined) {
-      // console.log("status searching...");
       const statusString = T.Status[status.toUpperCase() as keyof typeof T.Status];
       return clubs.filter((club) => club.status === statusString);
     }
@@ -58,7 +51,7 @@ const ClubList: FC<Props> = ({ keyword, category, tag, status, user }) => {
 
   const filteredClubs: Club[] = getFilteredClubs();
 
-  const clubsToShow = keyword !== undefined ? searchedClubs :
+  const clubsToShow = 
     (category !== undefined || tag !== undefined || status !== undefined) ? filteredClubs : clubs;
   
   const clubList: ReactNode = clubsToShow.map((club : Club, index) => {  

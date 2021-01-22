@@ -111,14 +111,15 @@ const ClubCard: FC<Props & RouteComponentProps> = ({ id, name, description, imag
         history.push(`/club/${id}`);
     }
         
-    const imageBuffer = image ? image.img.data.data : "";
-    const imageConverterPrefix = "data:image/png;base64,"
-    const imageElem = image ? imageConverterPrefix + btoa(String.fromCharCode.apply(null, imageBuffer)) : "";
+    const imageData = image ? image.img.data.data : "";
+    const base64prefix = "data:image/png;base64,"
+    // const imageElem = image ? imageConverterPrefix + btoa(String.fromCharCode.apply(null, imageBuffer)) : "";
+    const imageElem = image ? base64prefix + btoa(new TextDecoder('utf-16').decode(new Uint16Array(imageData))) : "";
     // console.log(imageElem);
 
     // need refactoring: switch-case
     return (
-        <Root id="clubcard-root" onClick={() => goClubDetail(id)} image={imageElem}>
+        <Root id="clubcard-root" onClick={() => goClubDetail(id)}>
             <CardImage src={imageElem} />
             {(() => {
                 switch (status) {
