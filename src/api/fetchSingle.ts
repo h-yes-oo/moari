@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { CLUB_SERVER } from 'components/Config'
-import Club from 'types';
+import { Club } from 'types';
 
 export async function fetchClubSingleRequest({ id }: FetchClubPayload){
     return await axios.get<FetchClubResponse>(`${CLUB_SERVER}/${id}`)

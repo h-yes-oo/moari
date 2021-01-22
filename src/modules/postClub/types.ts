@@ -1,6 +1,6 @@
 import * as actions from './actions';
 import { ActionType } from 'typesafe-actions';
-import { PostClubResponse } from '../../api/post';
+import { PostClubResponse } from '../../api/postClub';
 
 export type PostClubActions = ActionType<typeof actions>
 
@@ -9,3 +9,4 @@ export type PostClubState = {
     error: Error | null;
     data: PostClubResponse | null;
 }
+

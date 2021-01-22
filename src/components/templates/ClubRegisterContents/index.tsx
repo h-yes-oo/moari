@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 
-import { postClub } from 'modules/post';
+import { postClub } from 'modules/postClub';
 import RegisterForm from '../RegisterForm';
 import * as T from 'types';
 import text from './text';

@@ -78,6 +78,7 @@ export const ClubDetailTab = {
         path: "/qna"
     },
 } as const;
+
 export type TabItem = keyof typeof ClubDetailTab;
 //export type ClubDetailTab = typeof ClubDetailTab[TabItem];
 
@@ -103,7 +104,6 @@ export default interface Comment {
     createdDate: string
 }
 
-
 export default interface Story {
     _id: string;
     clubId: string;
@@ -112,5 +112,15 @@ export default interface Story {
     date: string;
 }
 
-// how to reduce code? 
+export interface Recruit {
+    _id: string
+    clubId: string
+    title: string
+    startDate: Date
+    endDate: Date
+    contact: string
+    description: string
+}
+
+// todo: refactor
 export type FilterType = typeof Category | typeof Tag | typeof Status;
