@@ -40,6 +40,7 @@ interface Props {
 const TopClubList: FC<Props> = () => {
     const fetchedData = useSelector((state: RootState) => state.fetchAll.data);
     // const dispatch = useDispatch();
+    const user = useSelector((state: RootState)=> state.userData.data);
     
     const clubs = fetchedData !== null? fetchedData!.clubs : [];
     // clubs.length === 0인 경우?
@@ -78,6 +79,7 @@ const TopClubList: FC<Props> = () => {
                 status={club.status}
                 likes={club.likedUsers.length}
                 views={club.views}
+                liked={user?.likedClubs?.includes(club._id)}
             />
         )
     });

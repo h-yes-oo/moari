@@ -114,13 +114,13 @@ router.get('/:clubId', async (req, res) => {
                     
                     })
                 } else {
-                    if(viewedPages[index+1] < Date.now() ){
+                    if(Date.parse(viewedPages[index+1]) < Date.now() ){
                         console.log('viewed before one day !')
                         viewedPages.splice(index,2);
                         const expiryDate = new Date(Date.now() + oneDay);
                         viewedPages.push(club._id);
                         viewedPages.push(expiryDate);
-                        res.cookie("viewdPages", JSON.parse(viewedPages), { expires: expiryDate });
+                        res.cookie("viewedPages", JSON.stringify(viewedPages), { expires: expiryDate });
                         Club.findByIdAndUpdate(club._id, { $inc: {views: 1}}, {new: true},(err, updated) => {
                             if(err) return res.status(400).json({ success: false, err});
                             return res.status(200).json({ success: true, club: updated})
@@ -142,7 +142,8 @@ router.get('/:clubId', async (req, res) => {
                 })
             }
         } catch(e){
-            alert('쿠키 설정에 문제가 있습니다');
+            //Todo
+            console.log(e);
             return res.status(200).json({ success: true, club})
         }
     })

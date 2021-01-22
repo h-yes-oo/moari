@@ -32,6 +32,7 @@ const ClubList: FC<Props> = ({ keyword, category, tag, status }) => {
   // const [clubsLoaded, setClubsLoaded] = useState<Boolean>(false);
   const fetchedData = useSelector((state: RootState) => state.fetchAll.data);
   const searchedData = useSelector((state: RootState) => state.search.data);
+  const user = useSelector((state: RootState)=> state.userData.data);
 
   const clubs = fetchedData === null? [] : fetchedData!.clubs;
   const searchedClubs = searchedData === null? [] : searchedData!.clubs;
@@ -71,6 +72,7 @@ const ClubList: FC<Props> = ({ keyword, category, tag, status }) => {
             status={club.status}
             likes={club.likedUsers.length}
             views={club.views}
+            liked={user?.likedClubs?.includes(club._id)}
         />
       </CardWrapper>
     )
