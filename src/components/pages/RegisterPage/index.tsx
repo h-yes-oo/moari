@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import { Route, RouteComponentProps } from "react-router-dom"
 import BaseLayout from 'components/templates/BaseLayout';
 import RegisterButton from 'components/templates/RegisterButton';
