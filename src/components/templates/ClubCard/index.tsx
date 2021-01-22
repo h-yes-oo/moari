@@ -138,7 +138,7 @@ const ClubCard: FC<Props & RouteComponentProps> = ({ id, name, description, imag
             <CardDescription>
                 <ClubNameText>{name}</ClubNameText>
                 <ClubInfo>
-                    <HeartImg src={liked==true? likeFilledSvg : likeEmptySvg} /> {likes}
+                    <HeartImg src={liked ? likeFilledSvg : likeEmptySvg} /> {likes}
                     <EyeImg src={eyesSvg} /> {views}
                 </ClubInfo>
                 <ClubDescription>{description}</ClubDescription>
