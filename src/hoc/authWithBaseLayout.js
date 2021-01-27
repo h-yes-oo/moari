@@ -2,8 +2,9 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { auth } from 'modules/userData';
 import Loading from 'components/templates/Loading';
+import BaseLayout from 'components/templates/BaseLayout';
 
-export default function Auth(SpecificComponent, option, adminRoute = null){
+export default function AuthWithBaseLayout(SpecificComponent, option, adminRoute = null){
 
     /*
     여기서 option은 null, true, false가 존재
@@ -21,12 +22,27 @@ export default function Auth(SpecificComponent, option, adminRoute = null){
 
         let user = useSelector((state) => state.userData)?.data;
         if(user){
+            console.log(user);
             return(
-                <SpecificComponent {...props} user={user} />
+                <BaseLayout user={user}>
+                    <SpecificComponent {...props} user={user} />
+                </BaseLayout>
             )
-        } else {
+        }
+        else {
+            const initialUser = {
+                isAuth: false,
+                _id: '',
+                id: '',
+                email: '',
+                name: '',
+                image: '',
+                likedClubs: []
+            }
             return(
-                <Loading />
+                <BaseLayout user={initialUser}>
+                    <Loading />
+                </BaseLayout>
             )
         }
     }

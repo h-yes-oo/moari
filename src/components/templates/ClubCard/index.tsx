@@ -10,8 +10,6 @@ import closedSvg from 'assets/icons/stat-closed.svg';
 import likeEmptySvg from 'assets/icons/like-empty.svg';
 import likeFilledSvg from 'assets/icons/like-filled.svg';
 import eyesSvg from 'assets/icons/eyes.svg';
-import { useSelector } from 'react-redux';
-import { RootState } from 'modules'
 
 const Root = styled.div<{ image?: string | undefined }>`
     width: 358px;

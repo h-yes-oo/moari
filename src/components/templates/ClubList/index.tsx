@@ -6,6 +6,7 @@ import * as T from 'types';
 import ClubCard from 'components/templates/ClubCard';
 import { RootState } from 'modules/index';
 import Club from 'types';
+import { AuthResponse } from 'api/auth';
 
 
 const Root = styled.div`
@@ -26,13 +27,13 @@ interface Props {
   category?: string;
   tag?: string;
   status?: string;
+  user: AuthResponse;
 }
 
-const ClubList: FC<Props> = ({ keyword, category, tag, status }) => {    
+const ClubList: FC<Props> = ({ keyword, category, tag, status, user }) => {    
   // const [clubsLoaded, setClubsLoaded] = useState<Boolean>(false);
   const fetchedData = useSelector((state: RootState) => state.fetchAll.data);
   const searchedData = useSelector((state: RootState) => state.search.data);
-  const user = useSelector((state: RootState)=> state.userData.data);
 
   const clubs = fetchedData === null? [] : fetchedData!.clubs;
   const searchedClubs = searchedData === null? [] : searchedData!.clubs;

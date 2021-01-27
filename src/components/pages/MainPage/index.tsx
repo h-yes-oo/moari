@@ -2,16 +2,16 @@ import React, { FC, ReactNode, useEffect } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { ProposeClubText } from 'components/templates/SimpleText';
 import TopClubList from 'components/templates/TopClubList';
-import BaseLayout from 'components/templates/BaseLayout';
 import ClubList from 'components/templates/ClubList';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchClubsAll } from 'modules/fetchAll';
 import { searchClub } from 'modules/search'
 import { RootState } from 'modules/index';
 import Loading from 'components/templates/Loading';
+import { AuthResponse } from 'api/auth';
 
 interface Props {
-
+    user: AuthResponse;
 }
 
 interface MatchParams {
@@ -21,7 +21,7 @@ interface MatchParams {
     status: string;
 }
 
-const MainPage: FC<Props & RouteComponentProps<MatchParams>> = ({ match }) => {
+const MainPage: FC<Props & RouteComponentProps<MatchParams>> = ({ match, user }) => {
     const dispatch = useDispatch();
     
     useEffect(() => {
@@ -33,7 +33,7 @@ const MainPage: FC<Props & RouteComponentProps<MatchParams>> = ({ match }) => {
     }, []);
 
     const isFilteredPage: boolean = Object.keys(match.params).length > 0;
-    const topClubList: ReactNode = isFilteredPage ? null : <TopClubList />
+    const topClubList: ReactNode = isFilteredPage ? null : <TopClubList user={user} />
     const proposeClubText: ReactNode = isFilteredPage ? null : <ProposeClubText />
 
     const fetchedData = useSelector((state: RootState) => state.fetchAll.data);
@@ -43,31 +43,33 @@ const MainPage: FC<Props & RouteComponentProps<MatchParams>> = ({ match }) => {
     {
         if(searchedData === null) {
             return (
-            <BaseLayout>
+            //<BaseLayout>
                 <Loading/>
-            </BaseLayout>
+            //</BaseLayout>
         )} else {
             return (
-            <BaseLayout>
+            //<BaseLayout>
                 <ClubList
                     keyword={match.params.keyword}
                     category={match.params.category}
                     tag={match.params.tag}
                     status={match.params.status}
+                    user={user}
                 /> 
-            </BaseLayout>
+            //</BaseLayout>
             )
         }
     } else{
         if(fetchedData === null){
             return (
-            <BaseLayout>
+            //<BaseLayout>
                 <Loading />
-            </BaseLayout>
+            //</BaseLayout>
             )
         }
         return (
-            <BaseLayout>
+            //<BaseLayout>
+            <>
                 {proposeClubText}
                 {topClubList}
                 <ClubList
@@ -75,8 +77,10 @@ const MainPage: FC<Props & RouteComponentProps<MatchParams>> = ({ match }) => {
                     category={match.params.category}
                     tag={match.params.tag}
                     status={match.params.status}
+                    user={user}
                 /> 
-            </BaseLayout>
+            </>
+            //</BaseLayout>
         );
     }
 }

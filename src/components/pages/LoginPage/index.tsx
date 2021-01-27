@@ -10,6 +10,7 @@ import moariLogin from 'assets/icons/moari-login.svg';
 import { useDispatch } from 'react-redux';
 import { loginUser } from 'modules/login';
 import { RouteComponentProps } from 'react-router-dom';
+import { AuthResponse } from 'api/auth';
 
 const Root = styled.div`
     display: flex;
@@ -113,10 +114,11 @@ const ToSignUp = styled.a`
 `
 
 interface Props {
+    user: AuthResponse;
 }
 
 
-const LoginPage: FC<Props & RouteComponentProps> = ({ history }) => {
+const LoginPage: FC<Props & RouteComponentProps> = ({ history, user }) => {
     const rememberMeChecked = localStorage.getItem("rememberMe") ? true : false;
     const handleRememberMe = () => {
         setRememberMe(!rememberMe);
@@ -134,36 +136,34 @@ const LoginPage: FC<Props & RouteComponentProps> = ({ history }) => {
     }
 
     return (
-        <BaseLayout>
-            <Root>
-                <Wrapper>
-                    <TopWrapper>
-                        <Logo src={logo} />
-                        <Title src={moariLogin}/>
-                    </TopWrapper>
-                    <LoginForm
-                        description={text.loginId.description}
-                        type={T.LoginFormType.INPUT}
-                        height={'60px'}
-                        setValue={setId}
-                        initialValue={initialId}
-                        value={id}
-                    />
-                    <LoginForm
-                        description={text.password.description}
-                        type={T.LoginFormType.PASSWORD}
-                        height={'60px'}
-                        setValue={setPassword}
-                    />
-                    <RegisterButton src={loginButtonSvg} onClick={handleLogin} />
-                    <BottomWrapper>
-                        <Label><CheckBox type="checkbox" name="maintainLogin" onChange={handleRememberMe} checked={rememberMe}/> 아이디 기억하기</Label>
-                        <Find href="/">아이디 비밀번호 찾기</Find>
-                    </BottomWrapper>
-                    <SignUp> 모아리에 처음이신가요 ?<ToSignUp href="/signup"> 회원가입</ToSignUp> </SignUp>
-                </Wrapper>
-            </Root>
-        </BaseLayout>
+        <Root>
+            <Wrapper>
+                <TopWrapper>
+                    <Logo src={logo} />
+                    <Title src={moariLogin}/>
+                </TopWrapper>
+                <LoginForm
+                    description={text.loginId.description}
+                    type={T.LoginFormType.INPUT}
+                    height={'60px'}
+                    setValue={setId}
+                    initialValue={initialId}
+                    value={id}
+                />
+                <LoginForm
+                    description={text.password.description}
+                    type={T.LoginFormType.PASSWORD}
+                    height={'60px'}
+                    setValue={setPassword}
+                />
+                <RegisterButton src={loginButtonSvg} onClick={handleLogin} />
+                <BottomWrapper>
+                    <Label><CheckBox type="checkbox" name="maintainLogin" onChange={handleRememberMe} checked={rememberMe}/> 아이디 기억하기</Label>
+                    <Find href="/">아이디 비밀번호 찾기</Find>
+                </BottomWrapper>
+                <SignUp> 모아리에 처음이신가요 ?<ToSignUp href="/signup"> 회원가입</ToSignUp> </SignUp>
+            </Wrapper>
+        </Root>
     );
 }
 

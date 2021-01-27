@@ -13,7 +13,7 @@ const userAuth = createReducer<AuthState, AuthAction> (initialState)
         ...state,
         loading: true,
         error: null,
-        data: null
+        //data: null
     }))
     .handleAction(auth.success, (state, action) => ({
         ...state,
