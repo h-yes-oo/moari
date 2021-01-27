@@ -20,13 +20,12 @@ export default function AuthWithBaseLayout(SpecificComponent, option, adminRoute
             dispatch(auth.request({history: props.history, option, adminRoute}));
         }, []);
 
-        let userData = useSelector((state) => state.userData);
-        //let user = useSelector((state) => state.userData)?.data;
-        if(userData.data){
-            console.log(userData.data);
+        let user = useSelector((state) => state.userData)?.data;
+        if(user){
+            console.log(user);
             return(
-                <BaseLayout user={userData.data}>
-                    <SpecificComponent {...props} user={userData.data} />
+                <BaseLayout user={user}>
+                    <SpecificComponent {...props} user={user} />
                 </BaseLayout>
             )
         }
