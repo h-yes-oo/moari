@@ -2,7 +2,6 @@ import React, { FC, ReactNode, useEffect } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { ProposeClubText } from 'components/templates/SimpleText';
 import TopClubList from 'components/templates/TopClubList';
-import BaseLayout from 'components/templates/BaseLayout';
 import ClubList from 'components/templates/ClubList';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchClubsAll } from 'modules/fetchAll';

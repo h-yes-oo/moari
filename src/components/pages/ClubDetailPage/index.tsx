@@ -4,7 +4,6 @@ import styled from 'styled-components';
 
 import * as T from 'types';
 import { BoldLargeText, TagText } from 'constants/styles';
-import BaseLayout from 'components/templates/BaseLayout';
 import likeEmptySvg from 'assets/icons/like-empty.svg';
 import likeFilledSvg from 'assets/icons/like-filled.svg';
 import eyesSvg from 'assets/icons/eyes.svg';

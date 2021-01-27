@@ -2,7 +2,6 @@ import React, { FC, useEffect } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
 import * as T from 'types';
-import BaseLayout from 'components/templates/BaseLayout';
 import ClubList from 'components/templates/ClubList';
 import FilteringButtons from 'components/templates/FilteringButtons';
 import { useDispatch, useSelector } from 'react-redux';
