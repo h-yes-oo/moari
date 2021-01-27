@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'modules/index';
 import { searchClub } from 'modules/search';
 import { logoutUser } from 'modules/logout/actions';
+import { AuthResponse } from 'api/auth';
 
 const Root = styled.div`
     position: fixed;
@@ -92,17 +93,17 @@ const HeaderButton = styled.img`
 
 interface Props {
     campusName: string;
-    username: string;
+    user: AuthResponse;
 }
 
-const Header: FC<Props & RouteComponentProps> = ({ campusName, username, history }) => {    
+const Header: FC<Props & RouteComponentProps> = ({ campusName, history, user }) => {    
     const dispatch = useDispatch();
     const [searchKeyword, setSearchKeyword] = useState<string>("");
     
-    const userData = useSelector((state: RootState) => state.userData.data);
-    const isAuth = userData?.isAuth;
-    const name = userData?.name;
-    const userImage = userData?.image;
+    //const userData = useSelector((state: RootState) => state.userData.data);
+    const isAuth = user.isAuth;
+    const name = user.name;
+    const userImage = user.image;
 
     const goMainPage: () => void = () => {
         history.push('/');
@@ -184,4 +185,4 @@ const Header: FC<Props & RouteComponentProps> = ({ campusName, username, history
     );
 }
 
-export default withRouter(Header);
+export default React.memo(withRouter(Header));
