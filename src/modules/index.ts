@@ -8,6 +8,8 @@ import search, { searchSaga } from './search';
 import fetchSingle, { fetchSingleSaga } from './fetchSingle'
 import post, { postSaga } from './post';
 import logout, { logoutSaga } from './logout';
+import comments, { commentsSaga } from './comments';
+import comment, { commentSaga } from './comment';
 
 const rootReducer = combineReducers({
     login,
@@ -18,7 +20,8 @@ const rootReducer = combineReducers({
     fetchSingle,
     search,
     post,
-    // like
+    comments,
+    comment
 });
 
 export default rootReducer;
@@ -35,6 +38,8 @@ export function* rootSaga() {
         fetchSingleSaga(),
         searchSaga(),
         postSaga(),
-        likeSaga()
+        likeSaga(),
+        commentsSaga(),
+        commentSaga()
     ]);
 }

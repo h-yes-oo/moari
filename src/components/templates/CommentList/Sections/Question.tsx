@@ -1,9 +1,10 @@
 import React, { FC, ReactNode, useState } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 import Comment from 'types';
 import { AuthResponse } from 'api/auth';
 import Profile from './Profile';
+import { useDispatch } from 'react-redux';
+import { deleteComment, saveComment } from 'modules/comment';
 
 const Root = styled.div`
     width: 1195px;
@@ -157,11 +158,14 @@ interface CommentProps {
     clubId: string;
     question: Comment;
     comments: Comment[];
+    refreshFunction: any
 }
 
-const Question: FC<CommentProps> = ({ user, clubId, question, comments }) => {
+const Question: FC<CommentProps> = ({ user, clubId, question, comments, refreshFunction }) => {
     const [showAnswerForm, setShowAnswerForm] = useState<boolean>(false);
     const [content, setContent] = useState<string>('');
+
+    const dispatch = useDispatch()
 
     const onNewAnswer = () => {
         if(user.isAuth){
@@ -177,28 +181,21 @@ const Question: FC<CommentProps> = ({ user, clubId, question, comments }) => {
         setContent(e.target.value);
     }
 
-    const onSubmit = (responseTo: string) => {
-        axios.post('/api/comment/saveComment', {
+    async function onSubmit(responseTo: string) {
+        await dispatch(saveComment.request({
             writer: user._id,
             clubId,
             content,
             responseTo
-        }).then(response => {
-            if(response.data.success){
-                console.log('success')
-            }
-        })
+        }));
         setShowAnswerForm(false);
         setContent('');
+        refreshFunction();
     }
 
-    const onDelete = ( commentId: string ) => {
-        axios.delete(`/api/comment/deleteComment/${commentId}`)
-        .then( response => {
-            if(response.data.success){
-                console.log('success')
-            }
-        });
+    async function onDelete( commentId: string ){
+        await dispatch(deleteComment.request({ commentId }));
+        refreshFunction();
     }
 
     if(question.responseTo) {

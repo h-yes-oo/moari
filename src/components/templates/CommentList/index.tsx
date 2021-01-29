@@ -1,11 +1,15 @@
 import React, { FC, ReactNode, useState, useEffect } from 'react';
 import styled from 'styled-components';
-import axios from 'axios';
 import Comment from 'types';
 import { AuthResponse } from 'api/auth';
 import Question from './Sections/Question';
 import searchPurpleSvg from 'assets/icons/searchPurple.svg';
 import Profile from './Sections/Profile';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchComments, searchComments } from 'modules/comments';
+import { saveComment } from 'modules/comment';
+import { RootState } from 'modules'
+import Loading from '../Loading';
 
 const Wrapper = styled.div`
     display: flex;
@@ -137,28 +141,37 @@ interface CommentProps {
 }
 
 const CommentList: FC<CommentProps> = ({ user, clubId }) => {
-    const [comments, setComments] = useState<Comment[]>([]);
     const [showForm, setShowForm] = useState<boolean>(false);
     const [content, setContent] = useState<string>('');
     const [searchKeyword, setSearchKeyword] = useState<string>('');
+    const [refresh, setRefresh] = useState<boolean>(false);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(fetchComments.request({ clubId }));
+    }, [refresh])
+
+    const refreshFunction = () => {
+        setRefresh(!refresh);
+        dispatch(fetchComments.request({ clubId }));
+    }
+
+    const commentsData = useSelector((state: RootState) => state.comments.data);
 
     const resize = (e:React.ChangeEvent<HTMLTextAreaElement>) => {
         e.currentTarget.style.height = (20 + e.currentTarget.scrollHeight) + "px";
         setContent(e.target.value);
     }
 
-    const onSubmit = () => {
-        axios.post('/api/comment/saveComment', {
+    async function onSubmit() {
+        dispatch(saveComment.request({
             writer: user._id,
             clubId,
             content
-        }).then(response => {
-            if(response.data.success){
-                console.log('success')
-            }
-        })
+        }))
         setShowForm(false);
         setContent('');
+        refreshFunction();
     }
 
     const onClickNewButton = () => {
@@ -178,49 +191,29 @@ const CommentList: FC<CommentProps> = ({ user, clubId }) => {
 
     const clickSearch = () => {
         if(searchKeyword === ''){
-            axios.get(`/api/comment/getComments/${clubId}`)
-            .then(response=> {
-                if(response.data.success){
-                    setComments(response.data.comments);
-                } else {
-                    alert('질문들을 가져오지 못했습니다.')
-                }
-            })
+            dispatch(fetchComments.request({ clubId }))
         } else{
-            axios.get(`/api/comment/searchComment/${clubId}/${searchKeyword}`).then(
-                response => {
-                    if(response.data.success){
-                        setComments(response.data.comments)
-                    }
-                }
-            )
+            dispatch(searchComments.request({ clubId, keyword: searchKeyword}));
             setSearchKeyword('');
         }
     }
 
-    useEffect(() => {
-        axios.get(`/api/comment/getComments/${clubId}`)
-        .then(response=> {
-            if(response.data.success){
-                console.log(response.data.comments);
-                setComments(response.data.comments);
-            } else {
-                alert('질문들을 가져오지 못했습니다.')
-            }
-        })
-    }, [])
+    let questionList: ReactNode = <Loading />;
 
-    const questionList: ReactNode = comments.map((question:Comment) => {
-        return (
-        <Question 
-            key={question._id}
-            user={user} 
-            clubId={clubId} 
-            comments={comments} 
-            question={question} 
-        />
-        )
-    })
+    if(commentsData){
+        const comments = commentsData!.comments;
+        questionList = comments.map((question:Comment) => {
+            return (
+            <Question 
+                key={question._id}
+                user={user} 
+                clubId={clubId} 
+                comments={comments} 
+                question={question}
+                refreshFunction={refreshFunction}
+            />)
+        })
+    }
 
     return (
         <>

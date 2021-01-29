@@ -25,11 +25,11 @@ router.post('/saveComment',(req,res)=>{
     const comment = new Comment(variables);
     comment.save((err, comment) => {
         if(err) return res.json({ success: false, err })
-        Comment.find({'_id' : comment._id})
+        Comment.findById(comment._id)
                 .populate('writer')
                 .exec((err, result) => {
                     if(err) return res.json({ success: false, err });
-                    res.status(200).json({ success: true, result });
+                    res.status(200).json({ success: true, comment: result });
                 });
     });
 });
@@ -51,9 +51,10 @@ router.delete('/deleteComment/:commentId', (req,res) => {
                 if(err) return res.status(400).json({ success: false, err})
             })
         }
-        Comment.findByIdAndRemove(comment._id, (err, result) => {
+        Comment.findByIdAndRemove(comment._id, (err, comment) => {
+            console.log(comment);
             if(err) return res.status(400).json({ success: false, err})
-            res.status(200).json({ success: true })
+            res.status(200).json({ success: true , comment})
         })
     })
 })
