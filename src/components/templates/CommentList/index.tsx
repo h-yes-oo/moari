@@ -172,39 +172,43 @@ const CommentList: FC<CommentProps> = ({ user, clubId }) => {
 
     const enterSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if(e.key === 'Enter') {
-            //TODD
-            console.log(searchKeyword);
-            //dispatch(searchQuestion.request({ clubId , keyword: searchKeyword }));
-            setSearchKeyword('');
+            clickSearch();
         }
     }
 
     const clickSearch = () => {
-        console.log(searchKeyword);
-        //dispatch(searchQuestion.request({ clubId , keyword: searchKeyword }));
-        setSearchKeyword('');
+        if(searchKeyword === ''){
+            axios.get(`/api/comment/getComments/${clubId}`)
+            .then(response=> {
+                if(response.data.success){
+                    setComments(response.data.comments);
+                } else {
+                    alert('질문들을 가져오지 못했습니다.')
+                }
+            })
+        } else{
+            axios.get(`/api/comment/searchComment/${clubId}/${searchKeyword}`).then(
+                response => {
+                    if(response.data.success){
+                        setComments(response.data.comments)
+                    }
+                }
+            )
+            setSearchKeyword('');
+        }
     }
 
-    // useEffect(() => {
-    //     axios.get(`/api/comment/getComments/${clubId}`)
-    //     .then(response=> {
-    //         if(response.data.success){
-    //             console.log(response.data.comments);
-    //             setComments(response.data.comments);
-    //         } else {
-    //             alert('질문들을 가져오지 못했습니다.')
-    //         }
-    //     })
-    // }, [showForm])
-
-    axios.get(`/api/comment/getComments/${clubId}`)
+    useEffect(() => {
+        axios.get(`/api/comment/getComments/${clubId}`)
         .then(response=> {
             if(response.data.success){
+                console.log(response.data.comments);
                 setComments(response.data.comments);
             } else {
                 alert('질문들을 가져오지 못했습니다.')
             }
-    })
+        })
+    }, [])
 
     const questionList: ReactNode = comments.map((question:Comment) => {
         return (

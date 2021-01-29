@@ -58,4 +58,14 @@ router.delete('/deleteComment/:commentId', (req,res) => {
     })
 })
 
+router.get('/searchComment/:clubId/:keyword', (req,res) => {
+    Comment.find({ 
+        clubId: req.params.clubId, 
+        content: { $regex: req.params.keyword, $options: 'i' }
+    }, (err, comments) => {
+        if (err) return res.status(400).json({ success: false, err });
+        res.status(200).json({ success: true, comments });
+    })
+})
+
 module.exports = router;
