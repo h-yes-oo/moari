@@ -1,5 +1,4 @@
 import React, { FC, useState } from 'react';
-import BaseLayout from 'components/templates/BaseLayout';
 import styled from 'styled-components';
 //import LoginForm from '../../templates/LoginForm';
 import SignupForm from '../../templates/SignupForm';
@@ -176,7 +175,7 @@ const SignupPage: FC<Props & RouteComponentProps> = ({ history, user }) => {
 
     async function onChangeNickname(e:React.ChangeEvent<HTMLInputElement>){
         setNickname(e.target.value);
-        if(!/^[가-힣a-zA-Z0-9]{2,8}$/.test(e.target.value)) {
+        if(!/^[가-힣a-zA-Z0-9_ ]{2,8}$/.test(e.target.value)) {
             setNicknameText(text.nickname.require);
             setNicknameChecked(false);
         } else {
