@@ -202,7 +202,7 @@ const CommentList: FC<CommentProps> = ({ user, clubId }) => {
 
     if(commentsData){
         const comments = commentsData!.comments;
-        questionList = comments.map((question:Comment) => {
+        questionList = comments.slice(0).reverse().map((question:Comment) => {
             return (
             <Question 
                 key={question._id}
