@@ -14,6 +14,8 @@ import { fetchClub } from 'modules/fetchSingle';
 import Loading from '../../templates/Loading';
 import { likeClub } from 'modules/userData';
 import { AuthResponse } from 'api/auth';
+import Comment from '../../templates/Comment';
+import CommentForm from '../../templates/CommentForm';
 
 const Root = styled.div`
     margin: 36px 144px;
@@ -194,14 +196,22 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
                 <ClubDetailMenuWrapper>
                     {menuItems}
                 </ClubDetailMenuWrapper>
-                <ClubContentsContainer>
-                    <ClubImageContainer>
-                        {clubImages}
-                    </ClubImageContainer>
-                    <ClubDescription>
-                        {club ? club.description : null}
-                    </ClubDescription>
-                </ClubContentsContainer>
+                { selectedTab === 'CLUB_INTRO' as keyof T.ClubDetailTab &&
+                    <ClubContentsContainer>
+                        <ClubImageContainer>
+                            {clubImages}
+                        </ClubImageContainer>
+                        <ClubDescription>
+                            {club ? club.description : null}
+                        </ClubDescription>
+                    </ClubContentsContainer>
+                }
+                { selectedTab === 'QNA' as keyof T.ClubDetailTab &&
+                    <ClubContentsContainer>
+                        <CommentForm user={user} />
+                        <Comment />
+                    </ClubContentsContainer>
+                }
             </Root>
         ) : null;
     }

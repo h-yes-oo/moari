@@ -102,14 +102,19 @@ const SignupPage: FC<Props & RouteComponentProps> = ({ history, user }) => {
     const [name,setNickname] = useState<string>('');
     const [confirmPassword,setConfirmPassword] = useState<string>('');
     const [agreement,setAgreement] = useState<boolean>(false);
+
     const [idChecked, setIdChecked] = useState<boolean>(false);
     const [idText, setIdText] = useState<string>(text.loginId.require);
+
     const [nicknameChecked, setNicknameChecked] = useState<boolean>(false);
     const [nicknameText, setNicknameText] = useState<string>(text.nickname.require);
+
     const [passwordChecked, setPasswordChecked] = useState<boolean>(false);
     const [passwordText, setPasswordText] = useState<string>(text.password.require);
+
     const [emailChecked, setEmailChecked] = useState<boolean>(false);
     const [emailText, setEmailText] = useState<string>(text.email.require);
+    
     const [confirmPasswordChecked, setConfirmPasswordChecked] = useState<boolean>(false);
     const [confirmPasswordText, setConfirmPasswordText] = useState<string>(text.confirmPassword.check);
     
@@ -171,7 +176,7 @@ const SignupPage: FC<Props & RouteComponentProps> = ({ history, user }) => {
 
     async function onChangeNickname(e:React.ChangeEvent<HTMLInputElement>){
         setNickname(e.target.value);
-        if(!/^[가-힣a-zA-Z0-9]{2,16}$/.test(e.target.value)) {
+        if(!/^[가-힣a-zA-Z0-9]{2,8}$/.test(e.target.value)) {
             setNicknameText(text.nickname.require);
             setNicknameChecked(false);
         } else {
