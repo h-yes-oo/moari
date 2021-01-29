@@ -14,8 +14,7 @@ import { fetchClub } from 'modules/fetchSingle';
 import Loading from '../../templates/Loading';
 import { likeClub } from 'modules/userData';
 import { AuthResponse } from 'api/auth';
-import Comment from '../../templates/Comment';
-import CommentForm from '../../templates/CommentForm';
+import CommentList from '../../templates/CommentList';
 
 const Root = styled.div`
     margin: 36px 144px;
@@ -208,8 +207,7 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
                 }
                 { selectedTab === 'QNA' as keyof T.ClubDetailTab &&
                     <ClubContentsContainer>
-                        <CommentForm user={user} />
-                        <Comment />
+                        <CommentList user={user} clubId={club._id}/>
                     </ClubContentsContainer>
                 }
             </Root>

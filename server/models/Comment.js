@@ -16,9 +16,11 @@ const commentSchema = mongoose.Schema({
     },
     content: {
         type: String
+    },
+    createdDate : {
+        type: String
     }
-
-}, { timestamps: true })
+})
 
 
 const Comment = mongoose.model('Comment', commentSchema);

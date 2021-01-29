@@ -1,9 +1,13 @@
-import React, { FC, useState } from 'react';
-import styled, { StyledComponent } from 'styled-components';
+import React, { FC, ReactNode, useState, useEffect } from 'react';
+import styled from 'styled-components';
+import axios from 'axios';
+import Comment from 'types';
 import { AuthResponse } from 'api/auth';
+import Question from './Sections/Question';
 import searchPurpleSvg from 'assets/icons/searchPurple.svg';
+import Profile from './Sections/Profile';
 
-const Root = styled.div`
+const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     margin-top: 42px;
@@ -18,7 +22,7 @@ const TopWrapper = styled.div`
 const SearchBoxWrapper = styled.div`
     display: flex;
     align-items: center;
-    width: 274px;
+    width: 242px;
     height: 47px;
     padding: 0 16px;
 
@@ -82,39 +86,7 @@ const CommentContainer = styled.div`
     border-radius: 8px;
 `
 
-const Profile = styled.div`
-    display: flex;
-    margin-right: 14px;
-    align-items: flex-start;
-`
-
-const ProfileImage = styled.img`
-    width: 34px;
-    height: 34px;
-    border: 2px solid #FFFFFF;
-    filter: drop-shadow(0px 10px 20px rgba(31, 32, 65, 0.1));
-    border-radius: 24px;
-`
-
-const ProfileName = styled.div`
-    width: 144px;
-    height: 34px;
-    margin-left: 10px;
-
-    font-family: Montserrat;
-    font-style: normal;
-    font-weight: bold;
-    font-size: 20px;
-
-    display: flex;
-    align-items: center;
-
-    background: -webkit-linear-gradient(180deg, #BC9CFF 0%, #8BA4F9 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-`
-
-const Question = styled.div`
+const QuestionForm = styled.div`
     display: flex;
     margin-left: 40px;
     position: relative;
@@ -156,15 +128,19 @@ const SubmitButton = styled.a`
     line-height: 10px;
 
     color: rgba(31, 32, 65, 0.5);
+    cursor: pointer;
 `
 
 interface CommentProps {
     user: AuthResponse;
+    clubId: string;
 }
 
-const CommentForm: FC<CommentProps> = ({ user }) => {
+const CommentList: FC<CommentProps> = ({ user, clubId }) => {
+    const [comments, setComments] = useState<Comment[]>([]);
     const [showForm, setShowForm] = useState<boolean>(false);
     const [content, setContent] = useState<string>('');
+    const [searchKeyword, setSearchKeyword] = useState<string>('');
 
     const resize = (e:React.ChangeEvent<HTMLTextAreaElement>) => {
         e.currentTarget.style.height = (20 + e.currentTarget.scrollHeight) + "px";
@@ -172,23 +148,91 @@ const CommentForm: FC<CommentProps> = ({ user }) => {
     }
 
     const onSubmit = () => {
+        axios.post('/api/comment/saveComment', {
+            writer: user._id,
+            clubId,
+            content
+        }).then(response => {
+            if(response.data.success){
+                console.log('success')
+            }
+        })
         setShowForm(false);
         setContent('');
-        //TODO
     }
 
     const onClickNewButton = () => {
-        setShowForm(!showForm);
-        setContent('');
+        if(user.isAuth){
+            setShowForm(!showForm);
+            setContent('');
+        } else {
+            alert('먼저 로그인해주세요')
+        }
     }
 
-    if(user.isAuth){
+    const enterSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if(e.key === 'Enter') {
+            //TODD
+            console.log(searchKeyword);
+            //dispatch(searchQuestion.request({ clubId , keyword: searchKeyword }));
+            setSearchKeyword('');
+        }
+    }
+
+    const clickSearch = () => {
+        console.log(searchKeyword);
+        //dispatch(searchQuestion.request({ clubId , keyword: searchKeyword }));
+        setSearchKeyword('');
+    }
+
+    // useEffect(() => {
+    //     axios.get(`/api/comment/getComments/${clubId}`)
+    //     .then(response=> {
+    //         if(response.data.success){
+    //             console.log(response.data.comments);
+    //             setComments(response.data.comments);
+    //         } else {
+    //             alert('질문들을 가져오지 못했습니다.')
+    //         }
+    //     })
+    // }, [showForm])
+
+    axios.get(`/api/comment/getComments/${clubId}`)
+        .then(response=> {
+            if(response.data.success){
+                setComments(response.data.comments);
+            } else {
+                alert('질문들을 가져오지 못했습니다.')
+            }
+    })
+
+    const questionList: ReactNode = comments.map((question:Comment) => {
         return (
-            <Root>
+        <Question 
+            key={question._id}
+            user={user} 
+            clubId={clubId} 
+            comments={comments} 
+            question={question} 
+        />
+        )
+    })
+
+    return (
+        <>
+            <Wrapper>
                 <TopWrapper>
                     <SearchBoxWrapper>
-                        <SearchBox/>
-                        <SearchIcon src={searchPurpleSvg}/>
+                        <SearchBox
+                            placeholder="질문 검색하기"
+                            value={searchKeyword}
+                            onChange={(e) => setSearchKeyword(e.target.value)}
+                            onKeyPress={(e) => enterSearch(e)}
+                        />
+                        <SearchIcon 
+                            src={searchPurpleSvg}
+                            onClick={clickSearch}
+                        />
                     </SearchBoxWrapper>
                     <NewButton onClick={onClickNewButton}>
                         {showForm? '질문 취소하기' : '질문 등록하기'}
@@ -196,23 +240,19 @@ const CommentForm: FC<CommentProps> = ({ user }) => {
                 </TopWrapper>
                 { showForm && 
                 <CommentContainer>
-                    <Question> 
-                        <Profile> 
-                            <ProfileImage src={user.image} />
-                            <ProfileName>{user.name}</ProfileName>
-                        </Profile>
+                    <QuestionForm> 
+                        <Profile writer={user} />
                         <Content value={content} onChange={(e) => {resize(e)}} />
                         <SubmitButton onClick={onSubmit}>
                             등록하기
                         </SubmitButton>
-                    </Question>
+                    </QuestionForm>
                 </CommentContainer>
                 }   
-            </Root>
-            )
-    } else {
-        return null
-    }
+            </Wrapper>
+            {questionList}
+        </>
+    )
 }
 
-export default CommentForm;
+export default CommentList;
