@@ -61,16 +61,16 @@ export enum ClubDetailTab {
 };
 
 export default interface Club {
-    _id: string
-    name: string
-    school: string
-    description: string
-    photos: any[]
+    _id: string;
+    name: string;
+    school: string;
+    description: string;
+    photos: any[];
     status: Status;
-    category?: string
-    tags?: string[]
-    likedUsers: string[]
-    views: number
+    category?: string;
+    tags?: string[];
+    likedUsers: string[];
+    views: number;
     // managerIds: string[]
 }
 
@@ -80,6 +80,15 @@ export default interface Comment {
     responseTo?: string
     content: string
     createdDate: string
+}
+
+
+export default interface Story {
+    _id: string;
+    clubId: string;
+    content: string;
+    image?: any[];
+    date: string;
 }
 
 // how to reduce code? 

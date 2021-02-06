@@ -7,6 +7,10 @@ const palette = {
     dark50: new Color('rgba(31, 32, 65, 0.5)'),
     dark75: new Color('rgba(31, 32, 65, 0.75)'),
     
+    dark100: new Color('#1F2041'),
+    dark50: new Color('rgba(31, 32, 65, 0.5)'),
+    dark75: new Color('rgba(31, 32, 65, 0.75)'),
+    
     primaryViolet: new Color('#7C71F4'),
     primaryGradient: new Color('#BC9CFF'),
 }

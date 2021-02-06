@@ -15,6 +15,7 @@ import Loading from '../../templates/Loading';
 import { likeClub } from 'modules/userData';
 import { AuthResponse } from 'api/auth';
 import CommentList from '../../templates/CommentList';
+import StoryList from 'components/templates/StoryList';
 
 const Root = styled.div`
     margin: 36px 144px;
@@ -178,7 +179,8 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
         const clubImages: ReactNode =
             club ? club.photos.map((photo,index) => {
                 const imageConverterPrefix = "data:image/png;base64,"
-                const imageElem = imageConverterPrefix + btoa(String.fromCharCode.apply(null, photo.img.data.data));
+                //const imageElem = imageConverterPrefix + btoa(String.fromCharCode.apply(null, photo.img.data.data));
+                const imageElem = "";
                 return (
                     <ClubImage key={index} src={imageElem} />
                 )
@@ -207,6 +209,7 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
                         {menuItems}
                     </ClubDetailMenuWrapper>
                 </TopWrapper>
+
                 { selectedTab === 'CLUB_INTRO' as keyof T.ClubDetailTab &&
                     <ClubContentsContainer>
                         <ClubImageContainer>
@@ -221,6 +224,9 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
                     <ClubContentsContainer>
                         <CommentList user={user} clubId={club._id}/>
                     </ClubContentsContainer>
+                }
+                { selectedTab === 'CLUB_NEWS' as keyof T.ClubDetailTab &&
+                    <StoryList clubId={club._id} />
                 }
             </Root>
         ) : null;
