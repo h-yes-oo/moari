@@ -57,18 +57,23 @@ const ClubDetailMenuWrapper = styled.div`
     justify-content: center;
 `
 const ClubDetailMenuItem = styled.div<ClubInfoMenuProps>(({ isSelected }) => ({
-    width: '300px',
-    height: '40px',
-    fontSize: '20px',
-    fontWeight: 'bold',
+    marginLeft: '50px',
 
-    color: isSelected ? '#FFFFFF' : palette.primaryGradient.toString(),
-    backgroundColor: isSelected ? palette.primaryGradient.toString() : '',
-    border: `1px solid ${palette.greyBorder.toString()}`,
+    fontSize: '20px',
+    fontFamily: 'Montserrat',
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    lineHeight: '24px',
 
     display: 'flex',
-    justifyContent: 'center',
     alignItems: 'center',
+    textAlign: 'center',
+
+    color: isSelected ? palette.primaryGradient.toString() : palette.dark50.toString(),
+
+    // display: 'flex',
+    // justifyContent: 'center',
+    // alignItems: 'center',
 
     cursor: 'pointer',
 }))
@@ -97,6 +102,11 @@ const ClubDescription = styled.div`
     padding: 12px;
     width: 1200px;
     text-align: center;
+`
+
+const TopWrapper = styled.div`
+    display: flex;
+    justify-content: space-between;
 `
 
 interface Props {
@@ -176,24 +186,26 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
         return club ? (
             <Root>
                 <BoldLargeText>{club.name}</BoldLargeText>
-                <IconTagWrapper>
-                    <IconCountWrapper>
-                        <Icon src={likeImg ? likeFilledSvg : likeEmptySvg} onClick={() => handleLike()} />
-                        <IconCount>{likeCount}</IconCount>
-                        <Icon src={eyesSvg} />
-                        <IconCount>{club.views}</IconCount>
-                    </IconCountWrapper>
-                    <TagWrapper>
-                        {/* array.map으로 전환 필요*/}  
-                        <TagText>#학회</TagText>
-                        <TagText>#생명과학</TagText>
-                        <TagText>#화학</TagText>
-                        <TagText>#논문읽기</TagText>
-                    </TagWrapper>
-                </IconTagWrapper>
-                <ClubDetailMenuWrapper>
-                    {menuItems}
-                </ClubDetailMenuWrapper>
+                <TopWrapper>
+                    <IconTagWrapper>
+                        <IconCountWrapper>
+                            <Icon src={likeImg ? likeFilledSvg : likeEmptySvg} onClick={() => handleLike()} />
+                            <IconCount>{likeCount}</IconCount>
+                            <Icon src={eyesSvg} />
+                            <IconCount>{club.views}</IconCount>
+                        </IconCountWrapper>
+                        <TagWrapper>
+                            {/* array.map으로 전환 필요*/}  
+                            <TagText>#학회</TagText>
+                            <TagText>#생명과학</TagText>
+                            <TagText>#화학</TagText>
+                            <TagText>#논문읽기</TagText>
+                        </TagWrapper>
+                    </IconTagWrapper>
+                    <ClubDetailMenuWrapper>
+                        {menuItems}
+                    </ClubDetailMenuWrapper>
+                </TopWrapper>
                 <ClubContentsContainer>
                     <ClubImageContainer>
                         {clubImages}

@@ -11,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import { loginUser } from 'modules/login';
 import { RouteComponentProps } from 'react-router-dom';
 import { AuthResponse } from 'api/auth';
+import palette from 'constants/palette';
 
 const Root = styled.div`
     display: flex;
@@ -56,11 +57,11 @@ const Label = styled.label`
     font-size: 14px;
     line-height: 24px;
     text-align: center;
-    color: rgba(31, 32, 65, 0.5);
+    color: ${palette.dark50.toString()};
 `
 
 const CheckBox = styled.input`
-    border: 1px solid rgba(31, 32, 65, 0.5);
+    border: 1px solid ${palette.dark50.toString()};
     border-radius: 2px;
 `
 
@@ -89,7 +90,7 @@ const SignUp = styled.div`
     margin-top: 5px;
 
 
-    color: rgba(31, 32, 65, 0.5);
+    color: ${palette.dark50.toString()};
 `
 
 const ToSignUp = styled.a`
