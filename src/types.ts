@@ -72,7 +72,15 @@ export default interface Club {
     likedUsers: string[]
     views: number
     // managerIds: string[]
-  }
+}
+
+export default interface Comment {
+    _id: string
+    writer: any
+    responseTo?: string
+    content: string
+    createdDate: string
+}
 
 // how to reduce code? 
 export type FilterType = typeof Category | typeof Tag | typeof Status;
