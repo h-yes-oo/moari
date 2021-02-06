@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { clubSchema, Club, Image } = require("../models/Club");
-const { ViewCount } = require("../models/ViewCount");
+const { Club, Image } = require("../models/Club");
 const { User } = require("../models/User");
 
 // use for image upload
