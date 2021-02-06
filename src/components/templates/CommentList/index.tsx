@@ -239,7 +239,7 @@ const CommentList: FC<CommentProps> = ({ user, clubId }) => {
                 <CommentContainer>
                     <QuestionForm> 
                         <Profile writer={user} />
-                        <Content value={content} onChange={(e) => {resize(e)}} />
+                        <Content value={content} onChange={(e) => resize(e)} />
                         <SubmitButton onClick={onSubmit}>
                             등록하기
                         </SubmitButton>
