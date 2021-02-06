@@ -10,6 +10,7 @@ import closedSvg from 'assets/icons/stat-closed.svg';
 import likeEmptySvg from 'assets/icons/like-empty.svg';
 import likeFilledSvg from 'assets/icons/like-filled.svg';
 import eyesSvg from 'assets/icons/eyes.svg';
+import palette from 'constants/palette';
 
 const Root = styled.div<{ image?: string | undefined }>`
     width: 358px;
@@ -74,7 +75,7 @@ const ClubInfo = styled.div`
     line-height: 24px;
     align-items: center;
     text-align: center;
-    color: rgba(31, 32, 65, 0.5);
+    color: ${palette.dark50.toString()};
 `
 const HeartImg = styled.img`
     margin-left: -1px;

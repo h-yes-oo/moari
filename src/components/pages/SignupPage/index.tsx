@@ -1,13 +1,10 @@
 import React, { FC, useState } from 'react';
 import styled from 'styled-components';
-//import LoginForm from '../../templates/LoginForm';
 import SignupForm from '../../templates/SignupForm';
 import text from './text';
-//import * as T from 'types';
 import signUpButtonSvg from 'assets/icons/signup-button.svg';
 import logo from 'assets/icons/logo.svg';
 import moariSignUp from 'assets/icons/moari-signup.svg';
-//import duplicateCheckSvg from 'assets/icons/duplicate-check.svg';
 import palette from 'constants/palette';
 import { useDispatch } from 'react-redux';
 import { signupUser } from 'modules/signup';
@@ -64,11 +61,11 @@ const Label = styled.label`
     font-size: 14px;
     line-height: 24px;
     text-align: center;
-    color: rgba(31, 32, 65, 0.5);
+    color: ${palette.dark50.toString()};
 `
 
 const CheckBox = styled.input`
-    border: 1px solid rgba(31, 32, 65, 0.5);
+    border: 1px solid ${palette.dark50.toString()};
     border-radius: 2px;
     margin-left: 0px;
     margin-top: 0px;

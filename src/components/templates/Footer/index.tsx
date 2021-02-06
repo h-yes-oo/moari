@@ -23,7 +23,7 @@ const MoariText = styled.div`
     font-weight: normal;
     font-size: 17px;
     line-height: 24px;
-    color: rgba(31, 32, 65, 0.75);
+    color: ${palette.dark75.toString()};
     margin-left: 26px;
     display: flex;
     align-items: center;
@@ -38,7 +38,7 @@ const CopyrightText = styled.div`
     line-height: 20px;
     margin-right: 32px;
 
-    color: rgba(31, 32, 65, 0.75);
+    color: ${palette.dark75.toString()};
 `
 
 const ContactText = styled.a`
@@ -52,7 +52,7 @@ const ContactText = styled.a`
 
     display: flex;
     align-items: center;
-    color: rgba(31, 32, 65, 0.5);
+    color: ${palette.dark50.toString()};
 `
 
 const PrivacyPolicy = styled.a`
@@ -66,7 +66,7 @@ const PrivacyPolicy = styled.a`
 
     display: flex;
     align-items: center;
-    color: rgba(31, 32, 65, 0.5);
+    color: ${palette.dark50.toString()};
 `
 
 const Wrapper = styled.div`
