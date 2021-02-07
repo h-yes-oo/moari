@@ -222,7 +222,7 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
                 { selectedTab === 'QNA' as T.TabItem &&
                     <Route path={`${match.url}${T.ClubDetailTab[selectedTab].path}`} render={() => <CommentList user={user} clubId={club._id}/>} />
                 }
-                { selectedTab === 'CLUB_NEWS' as T.TabItem &&
+                { selectedTab === 'STORY' as T.TabItem &&
                     <Route path={`${match.url}${T.ClubDetailTab[selectedTab].path}`} render={() => <StoryList clubId={club._id}/>} />   
                 }
             </Root>

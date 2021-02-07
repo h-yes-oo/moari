@@ -69,7 +69,7 @@ export const ClubDetailTab = {
         name: '모집공고',
         path: "/recruitment"
     },
-    CLUB_NEWS : {
+    STORY : {
         name: '동아리 소식',
         path: "/story"
     },

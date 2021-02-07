@@ -154,7 +154,7 @@ const StoryList: FC<StoryListProps> = ({ clubId }) => {
             <React.Fragment key={story._id}>
                 <Col>
                     <StoryWrapper>
-                        <Image src={''} />
+                        <Image src={sampleImg} />
                         <Content>{story.content.replace(/\n+/g, '\n')} </Content>
                         <Date>{story.date}</Date>
                     </StoryWrapper>
