@@ -103,8 +103,8 @@ const Content = styled.textarea`
     font-size: 20px;
 
     width: 800px;
-    height: auto;
     margin-top: 7px;
+    height: 88px;
 
     border: 1px solid #BC9CFF;
     box-sizing: border-box;
@@ -159,7 +159,8 @@ const CommentList: FC<CommentProps> = ({ user, clubId }) => {
     const commentsData = useSelector((state: RootState) => state.comments.data);
 
     const resize = (e:React.ChangeEvent<HTMLTextAreaElement>) => {
-        e.currentTarget.style.height = (20 + e.currentTarget.scrollHeight) + "px";
+        const contentHeight = 20 + e.currentTarget.scrollHeight;
+        e.currentTarget.style.height = contentHeight + "px";
         setContent(e.target.value);
     }
 
@@ -202,17 +203,20 @@ const CommentList: FC<CommentProps> = ({ user, clubId }) => {
 
     if(commentsData){
         const comments = commentsData!.comments;
-        questionList = comments.slice(0).reverse().map((question:Comment) => {
-            return (
-            <Question 
-                key={question._id}
-                user={user} 
-                clubId={clubId} 
-                comments={comments} 
-                question={question}
-                refreshFunction={refreshFunction}
-            />)
-        })
+        questionList = comments
+                        .filter(comment => !comment.responseTo)
+                        .reverse()
+                        .map((question: Comment) => {
+                            return (
+                            <Question 
+                                key={question._id}
+                                user={user} 
+                                clubId={clubId} 
+                                comments={comments} 
+                                question={question}
+                                refreshFunction={refreshFunction}
+                            />)
+                        })
     }
 
     return (

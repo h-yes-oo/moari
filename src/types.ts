@@ -63,7 +63,7 @@ export enum Status {
 export const ClubDetailTab = {
     CLUB_INTRO : {
         name: '동아리 소개',
-        path: ""
+        path: "/info"
     },
     RECRUIT_NOTICE : {
         name: '모집공고',
