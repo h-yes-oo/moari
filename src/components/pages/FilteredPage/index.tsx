@@ -5,7 +5,7 @@ import * as T from 'types';
 import ClubList from 'components/templates/ClubList';
 import FilteringButtons from 'components/templates/FilteringButtons';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchClubsAll } from 'modules/fetchAll';
+import { fetchClubsAll } from 'modules/clubList';
 import { RootState } from 'modules'
 import Loading from 'components/templates/Loading';
 import { AuthResponse } from 'api/auth';
@@ -28,8 +28,7 @@ const FilteredPage: FC<Props & RouteComponentProps<MatchParams>> = ({ match, use
     dispatch(fetchClubsAll.request());
   }, []);
 
-  const fetchedData = useSelector((state: RootState) => state.fetchAll.data);
-
+  const fetchedData = useSelector((state: RootState) => state.clubList.data);
 
   const getFilterType: () => T.FilterType = () => {
     if (match.params.category) return T.Category

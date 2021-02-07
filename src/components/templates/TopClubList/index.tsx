@@ -39,7 +39,9 @@ interface Props {
 // }
 
 const TopClubList: FC<Props> = ({ user }) => {
-    const fetchedData = useSelector((state: RootState) => state.fetchAll.data);
+    const fetchedData = useSelector((state: RootState) => state.clubList.data);
+    // const dispatch = useDispatch();
+    
     const clubs = fetchedData !== null? fetchedData!.clubs : [];
     // clubs.length === 0인 경우?
     const TOTAL_SLIDES: number = Math.floor((clubs.length - 1) / 3);
