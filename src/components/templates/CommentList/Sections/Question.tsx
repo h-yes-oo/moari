@@ -121,7 +121,7 @@ const ContentInput = styled.textarea`
     font-size: 20px;
 
     width: 800px;
-    height: auto;
+    height: 88px;
     margin-top: 7px;
 
     border: 1px solid #BC9CFF;
