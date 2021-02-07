@@ -28,22 +28,16 @@ app.use(cookieParser());
 const accountsRoute = require('./routes/accounts');
 const clubsRoute = require('./routes/clubs');
 const searchRoute = require('./routes/search');
-<<<<<<< HEAD
 const commentRoute = require('./routes/comment');
-=======
 const storyRoute = require('./routes/story');
->>>>>>> temporary error resolving
 // const clubsImageRoute = require('./routes/uploads/clubs');
 
 app.use('/api/users', accountsRoute);
 app.use('/api/clubs', clubsRoute);
 app.use('/api/search', searchRoute);
-<<<<<<< HEAD
 app.use('/api/comment', commentRoute);
-=======
 app.use('/api/story', storyRoute);
 
->>>>>>> temporary error resolving
 
 app.route('/register/club')
     .get(function(req, res) {

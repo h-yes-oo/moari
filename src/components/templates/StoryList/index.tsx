@@ -139,8 +139,12 @@ const StoryList: FC<StoryListProps> = ({ clubId }) => {
     useEffect(() => {
         axios.get(`/api/story/getStories/${clubId}`).then(
             res => { 
-                console.log(res.data.stories);
-                setStories(res.data.stories);
+                if(res.data.success){
+                    setStories(res.data.stories);
+                }
+                else {
+                    console.log(res.data.error)
+                }
             }
         );
     }, [])

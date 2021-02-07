@@ -16,6 +16,7 @@ function getKoreanDate(){
 }
 
 router.get('/getStories/:clubId', (req, res) => {
+    console.log(req.params.clubId);
     Story.find({'clubId' : req.params.clubId}, (err, stories) => {
         if(err) return res.json({ success: false, err })
         res.status(200).json({ success: true, stories });

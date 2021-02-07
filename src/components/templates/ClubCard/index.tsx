@@ -113,8 +113,7 @@ const ClubCard: FC<Props & RouteComponentProps> = ({ id, name, description, imag
         
     const imageBuffer = image ? image.img.data.data : "";
     const imageConverterPrefix = "data:image/png;base64,"
-    //const imageElem = image ? imageConverterPrefix + btoa(String.fromCharCode.apply(null, imageBuffer)) : "";
-    const imageElem = "";
+    const imageElem = image ? imageConverterPrefix + btoa(String.fromCharCode.apply(null, imageBuffer)) : "";
     // console.log(imageElem);
 
     // need refactoring: switch-case
