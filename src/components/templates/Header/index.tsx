@@ -10,9 +10,8 @@ import mypageSvg from 'assets/icons/mypage.svg';
 import signupSvg from 'assets/icons/signup.svg';
 import loginSvg from 'assets/icons/login.svg';
 import logoutSvg from 'assets/icons/logout.svg';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'modules/index';
-import { searchClub } from 'modules/clubList';
+import { useDispatch } from 'react-redux';
+import { searchClub } from 'modules/search';
 import { logoutUser } from 'modules/logout/actions';
 import { AuthResponse } from 'api/auth';
 

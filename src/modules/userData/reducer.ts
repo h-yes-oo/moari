@@ -40,7 +40,7 @@ const like = createReducer<AuthState, AuthAction>(initialState)
         error: action.payload,
     }))
 
-const userData = createReducer<AuthState, AuthAction>(initialState, {
+export const userData = createReducer<AuthState, AuthAction>(initialState, {
     ...userAuth.handlers,
     ...like.handlers
 }) 

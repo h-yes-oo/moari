@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
@@ -110,16 +110,16 @@ const ClubCard: FC<Props & RouteComponentProps> = ({ id, name, description, imag
     const goClubDetail: (id: string) => void = (id) => {
         history.push(`/club/${id}`);
     }
-    
-    const bufferArray = image ? image.img.data.data : ""; 
-    const base64prefix = "data:image/png;base64,"
-    // const imageSource = image ? imageConverterPrefix + btoa(String.fromCharCode.apply(null, bufferArray)) : "";
-    const imageSource = image ? base64prefix + btoa(new TextDecoder('utf-16').decode(new Uint16Array(bufferArray))) : "";
+        
+    const imageBuffer = image ? image.img.data.data : "";
+    const imageConverterPrefix = "data:image/png;base64,"
+    const imageElem = image ? imageConverterPrefix + btoa(String.fromCharCode.apply(null, imageBuffer)) : "";
+    // console.log(imageElem);
 
     // need refactoring: switch-case
     return (
-        <Root id="clubcard-root" onClick={() => goClubDetail(id)}>
-            <CardImage src={imageSource} />
+        <Root id="clubcard-root" onClick={() => goClubDetail(id)} image={imageElem}>
+            <CardImage src={imageElem} />
             {(() => {
                 switch (status) {
                     case T.Status.PREPARE:

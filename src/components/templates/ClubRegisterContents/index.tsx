@@ -52,6 +52,8 @@ const ClubRegisterContents: FC<Props & RouteComponentProps> = ({ history }) => {
         else if (category === '') return requiredAlert(category, '분류');
 
         dispatch(postClub.request({ name, school, description, photos, category, tags, status, history })); 
+        //alert('동아리 등록 성공! 😆');
+        // history.push('/');
     }
 
     const requiredAlert: (type: any, text: string) => void = (type, text) => {

@@ -3,7 +3,8 @@ import { all } from 'redux-saga/effects';
 import login, { loginSaga } from './login';
 import signup, { signupSaga } from './signup';
 import userData, { userDataSaga, likeSaga } from './userData';
-import clubList, { clubListSaga } from './clubList';
+import fetchAll, { fetchAllSaga } from './fetchAll';
+import search, { searchSaga } from './search';
 import fetchSingle, { fetchSingleSaga } from './fetchSingle'
 import post, { postSaga } from './post';
 import logout, { logoutSaga } from './logout';
@@ -15,8 +16,9 @@ const rootReducer = combineReducers({
     logout,
     signup,
     userData,
-    clubList,
+    fetchAll,
     fetchSingle,
+    search,
     post,
     comments,
     comment
@@ -32,8 +34,9 @@ export function* rootSaga() {
         logoutSaga(),
         signupSaga(), 
         userDataSaga(), 
-        clubListSaga(),
+        fetchAllSaga(), 
         fetchSingleSaga(),
+        searchSaga(),
         postSaga(),
         likeSaga(),
         commentsSaga(),

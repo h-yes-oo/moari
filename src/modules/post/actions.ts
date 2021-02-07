@@ -8,7 +8,8 @@ export const POST_CLUB = {
     FAILURE: 'CLUB_POST_FAILURE'
   }
 
-export const postClub =
-createAsyncAction(
-  POST_CLUB.REQUEST, POST_CLUB.SUCCESS, POST_CLUB.FAILURE
-)<PostClubPayload, PostClubResponse, AxiosError>()
+  export const postClub =
+  createAsyncAction(
+    POST_CLUB.REQUEST, POST_CLUB.SUCCESS, POST_CLUB.FAILURE
+  // AxiosResponse<Club>
+  )<PostClubPayload, PostClubResponse, AxiosError>()
