@@ -1,5 +1,5 @@
 import React, { FC, ReactNode, useEffect, useState } from 'react';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { Route, withRouter, RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 
 import * as T from 'types';
@@ -119,11 +119,10 @@ interface ClubInfoRouterProps {
     id: string;
 }
 
-const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ match, user }) => {
-    const [selectedTab, setSelectedTab] = useState<keyof T.ClubDetailTab>('CLUB_INTRO' as keyof T.ClubDetailTab);
+const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ match, user, history }) => {
+    const [selectedTab, setSelectedTab] = useState<T.TabItem>('CLUB_INTRO' as T.TabItem);
     const [likeImg, setLikeImg] = useState<boolean>(false);
     const [likeCount, setLikeCount] = useState<number>(0);
-    //const user = useSelector((state: RootState) => state.userData.data);
 
     const fetchedData = useSelector((state: RootState) => state.fetchSingle.data);
     const dispatch = useDispatch();
@@ -147,13 +146,15 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
         return <Loading />
     } else {
         const club = fetchedData!.club;
-        const handleTabClick: (type: keyof T.ClubDetailTab) => void = (type) => {
+        const handleTabClick: (type: keyof typeof  T.ClubDetailTab, path: string) => void = (type, path) => {
             setSelectedTab(type);
+            history.push(`${match.url}${path}`)
         };
 
-        const isSelectedTab: (type: keyof T.ClubDetailTab) => boolean = (type) => {
+        const isSelectedTab: (type: T.TabItem) => boolean = (type) => {
             return selectedTab === type;
         }
+
 
         const handleLike: () => void = async () => {
             if(user!.isAuth) {
@@ -168,10 +169,10 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
                 return (
                     <ClubDetailMenuItem 
                         key={key}
-                        isSelected={isSelectedTab(key as keyof T.ClubDetailTab)} 
-                        onClick={() => handleTabClick(key as keyof T.ClubDetailTab)}
+                        isSelected={isSelectedTab(key as T.TabItem)} 
+                        onClick={() => handleTabClick(key as T.TabItem, value.path) }
                     >
-                    {value}
+                        {value.name}
                     </ClubDetailMenuItem>
                 );
             })
@@ -179,8 +180,7 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
         const clubImages: ReactNode =
             club ? club.photos.map((photo,index) => {
                 const imageConverterPrefix = "data:image/png;base64,"
-                //const imageElem = imageConverterPrefix + btoa(String.fromCharCode.apply(null, photo.img.data.data));
-                const imageElem = "";
+                const imageElem = imageConverterPrefix + btoa(String.fromCharCode.apply(null, photo.img.data.data));
                 return (
                     <ClubImage key={index} src={imageElem} />
                 )
@@ -209,8 +209,7 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
                         {menuItems}
                     </ClubDetailMenuWrapper>
                 </TopWrapper>
-
-                { selectedTab === 'CLUB_INTRO' as keyof T.ClubDetailTab &&
+                { selectedTab === 'CLUB_INTRO' as T.TabItem &&
                     <ClubContentsContainer>
                         <ClubImageContainer>
                             {clubImages}
@@ -220,13 +219,11 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
                         </ClubDescription>
                     </ClubContentsContainer>
                 }
-                { selectedTab === 'QNA' as keyof T.ClubDetailTab &&
-                    <ClubContentsContainer>
-                        <CommentList user={user} clubId={club._id}/>
-                    </ClubContentsContainer>
+                { selectedTab === 'QNA' as T.TabItem &&
+                    <Route path={`${match.url}${T.ClubDetailTab[selectedTab].path}`} render={() => <CommentList user={user} clubId={club._id}/>} />
                 }
-                { selectedTab === 'CLUB_NEWS' as keyof T.ClubDetailTab &&
-                    <StoryList clubId={club._id} />
+                { selectedTab === 'CLUB_NEWS' as T.TabItem &&
+                    <Route path={`${match.url}${T.ClubDetailTab[selectedTab].path}`} render={() => <StoryList clubId={club._id}/>} />   
                 }
             </Root>
         ) : null;

@@ -115,6 +115,7 @@ const ClubCard: FC<Props & RouteComponentProps> = ({ id, name, description, imag
     const base64prefix = "data:image/png;base64,"
     // const imageSource = image ? imageConverterPrefix + btoa(String.fromCharCode.apply(null, bufferArray)) : "";
     const imageSource = image ? base64prefix + btoa(new TextDecoder('utf-16').decode(new Uint16Array(bufferArray))) : "";
+
     // need refactoring: switch-case
     return (
         <Root id="clubcard-root" onClick={() => goClubDetail(id)}>
