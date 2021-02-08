@@ -29,12 +29,15 @@ const accountsRoute = require('./routes/accounts');
 const clubsRoute = require('./routes/clubs');
 const searchRoute = require('./routes/search');
 const commentRoute = require('./routes/comment');
+const storyRoute = require('./routes/story');
 // const clubsImageRoute = require('./routes/uploads/clubs');
 
 app.use('/api/users', accountsRoute);
 app.use('/api/clubs', clubsRoute);
 app.use('/api/search', searchRoute);
 app.use('/api/comment', commentRoute);
+app.use('/api/story', storyRoute);
+
 
 app.route('/register/club')
     .get(function(req, res) {

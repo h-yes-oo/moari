@@ -20,7 +20,7 @@ const commentSchema = mongoose.Schema({
     createdDate : {
         type: String
     }
-})
+}, {timestamps: true})
 
 
 const Comment = mongoose.model('Comment', commentSchema);

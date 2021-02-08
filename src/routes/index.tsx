@@ -22,7 +22,8 @@ const Root: FC<Props> = () => {
             <Switch>
                 <Route exact path="/" component={AuthWithBaseLayout(MainPage, null)} />
                 <Route path="/search/:keyword" component={AuthWithBaseLayout(MainPage, null)} />
-                <Route path="/club/:id" component={AuthWithBaseLayout(ClubDetailPage, null)} />
+                <Route exact path="/club/:id" component={AuthWithBaseLayout(ClubDetailPage, null)} />
+                <Route path="/club/:id/:tab" component={AuthWithBaseLayout(ClubDetailPage, null)} />
                 <Route path="/register" component={AuthWithBaseLayout(RegisterPage, true)} />
                 <Route path="/signup" component={AuthWithBaseLayout(SignupPage, false)} />
                 <Route path="/login" component={AuthWithBaseLayout(LoginPage, false)} />

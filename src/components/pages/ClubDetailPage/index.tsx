@@ -15,6 +15,8 @@ import Loading from '../../templates/Loading';
 import { likeClub } from 'modules/userData';
 import { AuthResponse } from 'api/auth';
 import CommentList from '../../templates/CommentList';
+import StoryList from 'components/templates/StoryList';
+import ClubIntro from 'components/templates/ClubIntro';
 
 const Root = styled.div`
     margin: 36px 144px;
@@ -79,32 +81,6 @@ const ClubDetailMenuItem = styled.div<ClubInfoMenuProps>(({ isSelected }) => ({
     cursor: 'pointer',
 }))
 
-const ClubContentsContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-`
-
-const ClubImageContainer = styled.div`
-    display: flex;
-    justify-content: center;
-    padding: 72px;
-`
-
-const ClubImage = styled.img`
-    width: 480px;
-    height: auto;
-    margin: 24px;
-`
-
-const ClubDescription = styled.div`
-    border: 1px solid ${palette.primaryViolet.toString()};
-    border-radius: 4px;
-    padding: 12px;
-    width: 1200px;
-    text-align: center;
-`
-
 const TopWrapper = styled.div`
     display: flex;
     justify-content: space-between;
@@ -116,19 +92,25 @@ interface Props {
 
 interface ClubInfoRouterProps {
     id: string;
+    tab: string
 }
 
-const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ match, user }) => {
-    const [selectedTab, setSelectedTab] = useState<keyof T.ClubDetailTab>('CLUB_INTRO' as keyof T.ClubDetailTab);
+const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ match, user, history }) => {
+    const [selectedTab, setSelectedTab] = useState<T.TabItem>(
+        match.params.tab === 'story' ? 'STORY' as T.TabItem : 
+        match.params.tab === 'qna'? 'QNA' as T.TabItem : 
+        match.params.tab === 'recruitment'? 'RECRUIT_NOTICE' as T.TabItem : 
+        'CLUB_INTRO' as T.TabItem
+        );
     const [likeImg, setLikeImg] = useState<boolean>(false);
     const [likeCount, setLikeCount] = useState<number>(0);
-    //const user = useSelector((state: RootState) => state.userData.data);
 
     const fetchedData = useSelector((state: RootState) => state.fetchSingle.data);
     const dispatch = useDispatch();
 
     useEffect(() => {
         dispatch(fetchClub.request({ id: match.params.id }));
+        console.log(match.params.tab)
     }, [match.params.id]);
     
     useEffect(() => {
@@ -146,13 +128,15 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
         return <Loading />
     } else {
         const club = fetchedData!.club;
-        const handleTabClick: (type: keyof T.ClubDetailTab) => void = (type) => {
+        const handleTabClick: (type: keyof typeof  T.ClubDetailTab, path: string) => void = (type, path) => {
             setSelectedTab(type);
+            history.push(`/club/${club._id}${path}`)
         };
 
-        const isSelectedTab: (type: keyof T.ClubDetailTab) => boolean = (type) => {
+        const isSelectedTab: (type: T.TabItem) => boolean = (type) => {
             return selectedTab === type;
         }
+
 
         const handleLike: () => void = async () => {
             if(user!.isAuth) {
@@ -167,22 +151,13 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
                 return (
                     <ClubDetailMenuItem 
                         key={key}
-                        isSelected={isSelectedTab(key as keyof T.ClubDetailTab)} 
-                        onClick={() => handleTabClick(key as keyof T.ClubDetailTab)}
+                        isSelected={isSelectedTab(key as T.TabItem)} 
+                        onClick={() => handleTabClick(key as T.TabItem, value.path) }
                     >
-                    {value}
+                        {value.name}
                     </ClubDetailMenuItem>
                 );
             })
-
-        const clubImages: ReactNode =
-            club ? club.photos.map((photo,index) => {
-                const imageConverterPrefix = "data:image/png;base64,"
-                const imageElem = imageConverterPrefix + btoa(String.fromCharCode.apply(null, photo.img.data.data));
-                return (
-                    <ClubImage key={index} src={imageElem} />
-                )
-            }) : null;
 
         return club ? (
             <Root>
@@ -207,20 +182,14 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
                         {menuItems}
                     </ClubDetailMenuWrapper>
                 </TopWrapper>
-                { selectedTab === 'CLUB_INTRO' as keyof T.ClubDetailTab &&
-                    <ClubContentsContainer>
-                        <ClubImageContainer>
-                            {clubImages}
-                        </ClubImageContainer>
-                        <ClubDescription>
-                            {club ? club.description : null}
-                        </ClubDescription>
-                    </ClubContentsContainer>
+                { selectedTab === 'CLUB_INTRO' as T.TabItem &&
+                    <ClubIntro club={club}/>
                 }
-                { selectedTab === 'QNA' as keyof T.ClubDetailTab &&
-                    <ClubContentsContainer>
-                        <CommentList user={user} clubId={club._id}/>
-                    </ClubContentsContainer>
+                { selectedTab === 'QNA' as T.TabItem &&
+                    <CommentList user={user} clubId={club._id}/>
+                }
+                { selectedTab === 'STORY' as T.TabItem &&
+                    <StoryList clubId={club._id}/>
                 }
             </Root>
         ) : null;

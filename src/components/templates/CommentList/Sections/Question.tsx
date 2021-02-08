@@ -197,55 +197,52 @@ const Question: FC<CommentProps> = ({ user, clubId, question, comments, refreshF
         await dispatch(deleteComment.request({ commentId }));
         refreshFunction();
     }
-
-    if(question.responseTo) {
-        return null;
-    } else {
-        let answers = comments.filter(comment => comment.responseTo === question._id);
-        const answerList: ReactNode = answers.map((answer:Comment) => {
-            return (
-                <Answer key={answer._id}>
-                    <Profile writer={answer.writer} />
-                    <Content>
-                        {answer.content}
-                    </Content>
-                    <ButtonWrapper>
-                        { answer.writer._id === user._id &&
-                            <EraseButton onClick={() => onDelete(answer._id)}>지우기</EraseButton>
-                        }
-                        <Date>{answer.createdDate}</Date>
-                    </ButtonWrapper>
-                </Answer>
-            )
-        })
-
+    
+    let answers = comments.filter(comment => comment.responseTo === question._id);
+    const answerList: ReactNode = answers.map((answer:Comment) => {
         return (
-            <Root key={question._id}>
-                <QuestionWrapper> 
-                    <Profile writer={question.writer} />
-                    <Content>
-                        {question.content}
-                    </Content>
-                    <ButtonWrapper>
-                        { question.writer._id === user._id &&
-                            <EraseButton onClick={() => onDelete(question._id)}>지우기</EraseButton>
-                        }
-                        <AnswerButton onClick={onNewAnswer}>답변하기</AnswerButton>
-                        <Date>{question.createdDate}</Date>
-                    </ButtonWrapper>
-                </QuestionWrapper>
-                { answerList }
-                { showAnswerForm &&
-                    <AnswerForm>
-                        <Profile writer={user} />
-                        <ContentInput value={content} onChange={(e) => {resize(e)}} />
-                        <SubmitButton onClick={() => onSubmit(question._id)}>
-                            등록하기
-                        </SubmitButton>
-                    </AnswerForm>
-                }
-            </Root>
-        )}
+            <Answer key={answer._id}>
+                <Profile writer={answer.writer} />
+                <Content>
+                    {answer.content}
+                </Content>
+                <ButtonWrapper>
+                    { answer.writer._id === user._id &&
+                        <EraseButton onClick={() => onDelete(answer._id)}>지우기</EraseButton>
+                    }
+                    <Date>{answer.createdDate}</Date>
+                </ButtonWrapper>
+            </Answer>
+        )
+    })
+
+
+    return question.responseTo ? null :
+        <Root key={question._id}>
+            <QuestionWrapper> 
+                <Profile writer={question.writer} />
+                <Content>
+                    {question.content}
+                </Content>
+                <ButtonWrapper>
+                    { question.writer._id === user._id &&
+                        <EraseButton onClick={() => onDelete(question._id)}>지우기</EraseButton>
+                    }
+                    <AnswerButton onClick={onNewAnswer}>답변하기</AnswerButton>
+                    <Date>{question.createdDate}</Date>
+                </ButtonWrapper>
+            </QuestionWrapper>
+            { answerList }
+            { showAnswerForm &&
+                <AnswerForm>
+                    <Profile writer={user} />
+                    <ContentInput value={content} onChange={(e) => {resize(e)}} />
+                    <SubmitButton onClick={() => onSubmit(question._id)}>
+                        등록하기
+                    </SubmitButton>
+                </AnswerForm>
+            }
+        </Root>
 }
 
 export default Question;

@@ -29,7 +29,7 @@ const ProfileName = styled.div`
     display: flex;
     align-items: center;
 
-    background: -webkit-linear-gradient(180deg, #BC9CFF 0%, #8BA4F9 100%);
+    background: -webkit-linear-gradient(90deg, #BC9CFF 0%, #8BA4F9 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 `
