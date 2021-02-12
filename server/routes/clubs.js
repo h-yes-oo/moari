@@ -39,7 +39,6 @@ router.post("/", upload_club.array("photos"), async (req, res) => {
     status: req.body.status,
   });
 
-  // console.log(req.files);
   for (let image of req.files) {
     let obj = {
       img: {
@@ -48,18 +47,19 @@ router.post("/", upload_club.array("photos"), async (req, res) => {
         ),
         contentType: "image/png",
       },
-      club: club,
+      club: club._id,
     };
 
     const newImage = new Image(obj);
     newImage.save();
     club.photos.push(newImage);
   }
-  club.save((err, club) => {
+  club.save((err, _) => {
+    // success response로 club까지 리턴하면 너무 오래 지연되어 server error 발생
     if (err) return res.json({ success: false, err });
     return res.status(200).json({
       success: true,
-      club,
+      // club,
     });
   });
 });
