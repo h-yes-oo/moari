@@ -4,11 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'modules'
 import Loading from '../Loading';
 import palette from 'constants/palette';
-import sampleImg from 'assets/samples/likelion.jpg';
-import axios from 'axios';
-import Story from 'types';
 import { useDropzone } from 'react-dropzone';
 import PhotoSlider from './PhotoSlider';
+import { fetchStories } from 'modules/stories';
+import { deleteStory, saveStory } from 'modules/story';
 
 interface StoryListProps {
     clubId: string;
@@ -106,6 +105,7 @@ const DeleteButton = styled.a`
     text-align: center;
 
     color: ${palette.dark75.toString()};
+    cursor: pointer;
 `
 
 const SumbitButton = styled.div`
@@ -228,38 +228,22 @@ type dropFile = {
 
 
 const StoryList: FC<StoryListProps> = ({ clubId }) => {
-    const [stories, setStories] = useState<Story[]>([]);
     const [showNewForm, setShowNewForm] = useState<boolean>(false);
     const [content, setContent] = useState<string>('');
     const [refresh, setRefresh] = useState<boolean>(false);
     const [files, setFiles] = useState<(Blob & dropFile)[]>([]);
+    const dispatch = useDispatch();
 
     useEffect(() => {
-        axios.get(`/api/story/getStories/${clubId}`).then(
-            res => { 
-                if(res.data.success){
-                    setStories(res.data.stories);
-                }
-                else {
-                    console.log(res.data.error)
-                }
-            }
-        );
+        dispatch(fetchStories.request({ clubId }));
     }, [refresh])
 
     const refreshFunction = () => {
         setRefresh(!refresh);
-        axios.get(`/api/story/getStories/${clubId}`).then(
-            res => { 
-                if(res.data.success){
-                    setStories(res.data.stories);
-                }
-                else {
-                    console.log(res.data.error)
-                }
-            }
-        );
+        dispatch(fetchStories.request({ clubId }));
     }
+
+    const storiesData = useSelector((state: RootState) => state.stories.data);
 
     const {getRootProps, getInputProps} = useDropzone({
       accept: 'image/*',
@@ -284,28 +268,10 @@ const StoryList: FC<StoryListProps> = ({ clubId }) => {
       files.forEach((file: dropFile) => URL.revokeObjectURL(file.preview));
     }, [files]);
 
-    const saveStory = () => {
-        let formData = new FormData;
-        const config = {
-            header: {'content-type': 'multipart/form-data'}
-        }
-        for( let i = 0; i < files.length; i++){
-            formData.append("photos",files[i])
-        }
-
-        formData.append("clubId",clubId);
-        formData.append("content",content);
-        axios.post(`/api/story/saveStory`, formData).then(
-            res => {
-                if(res.data.success){
-                    alert('새로운 소식 등록에 성공했습니다')
-                    setShowNewForm(false);
-                    setContent("");
-                } else {
-                    alert('소식 등록에 실패했습니다. 다시 시도해주세요')
-                }
-            }
-        );
+    const onSaveStory = () => {
+        dispatch(saveStory.request({ clubId, content, files }));
+        setShowNewForm(false);
+        setContent("");
         refreshFunction();
     }
 
@@ -314,16 +280,8 @@ const StoryList: FC<StoryListProps> = ({ clubId }) => {
         setContent('');
     }
 
-    const deleteStory = (storyId: string) => {
-        axios.delete(`/api/story/deleteStory/${storyId}`).then(
-            res => {
-                if(res.data.success){
-                    alert('삭제 성공')
-                } else {
-                    alert('삭제 실패')
-                }
-            }
-        )
+    const onDeleteStory = (storyId: string) => {
+        dispatch(deleteStory.request({ storyId }));
         refreshFunction();
     }
 
@@ -334,21 +292,26 @@ const StoryList: FC<StoryListProps> = ({ clubId }) => {
         setContent(e.target.value);
     }
 
-    const storyList = stories.slice(0).reverse().map( story => {
-        return(
-            <React.Fragment key={story._id}>
-                <Col>
-                    <StoryWrapper>
-                        { story.storyPhotos.length > 0 &&
-                            <PhotoSlider story={story} /> }
-                        <Content>{story.content.replace(/\n+/g, '\n')} </Content>
-                        <Date>{story.date}</Date>
-                        <DeleteButton onClick={() => deleteStory(story._id)}>삭제하기</DeleteButton>
-                    </StoryWrapper>
-                </Col>
-            </React.Fragment>
-        )
-    })
+    let storyList: ReactNode = <Loading />;
+
+    if(storiesData){
+        const stories = storiesData!.stories;
+        storyList = stories.slice(0).reverse().map( story => {
+            return(
+                <React.Fragment key={story._id}>
+                    <Col>
+                        <StoryWrapper>
+                            { story.storyPhotos.length > 0 &&
+                                <PhotoSlider story={story} /> }
+                            <Content>{story.content.replace(/\n+/g, '\n')} </Content>
+                            <Date>{story.date}</Date>
+                            <DeleteButton onClick={() => onDeleteStory(story._id)}>삭제하기</DeleteButton>
+                        </StoryWrapper>
+                    </Col>
+                </React.Fragment>
+            )
+        })
+    }
 
 
     return (
@@ -369,7 +332,7 @@ const StoryList: FC<StoryListProps> = ({ clubId }) => {
                             </ThumbsContainer>
                         </Box>
                         <ContentInput placeholder="새로운 소식을 등록해주세요" value={content} onChange={(e) => resize(e)} />
-                        <SumbitButton onClick={saveStory}>등록하기</SumbitButton>
+                        <SumbitButton onClick={onSaveStory}>등록하기</SumbitButton>
                     </StoryWrapper>
                 </Col>
                 }

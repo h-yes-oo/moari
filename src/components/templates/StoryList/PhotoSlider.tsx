@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useState, useEffect, useRef } from 'react';
+import React, { FC, useState } from 'react';
 import styled from 'styled-components';
 import Story from 'types';
 import LeftArrow from 'assets/icons/left-arrow.svg';
@@ -40,7 +40,7 @@ const LeftButton = styled.button`
     background: transparent;
     border: none;
     cursor: pointer;
-    z-index: 100;
+    z-index: 2;
     opacity: 0.5;
     &:focus {
     outline: none;
@@ -59,7 +59,7 @@ const RightButton = styled.button`
     background: transparent;
     border: none;
     cursor: pointer;
-    z-index: 100;
+    z-index: 2;
     opacity: 0.5;
     &:focus {
     outline: none;
