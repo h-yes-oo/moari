@@ -108,7 +108,7 @@ export default interface Story {
     _id: string;
     clubId: string;
     content: string;
-    image?: any[];
+    storyPhotos: any[];
     date: string;
 }
 

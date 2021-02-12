@@ -10,6 +10,7 @@ import { fetchComments, searchComments } from 'modules/comments';
 import { saveComment } from 'modules/comment';
 import { RootState } from 'modules'
 import Loading from '../Loading';
+import palette from 'constants/palette';
 
 const Wrapper = styled.div`
     display: flex;
@@ -55,7 +56,7 @@ const SearchBox = styled.input`
     font-weight: 600;
     font-size: 18px;
     line-height: 24px;
-    color: rgba(31, 32, 65, 0.5);
+    color: ${palette.dark50.toString()};
 
     &:focus {
         outline: none;
@@ -74,7 +75,7 @@ const NewButton = styled.a`
     display: flex;
     align-items: center;
 
-    color: rgba(31, 32, 65, 0.5);
+    color: ${palette.dark50.toString()};
 
     cursor: pointer;
 `
@@ -109,8 +110,7 @@ const Content = styled.textarea`
     border: 1px solid #BC9CFF;
     box-sizing: border-box;
     border-radius: 4px;
-    color: rgba(31, 32, 65, 0.75);
-    overflow: scroll;
+    color: ${palette.dark75.toString()};
 
     &::-webkit-scrollbar { width: 0 !important };
     &:focus {
@@ -131,7 +131,7 @@ const SubmitButton = styled.a`
     font-size: 18px;
     line-height: 10px;
 
-    color: rgba(31, 32, 65, 0.5);
+    color: ${palette.dark50.toString()};
     cursor: pointer;
 `
 
@@ -159,8 +159,8 @@ const CommentList: FC<CommentProps> = ({ user, clubId }) => {
     const commentsData = useSelector((state: RootState) => state.comments.data);
 
     const resize = (e:React.ChangeEvent<HTMLTextAreaElement>) => {
-        const contentHeight = 20 + e.currentTarget.scrollHeight;
-        e.currentTarget.style.height = contentHeight + "px";
+        e.currentTarget.style.height = "88px";
+        e.currentTarget.style.height = e.currentTarget.scrollHeight + "px";
         setContent(e.target.value);
     }
 

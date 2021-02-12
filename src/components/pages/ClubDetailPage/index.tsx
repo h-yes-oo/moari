@@ -74,9 +74,9 @@ const ClubDetailMenuItem = styled.div<ClubInfoMenuProps>`
     text-align: center;
     color: ${palette.dark50.toString()};
 
-    background: ${ props => props.isSelected && css`-webkit-linear-gradient(90deg, #BC9CFF 0%, #8BA4F9 100%)`};
-    -webkit-background-clip: ${ props => props.isSelected && css`text`};
-    -webkit-text-fill-color: ${ props => props.isSelected && css`transparent`};
+    background: ${props => props.isSelected && css`-webkit-linear-gradient(90deg, #BC9CFF 0%, #8BA4F9 100%)`};
+    -webkit-background-clip: ${props => props.isSelected && css`text`};
+    -webkit-text-fill-color: ${props => props.isSelected && css`transparent`};
     
     cursor: pointer;
 `
@@ -84,6 +84,7 @@ const ClubDetailMenuItem = styled.div<ClubInfoMenuProps>`
 const TopWrapper = styled.div`
     display: flex;
     justify-content: space-between;
+    min-width: 1000px;
 `
 
 interface Props {
@@ -185,11 +186,11 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
                 { selectedTab === 'CLUB_INTRO' as T.TabItem &&
                     <ClubIntro club={club}/>
                 }
-                { selectedTab === 'QNA' as T.TabItem &&
-                    <CommentList user={user} clubId={club._id}/>
-                }
                 { selectedTab === 'STORY' as T.TabItem &&
                     <StoryList clubId={club._id}/>
+                }
+                { selectedTab === 'QNA' as T.TabItem &&
+                    <CommentList user={user} clubId={club._id}/>
                 }
             </Root>
         ) : null;
