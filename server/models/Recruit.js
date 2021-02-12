@@ -1,9 +1,9 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const recruitSchema = mongoose.Schema({
   club: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Club',
+    ref: "Club",
   },
   title: {
     type: String,
@@ -17,14 +17,14 @@ const recruitSchema = mongoose.Schema({
   },
   contact: {
     type: String,
+    required: true,
   },
   description: {
     type: String,
-    required: true,
   },
-})
+});
 
-const Recruit = mongoose.model('Recruit', recruitSchema); 
+const Recruit = mongoose.model("Recruit", recruitSchema);
 module.exports = {
-  Recruit
+  Recruit,
 };
