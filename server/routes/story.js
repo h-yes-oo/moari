@@ -72,4 +72,12 @@ router.post('/saveStory', uploadStory.array("photos"), async (req, res) => {
     })
 });
 
+router.delete('/deleteStory/:storyId', (req, res) => {
+    console.log('here')
+    Story.findByIdAndDelete(req.params.storyId, (err, result) => {
+        if(err) return res.json({ success: false, err })
+        res.status(200).json({ success: true });
+    })
+})
+
 module.exports = router;

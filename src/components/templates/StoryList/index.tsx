@@ -231,8 +231,36 @@ const StoryList: FC<StoryListProps> = ({ clubId }) => {
     const [stories, setStories] = useState<Story[]>([]);
     const [showNewForm, setShowNewForm] = useState<boolean>(false);
     const [content, setContent] = useState<string>('');
-
+    const [refresh, setRefresh] = useState<boolean>(false);
     const [files, setFiles] = useState<(Blob & dropFile)[]>([]);
+
+    useEffect(() => {
+        axios.get(`/api/story/getStories/${clubId}`).then(
+            res => { 
+                if(res.data.success){
+                    setStories(res.data.stories);
+                }
+                else {
+                    console.log(res.data.error)
+                }
+            }
+        );
+    }, [refresh])
+
+    const refreshFunction = () => {
+        setRefresh(!refresh);
+        axios.get(`/api/story/getStories/${clubId}`).then(
+            res => { 
+                if(res.data.success){
+                    setStories(res.data.stories);
+                }
+                else {
+                    console.log(res.data.error)
+                }
+            }
+        );
+    }
+
     const {getRootProps, getInputProps} = useDropzone({
       accept: 'image/*',
       onDrop: (acceptedFiles) => {
@@ -244,12 +272,10 @@ const StoryList: FC<StoryListProps> = ({ clubId }) => {
     
     const thumbs = files.map((file: Blob & dropFile) => (
       <Thumb key={file.name}>
-        {/* <ThumbInner> */}
           <Img
             src={file.preview}
             alt={file.name}
           />
-        {/* </ThumbInner> */}
       </Thumb>
     ));
   
@@ -280,12 +306,25 @@ const StoryList: FC<StoryListProps> = ({ clubId }) => {
                 }
             }
         );
+        refreshFunction();
     }
 
     const onClickNewButton = () => {
         setShowNewForm(!showNewForm);
         setContent('');
+    }
 
+    const deleteStory = (storyId: string) => {
+        axios.delete(`/api/story/deleteStory/${storyId}`).then(
+            res => {
+                if(res.data.success){
+                    alert('삭제 성공')
+                } else {
+                    alert('삭제 실패')
+                }
+            }
+        )
+        refreshFunction();
     }
 
     const resize = (e:React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -294,19 +333,6 @@ const StoryList: FC<StoryListProps> = ({ clubId }) => {
         e.currentTarget.style.height = e.currentTarget.scrollHeight + "px";
         setContent(e.target.value);
     }
-
-    useEffect(() => {
-        axios.get(`/api/story/getStories/${clubId}`).then(
-            res => { 
-                if(res.data.success){
-                    setStories(res.data.stories);
-                }
-                else {
-                    console.log(res.data.error)
-                }
-            }
-        );
-    }, [])
 
     const storyList = stories.slice(0).reverse().map( story => {
         return(
@@ -317,7 +343,7 @@ const StoryList: FC<StoryListProps> = ({ clubId }) => {
                             <PhotoSlider story={story} /> }
                         <Content>{story.content.replace(/\n+/g, '\n')} </Content>
                         <Date>{story.date}</Date>
-                        <DeleteButton>삭제하기</DeleteButton>
+                        <DeleteButton onClick={() => deleteStory(story._id)}>삭제하기</DeleteButton>
                     </StoryWrapper>
                 </Col>
             </React.Fragment>
