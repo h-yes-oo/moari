@@ -6,6 +6,7 @@ import ClubCard from 'components/templates/ClubCard';
 import leftArrowSvg from 'assets/icons/left-arrow.svg';
 import rightArrowSvg from 'assets/icons/right-arrow.svg';
 import { RootState } from 'modules/index';
+import { AuthResponse } from 'api/auth';
 
 const Root = styled.div`
     display: flex;
@@ -30,17 +31,16 @@ const SliderContainer = styled.div<{ currentSlide: number }>`
 `
 
 interface Props {
-  
+  user: AuthResponse;
 }
 
 // interface ClubData {
 //     [key: number]: T.ClubInfo; // key refers to id
 // }
 
-const TopClubList: FC<Props> = () => {
-    const fetchedData = useSelector((state: RootState) => state.fetchAll.data);
+const TopClubList: FC<Props> = ({ user }) => {
+    const fetchedData = useSelector((state: RootState) => state.clubList.data);
     // const dispatch = useDispatch();
-    const user = useSelector((state: RootState)=> state.userData.data);
     
     const clubs = fetchedData !== null? fetchedData!.clubs : [];
     // clubs.length === 0인 경우?

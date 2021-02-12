@@ -13,7 +13,7 @@ const userAuth = createReducer<AuthState, AuthAction> (initialState)
         ...state,
         loading: true,
         error: null,
-        data: null
+        //data: null
     }))
     .handleAction(auth.success, (state, action) => ({
         ...state,
@@ -40,7 +40,7 @@ const like = createReducer<AuthState, AuthAction>(initialState)
         error: action.payload,
     }))
 
-export const userData = createReducer<AuthState, AuthAction>(initialState, {
+const userData = createReducer<AuthState, AuthAction>(initialState, {
     ...userAuth.handlers,
     ...like.handlers
 }) 

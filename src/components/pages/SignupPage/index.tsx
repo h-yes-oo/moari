@@ -1,20 +1,17 @@
 import React, { FC, useState } from 'react';
-import BaseLayout from 'components/templates/BaseLayout';
 import styled from 'styled-components';
-//import LoginForm from '../../templates/LoginForm';
 import SignupForm from '../../templates/SignupForm';
 import text from './text';
-//import * as T from 'types';
 import signUpButtonSvg from 'assets/icons/signup-button.svg';
 import logo from 'assets/icons/logo.svg';
 import moariSignUp from 'assets/icons/moari-signup.svg';
-//import duplicateCheckSvg from 'assets/icons/duplicate-check.svg';
 import palette from 'constants/palette';
 import { useDispatch } from 'react-redux';
 import { signupUser } from 'modules/signup';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Axios from 'axios';
 import { USER_SERVER } from 'components/Config';
+import { AuthResponse } from 'api/auth';
 
 const Root = styled.div`
     display: flex;
@@ -64,11 +61,11 @@ const Label = styled.label`
     font-size: 14px;
     line-height: 24px;
     text-align: center;
-    color: rgba(31, 32, 65, 0.5);
+    color: ${palette.dark50.toString()};
 `
 
 const CheckBox = styled.input`
-    border: 1px solid rgba(31, 32, 65, 0.5);
+    border: 1px solid ${palette.dark50.toString()};
     border-radius: 2px;
     margin-left: 0px;
     margin-top: 0px;
@@ -91,23 +88,29 @@ const RedTextDiv = styled.div`
 `
 
 interface Props {
+    user: AuthResponse;
 }
 
-const SignupPage: FC<Props & RouteComponentProps> = ({ history }) => {
+const SignupPage: FC<Props & RouteComponentProps> = ({ history, user }) => {
     const [id,setId] = useState<string>('');
     const [password,setPassword] = useState<string>('');
     const [email,setEmail] = useState<string>('');
     const [name,setNickname] = useState<string>('');
     const [confirmPassword,setConfirmPassword] = useState<string>('');
     const [agreement,setAgreement] = useState<boolean>(false);
+
     const [idChecked, setIdChecked] = useState<boolean>(false);
     const [idText, setIdText] = useState<string>(text.loginId.require);
+
     const [nicknameChecked, setNicknameChecked] = useState<boolean>(false);
     const [nicknameText, setNicknameText] = useState<string>(text.nickname.require);
+
     const [passwordChecked, setPasswordChecked] = useState<boolean>(false);
     const [passwordText, setPasswordText] = useState<string>(text.password.require);
+
     const [emailChecked, setEmailChecked] = useState<boolean>(false);
     const [emailText, setEmailText] = useState<string>(text.email.require);
+    
     const [confirmPasswordChecked, setConfirmPasswordChecked] = useState<boolean>(false);
     const [confirmPasswordText, setConfirmPasswordText] = useState<string>(text.confirmPassword.check);
     
@@ -169,7 +172,7 @@ const SignupPage: FC<Props & RouteComponentProps> = ({ history }) => {
 
     async function onChangeNickname(e:React.ChangeEvent<HTMLInputElement>){
         setNickname(e.target.value);
-        if(!/^[가-힣a-zA-Z0-9]{2,16}$/.test(e.target.value)) {
+        if(!/^[가-힣a-zA-Z0-9_ ]{2,8}$/.test(e.target.value)) {
             setNicknameText(text.nickname.require);
             setNicknameChecked(false);
         } else {
@@ -237,57 +240,55 @@ const SignupPage: FC<Props & RouteComponentProps> = ({ history }) => {
     }
 
     return (
-        <BaseLayout>
-            <Root>
-                <Wrapper>
-                    <TopWrapper>
-                        <Logo src={logo} />
-                        <Title src={moariSignUp}/>
-                    </TopWrapper>
-                    <SignupForm
-                        description={text.loginId.description}
-                        value={id}
-                        onChange={onChangeId}
-                    />
-                    {idChecked && <VioletTextDiv>{idText}</VioletTextDiv>}
-                    {!idChecked && <RedTextDiv>{idText}</RedTextDiv>}
-                    <SignupForm
-                        description={text.nickname.description}
-                        value={name}
-                        onChange={onChangeNickname}
-                    />
-                    {nicknameChecked && <VioletTextDiv>{nicknameText}</VioletTextDiv>}
-                    {!nicknameChecked && <RedTextDiv>{nicknameText}</RedTextDiv>}
-                    <SignupForm
-                        description={text.email.description}
-                        value={email}
-                        onChange={onChangeEmail}
-                        type="email"
-                    />
-                    {emailChecked && <VioletTextDiv>{emailText}</VioletTextDiv>}
-                    {!emailChecked && <RedTextDiv>{emailText}</RedTextDiv>}
-                    <SignupForm
-                        description={text.password.description}
-                        value={password}
-                        onChange={onChangePassword}
-                        type="password"
-                    />
-                    {passwordChecked && <VioletTextDiv>{passwordText}</VioletTextDiv>}
-                    {!passwordChecked && <RedTextDiv>{passwordText}</RedTextDiv>}
-                    <SignupForm
-                        description={text.confirmPassword.description}
-                        value={confirmPassword}
-                        onChange={onChangeConfirmPassword}
-                        type="password"
-                    />
-                    {confirmPasswordChecked && <VioletTextDiv>{confirmPasswordText}</VioletTextDiv>}
-                    {!confirmPasswordChecked && <RedTextDiv>{confirmPasswordText}</RedTextDiv>}
-                    <Agreement value={agreementText} readOnly disabled></Agreement>
-                    <Label><CheckBox type="checkbox" name="maintainLogin" checked={agreement} onChange={()=>{setAgreement(!agreement);}}/> 약관 동의</Label>
-                    <RegisterButton src={signUpButtonSvg} onClick={() => handleSignup()} />
-                </Wrapper>
-            </Root>
-        </BaseLayout>
+        <Root>
+            <Wrapper>
+                <TopWrapper>
+                    <Logo src={logo} />
+                    <Title src={moariSignUp}/>
+                </TopWrapper>
+                <SignupForm
+                    description={text.loginId.description}
+                    value={id}
+                    onChange={onChangeId}
+                />
+                {idChecked && <VioletTextDiv>{idText}</VioletTextDiv>}
+                {!idChecked && <RedTextDiv>{idText}</RedTextDiv>}
+                <SignupForm
+                    description={text.nickname.description}
+                    value={name}
+                    onChange={onChangeNickname}
+                />
+                {nicknameChecked && <VioletTextDiv>{nicknameText}</VioletTextDiv>}
+                {!nicknameChecked && <RedTextDiv>{nicknameText}</RedTextDiv>}
+                <SignupForm
+                    description={text.email.description}
+                    value={email}
+                    onChange={onChangeEmail}
+                    type="email"
+                />
+                {emailChecked && <VioletTextDiv>{emailText}</VioletTextDiv>}
+                {!emailChecked && <RedTextDiv>{emailText}</RedTextDiv>}
+                <SignupForm
+                    description={text.password.description}
+                    value={password}
+                    onChange={onChangePassword}
+                    type="password"
+                />
+                {passwordChecked && <VioletTextDiv>{passwordText}</VioletTextDiv>}
+                {!passwordChecked && <RedTextDiv>{passwordText}</RedTextDiv>}
+                <SignupForm
+                    description={text.confirmPassword.description}
+                    value={confirmPassword}
+                    onChange={onChangeConfirmPassword}
+                    type="password"
+                />
+                {confirmPasswordChecked && <VioletTextDiv>{confirmPasswordText}</VioletTextDiv>}
+                {!confirmPasswordChecked && <RedTextDiv>{confirmPasswordText}</RedTextDiv>}
+                <Agreement value={agreementText} readOnly disabled></Agreement>
+                <Label><CheckBox type="checkbox" name="maintainLogin" checked={agreement} onChange={()=>{setAgreement(!agreement);}}/> 약관 동의</Label>
+                <RegisterButton src={signUpButtonSvg} onClick={() => handleSignup()} />
+            </Wrapper>
+        </Root>
     );
 }
 

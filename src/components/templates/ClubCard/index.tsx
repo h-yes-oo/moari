@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
 import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
@@ -10,8 +10,7 @@ import closedSvg from 'assets/icons/stat-closed.svg';
 import likeEmptySvg from 'assets/icons/like-empty.svg';
 import likeFilledSvg from 'assets/icons/like-filled.svg';
 import eyesSvg from 'assets/icons/eyes.svg';
-import { useSelector } from 'react-redux';
-import { RootState } from 'modules'
+import palette from 'constants/palette';
 
 const Root = styled.div<{ image?: string | undefined }>`
     width: 358px;
@@ -76,7 +75,7 @@ const ClubInfo = styled.div`
     line-height: 24px;
     align-items: center;
     text-align: center;
-    color: rgba(31, 32, 65, 0.5);
+    color: ${palette.dark50.toString()};
 `
 const HeartImg = styled.img`
     margin-left: -1px;
@@ -111,16 +110,16 @@ const ClubCard: FC<Props & RouteComponentProps> = ({ id, name, description, imag
     const goClubDetail: (id: string) => void = (id) => {
         history.push(`/club/${id}`);
     }
-        
-    const imageBuffer = image ? image.img.data.data : "";
-    const imageConverterPrefix = "data:image/png;base64,"
-    const imageElem = image ? imageConverterPrefix + btoa(String.fromCharCode.apply(null, imageBuffer)) : "";
-    // console.log(imageElem);
+    
+    const bufferArray = image ? image.img.data.data : ""; 
+    const base64prefix = "data:image/png;base64,"
+    // const imageSource = image ? imageConverterPrefix + btoa(String.fromCharCode.apply(null, bufferArray)) : "";
+    const imageSource = image ? base64prefix + btoa(new TextDecoder('utf-16').decode(new Uint16Array(bufferArray))) : "";
 
     // need refactoring: switch-case
     return (
-        <Root id="clubcard-root" onClick={() => goClubDetail(id)} image={imageElem}>
-            <CardImage src={imageElem} />
+        <Root id="clubcard-root" onClick={() => goClubDetail(id)}>
+            <CardImage src={imageSource} />
             {(() => {
                 switch (status) {
                     case T.Status.PREPARE:

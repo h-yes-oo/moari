@@ -16,7 +16,7 @@ const text = {
     },
     nickname: {
         description: '닉네임',
-        require:"닉네임은 2~16자 한글, 영문, 숫자로 설정해주세요",
+        require:"닉네임은 2~8자 한글, 영문, 숫자로 설정해주세요",
         duplicate:"이미 사용중인 닉네임입니다",
         availabe: "사용 가능한 닉네임입니다",
         check: "닉네임을 다시 확인해주세요"

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Header from '../Header';
 import TopMenuBar from '../TopMenuBar';
 import Footer from '../Footer';
+import { AuthResponse } from 'api/auth';
 
 const Root = styled.div`
     width: 100%;
@@ -19,12 +20,13 @@ const ContentsWrapper = styled.div`
 
 interface LayoutProps {
     children: ReactNode;
+    user: AuthResponse;
 }
 
-const BaseLayout: FC<LayoutProps> = ({ children }) => {
+const BaseLayout: FC<LayoutProps> = ({ children, user }) => {
     return (
         <Root>
-            <Header campusName={'SNU'} username={'zig'} />
+            <Header campusName={'SNU'} user={user} />
             <TopMenuBar />
             <ContentsWrapper>
                 {children}

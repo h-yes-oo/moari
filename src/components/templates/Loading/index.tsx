@@ -6,13 +6,16 @@ import loading from 'assets/icons/loading.svg';
 const Root = styled.div`
     background-color: #ffffff;
     display: flex;
-    height: 70vh;
+    flex: 1;
     justify-content: center;
     align-content: center;
 `
 
 const LoadingImage = styled.img`
-
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 `
 
 const Loading = () => {

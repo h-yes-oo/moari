@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { auth } from 'modules/userData';
+import Loading from 'components/templates/Loading';
 
 export default function Auth(SpecificComponent, option, adminRoute = null){
 
@@ -12,17 +13,22 @@ export default function Auth(SpecificComponent, option, adminRoute = null){
     */
 
     function AuthenticationCheck(props){
-
-        let user = useSelector((state) => state);
         const dispatch = useDispatch();
 
         useEffect(() => {
             dispatch(auth.request({history: props.history, option, adminRoute}));
         }, []);
 
-        return(
-            <SpecificComponent {...props} user={user} />
-        )
+        let user = useSelector((state) => state.userData)?.data;
+        if(user){
+            return(
+                <SpecificComponent {...props} user={user} />
+            )
+        } else {
+            return(
+                <Loading />
+            )
+        }
     }
     return AuthenticationCheck
 }

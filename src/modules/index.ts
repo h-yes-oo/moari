@@ -3,22 +3,23 @@ import { all } from 'redux-saga/effects';
 import login, { loginSaga } from './login';
 import signup, { signupSaga } from './signup';
 import userData, { userDataSaga, likeSaga } from './userData';
-import fetchAll, { fetchAllSaga } from './fetchAll';
-import search, { searchSaga } from './search';
+import clubList, { clubListSaga } from './clubList';
 import fetchSingle, { fetchSingleSaga } from './fetchSingle'
 import post, { postSaga } from './post';
 import logout, { logoutSaga } from './logout';
+import comments, { commentsSaga } from './comments';
+import comment, { commentSaga } from './comment';
 
 const rootReducer = combineReducers({
     login,
     logout,
     signup,
     userData,
-    fetchAll,
+    clubList,
     fetchSingle,
-    search,
     post,
-    // like
+    comments,
+    comment
 });
 
 export default rootReducer;
@@ -31,10 +32,11 @@ export function* rootSaga() {
         logoutSaga(),
         signupSaga(), 
         userDataSaga(), 
-        fetchAllSaga(), 
+        clubListSaga(),
         fetchSingleSaga(),
-        searchSaga(),
         postSaga(),
-        likeSaga()
+        likeSaga(),
+        commentsSaga(),
+        commentSaga()
     ]);
 }

@@ -2,16 +2,16 @@ import React, { FC, useEffect } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 
 import * as T from 'types';
-import BaseLayout from 'components/templates/BaseLayout';
 import ClubList from 'components/templates/ClubList';
 import FilteringButtons from 'components/templates/FilteringButtons';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchClubsAll } from 'modules/fetchAll';
+import { fetchClubsAll } from 'modules/clubList';
 import { RootState } from 'modules'
 import Loading from 'components/templates/Loading';
+import { AuthResponse } from 'api/auth';
 
 interface Props {
-
+  user: AuthResponse;
 }
 
 interface MatchParams {
@@ -21,15 +21,14 @@ interface MatchParams {
 }
 
 
-const FilteredPage: FC<Props & RouteComponentProps<MatchParams>> = ({ match }) => {
+const FilteredPage: FC<Props & RouteComponentProps<MatchParams>> = ({ match, user }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchClubsAll.request());
   }, []);
 
-  const fetchedData = useSelector((state: RootState) => state.fetchAll.data);
-
+  const fetchedData = useSelector((state: RootState) => state.clubList.data);
 
   const getFilterType: () => T.FilterType = () => {
     if (match.params.category) return T.Category
@@ -42,23 +41,24 @@ const FilteredPage: FC<Props & RouteComponentProps<MatchParams>> = ({ match }) =
 
   if(fetchedData === null){
     return(
-      <BaseLayout>
+      <>
         <FilteringButtons filter={filterType} />
         <Loading />
-      </BaseLayout>
+      </>
     )
   }
 
   return (
-    <BaseLayout>
+    <>
       <FilteringButtons filter={filterType} />
       <ClubList
         // keyword={match.params.keyword}
         category={match.params.category}
         tag={match.params.tag}
         status={match.params.status}
+        user={user}
       /> 
-    </BaseLayout>
+    </>
 
   );
 }

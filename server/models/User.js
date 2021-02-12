@@ -6,6 +6,7 @@ const saltRounds = 10;
 const jwt = require('jsonwebtoken');
 const moment = require("moment");
 const config = require('../config/key');
+const Schema = mongoose.Schema;
 
 const userSchema = mongoose.Schema({
     id: {
@@ -27,22 +28,20 @@ const userSchema = mongoose.Schema({
     },
     image: String,
     likedClubs: [{
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'Club'
     }],
     /*
     //본인이 구성원으로 속한 동아리
-    belonging: {
-        type: String,
-        maxlength: 50
-    },
+    belonging: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Club'
+    }],
     //본인이 운영자 계정인 동아리
-    own: {
-        type: Number,
-        default: 0
-    },
-    // 랜덤 아이콘 할당 ?? 고민중
-    image: String,
+    own: [{
+        type: Schema.Types.ObjectId
+        ref: 'Club'
+    }],
     */
     token: {
         type: String
@@ -66,7 +65,7 @@ userSchema.pre('save',function(next){
                 next();
             })
         })
-    } else{
+    } else {
         next();
     }
 })
