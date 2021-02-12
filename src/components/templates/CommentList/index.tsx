@@ -149,7 +149,7 @@ const CommentList: FC<CommentProps> = ({ user, clubId }) => {
 
     useEffect(() => {
         dispatch(fetchComments.request({ clubId }));
-    }, [refresh])
+    }, [refresh, clubId, dispatch])
 
     const refreshFunction = () => {
         setRefresh(!refresh);

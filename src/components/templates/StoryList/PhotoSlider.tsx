@@ -130,7 +130,7 @@ const PhotoSlider: FC<PhotoSliderProps> = ({ story }) => {
                     { totalSlides > 1 && 
                         <SlideNumber>{
                             story.storyPhotos.map((photo, index2) => {
-                            return <Dot key={index2} selected={index === index2}></Dot>
+                            return <Dot key={'dot'+index2} selected={index === index2}></Dot>
                             })
                     }</SlideNumber>
                     }

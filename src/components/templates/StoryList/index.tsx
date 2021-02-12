@@ -8,6 +8,7 @@ import { useDropzone } from 'react-dropzone';
 import PhotoSlider from './PhotoSlider';
 import { fetchStories } from 'modules/stories';
 import { deleteStory, saveStory } from 'modules/story';
+import Plus from 'assets/icons/plus.svg';
 
 interface StoryListProps {
     clubId: string;
@@ -179,31 +180,41 @@ const Col = styled.div`
 
 
 const ThumbsContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-top: 16;
-  position: absolute;
-  bottom: 10px;
-  overflow: scroll;
-  width: 100%;
+    display: flex;
+    flex-direction: row;
+    margin-top: 16;
+    position: absolute;
+    bottom: 10px;
+    overflow: scroll;
+    width: 100%;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    
+    &::-webkit-scrollbar {
+        display: none;
+      }
 `
 
 const Thumb = styled.div`
-  display: inline-flex;
-  border-radius: 2px;
-  border: 1px solid #eaeaea;
-  margin-bottom: 20px;
-  margin-left: 20px;
-  padding: 4px;
-  box-sizing: border-box;
-  width: 100px;
-  height: 100px;
-  justify-content: center;
+    display: inline-flex;
+    border-radius: 2px;
+    border: 1px solid #eaeaea;
+    margin-left: 20px;
+    padding: 4px;
+    box-sizing: border-box;
+    width: 100px;
+    min-width: 100px;
+    height: 100px;
+    justify-content: center;
+    overflow: hidden;
+
 `
 
 const Img = styled.img`
-  display: block;
+    display: block;
+`
 
+const DropHere = styled.p`
 `
 
 const Box = styled.div`
@@ -236,10 +247,11 @@ const StoryList: FC<StoryListProps> = ({ clubId }) => {
 
     useEffect(() => {
         dispatch(fetchStories.request({ clubId }));
-    }, [refresh])
+    }, [refresh, clubId, dispatch])
 
     const refreshFunction = () => {
         setRefresh(!refresh);
+        setShowNewForm(false);
         dispatch(fetchStories.request({ clubId }));
     }
 
@@ -286,7 +298,6 @@ const StoryList: FC<StoryListProps> = ({ clubId }) => {
     }
 
     const resize = (e:React.ChangeEvent<HTMLTextAreaElement>) => {
-        console.log( e.currentTarget.scrollHeight)
         e.currentTarget.style.height = "90px";
         e.currentTarget.style.height = e.currentTarget.scrollHeight + "px";
         setContent(e.target.value);
@@ -323,9 +334,9 @@ const StoryList: FC<StoryListProps> = ({ clubId }) => {
                 <Col>
                     <StoryWrapper>
                         <Box>
-                            <div {...getRootProps()}>
+                            <div {...getRootProps()} >
                                 <input {...getInputProps()} />
-                                <p>Drag 'n' drop some files here, or click to select files</p>
+                                <DropHere><img src={Plus}/></DropHere>
                             </div>
                             <ThumbsContainer>
                                 {thumbs}
