@@ -219,7 +219,21 @@ router.post("/:clubId/recruit", async (req, res) => {
       });
     });
   } catch (err) {
-    console.log(err);
+    res.status(400).json({ success: false, err });
+  }
+});
+
+router.get("/:clubId/recruit", async (req, res) => {
+  try {
+    Club.findById(req.params.clubId)
+      .populate("recruits")
+      .exec((err, recruits) => {
+        res.status(200).json({
+          success: true,
+          recruits,
+        });
+      });
+  } catch (err) {
     res.status(400).json({ success: false, err });
   }
 });

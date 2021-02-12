@@ -56,7 +56,6 @@ const ClubRegisterContents: FC<Props & RouteComponentProps> = ({ history }) => {
 
     const requiredAlert: (type: any, text: string) => void = (type, text) => {
         alert(`[${text}]은/는 필수 항목입니다.`);
-        return;
     }
 
     const isRequiredEmpty: (input: string) => boolean = (input) => {
