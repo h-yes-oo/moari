@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, ReactNode } from 'react';
 import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
@@ -147,6 +147,25 @@ const Header: FC<Props & RouteComponentProps> = ({ campusName, history, user }) 
         }
     }
 
+    const profile: ReactNode = isAuth ?         
+        <ProfileWrapper>
+            <ProfileName>{name}님</ProfileName>
+            <ProfileImage src={userImage} />
+        </ProfileWrapper>
+        : null;
+
+    const headerButtons: ReactNode = isAuth ? 
+        <>
+            <HeaderButton src={likeSvg} />
+            <HeaderButton src={alarmSvg} />
+            <HeaderButton src={mypageSvg} onClick={() => logout()} />
+            <HeaderButton src={logoutSvg} onClick={() => logout()} />
+        </>
+        : <>
+            <HeaderButton src={signupSvg} onClick={() => goSignup()} />
+            <HeaderButton src={loginSvg} onClick={() => goLogin()} />
+        </>;
+
     return (
         <Root>
             <LogoCampusIcon src={logoCampusSvg} onClick={() => goMainPage()}/>
@@ -164,22 +183,9 @@ const Header: FC<Props & RouteComponentProps> = ({ campusName, history, user }) 
                     onKeyPress={(e) => enterSearch(e)}
                 />
             </SearchBoxWrapper>
-            { isAuth &&
-            <ProfileWrapper>
-                <ProfileName>{name}님</ProfileName>
-                <ProfileImage src={userImage} />
-            </ProfileWrapper>
-            }
+            {profile}
             <ButtonsWrapper>
-                { isAuth && <HeaderButton src={likeSvg} /> }
-                { isAuth && <HeaderButton src={alarmSvg} /> }
-                {/* <HeaderButton src={mypageSvg} />
-                <HeaderButton src={logoutSvg} /> */}
-                {/* else */}
-                { !isAuth && <HeaderButton src={signupSvg} onClick={() => goSignup()} />}
-                { !isAuth && <HeaderButton src={loginSvg} onClick={() => goLogin()} />}
-                { isAuth && <HeaderButton src={mypageSvg} onClick={() => logout()} /> }
-                { isAuth && <HeaderButton src={logoutSvg} onClick={() => logout()} /> }
+                {headerButtons}
             </ButtonsWrapper>
         </Root>
     );

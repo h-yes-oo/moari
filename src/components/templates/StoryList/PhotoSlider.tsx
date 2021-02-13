@@ -120,25 +120,24 @@ const PhotoSlider: FC<PhotoSliderProps> = ({ story }) => {
             const bufferArray = photo ? photo.img.data.data : ""; 
             const base64prefix = "data:image/png;base64,"
             const imageSource = photo ? base64prefix + btoa(new TextDecoder('utf-16').decode(new Uint16Array(bufferArray))) : "";
+            const slideComponents = totalSlides > 1 ?
+                <>
+                    <LeftButton onClick={prevSlide}>
+                        <img alt="이전 페이지 보기" src={LeftArrow}/> 
+                    </LeftButton>
+                    <SlideNumber>
+                        {story.storyPhotos.map((photo, index2) => {
+                            return <Dot key={'dot'+index2} selected={index === index2} />
+                        })}
+                    </SlideNumber>
+                    <RightButton onClick={nextSlide}>
+                        <img alt="이전 페이지 보기" src={RightArrow}/> 
+                    </RightButton>
+                </>
+                : null;
             return (
                 <Container key={index} src={imageSource} >
-                    { totalSlides > 1 && 
-                        <LeftButton onClick={prevSlide}>
-                            <img alt="이전 페이지 보기" src={LeftArrow}/> 
-                        </LeftButton>
-                    }
-                    { totalSlides > 1 && 
-                        <SlideNumber>{
-                            story.storyPhotos.map((photo, index2) => {
-                            return <Dot key={'dot'+index2} selected={index === index2}></Dot>
-                            })
-                    }</SlideNumber>
-                    }
-                    { totalSlides > 1 && 
-                        <RightButton onClick={nextSlide}>
-                            <img alt="이전 페이지 보기" src={RightArrow}/> 
-                        </RightButton>
-                    }       
+                    {slideComponents}      
                 </Container>
             )
         })
