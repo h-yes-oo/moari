@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useState, ReactNode } from 'react';
 import styled from 'styled-components';
 import SignupForm from '../../templates/SignupForm';
 import text from './text';
@@ -239,6 +239,12 @@ const SignupPage: FC<Props & RouteComponentProps> = ({ history, user }) => {
         }
     }
 
+    const idColoredText: ReactNode = idChecked ? <VioletTextDiv>{idText}</VioletTextDiv> : <RedTextDiv>{idText}</RedTextDiv>;
+    const nicknameColoredText: ReactNode = nicknameChecked ? <VioletTextDiv>{nicknameText}</VioletTextDiv> : <RedTextDiv>{nicknameText}</RedTextDiv>;
+    const emailColoredText: ReactNode = emailChecked ? <VioletTextDiv>{emailText}</VioletTextDiv> : <RedTextDiv>{emailText}</RedTextDiv>;
+    const passwordColoredText: ReactNode = passwordChecked ? <VioletTextDiv>{passwordText}</VioletTextDiv> : <RedTextDiv>{passwordText}</RedTextDiv>;
+    const confirmPasswordColoredText: ReactNode = confirmPasswordChecked ? <VioletTextDiv>{confirmPasswordText}</VioletTextDiv> : <RedTextDiv>{confirmPasswordText}</RedTextDiv>;
+
     return (
         <Root>
             <Wrapper>
@@ -251,39 +257,34 @@ const SignupPage: FC<Props & RouteComponentProps> = ({ history, user }) => {
                     value={id}
                     onChange={onChangeId}
                 />
-                {idChecked && <VioletTextDiv>{idText}</VioletTextDiv>}
-                {!idChecked && <RedTextDiv>{idText}</RedTextDiv>}
+                {idColoredText}
                 <SignupForm
                     description={text.nickname.description}
                     value={name}
                     onChange={onChangeNickname}
                 />
-                {nicknameChecked && <VioletTextDiv>{nicknameText}</VioletTextDiv>}
-                {!nicknameChecked && <RedTextDiv>{nicknameText}</RedTextDiv>}
+                {nicknameColoredText}
                 <SignupForm
                     description={text.email.description}
                     value={email}
                     onChange={onChangeEmail}
                     type="email"
                 />
-                {emailChecked && <VioletTextDiv>{emailText}</VioletTextDiv>}
-                {!emailChecked && <RedTextDiv>{emailText}</RedTextDiv>}
+                {emailColoredText}
                 <SignupForm
                     description={text.password.description}
                     value={password}
                     onChange={onChangePassword}
                     type="password"
                 />
-                {passwordChecked && <VioletTextDiv>{passwordText}</VioletTextDiv>}
-                {!passwordChecked && <RedTextDiv>{passwordText}</RedTextDiv>}
+                {passwordColoredText}
                 <SignupForm
                     description={text.confirmPassword.description}
                     value={confirmPassword}
                     onChange={onChangeConfirmPassword}
                     type="password"
                 />
-                {confirmPasswordChecked && <VioletTextDiv>{confirmPasswordText}</VioletTextDiv>}
-                {!confirmPasswordChecked && <RedTextDiv>{confirmPasswordText}</RedTextDiv>}
+                {confirmPasswordColoredText}
                 <Agreement value={agreementText} readOnly disabled></Agreement>
                 <Label><CheckBox type="checkbox" name="maintainLogin" checked={agreement} onChange={()=>{setAgreement(!agreement);}}/> 약관 동의</Label>
                 <RegisterButton src={signUpButtonSvg} onClick={() => handleSignup()} />

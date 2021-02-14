@@ -9,6 +9,8 @@ import post, { postSaga } from './post';
 import logout, { logoutSaga } from './logout';
 import comments, { commentsSaga } from './comments';
 import comment, { commentSaga } from './comment';
+import stories, { storiesSaga } from './stories';
+import story, { storySaga } from './story';
 
 const rootReducer = combineReducers({
     login,
@@ -19,7 +21,9 @@ const rootReducer = combineReducers({
     fetchSingle,
     post,
     comments,
-    comment
+    comment,
+    stories,
+    story
 });
 
 export default rootReducer;
@@ -37,6 +41,8 @@ export function* rootSaga() {
         postSaga(),
         likeSaga(),
         commentsSaga(),
-        commentSaga()
+        commentSaga(),
+        storiesSaga(),
+        storySaga()
     ]);
 }

@@ -1,6 +1,6 @@
 import React, { FC, ReactNode, useEffect, useState } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import * as T from 'types';
 import { BoldLargeText, TagText } from 'constants/styles';
@@ -59,31 +59,32 @@ const ClubDetailMenuWrapper = styled.div`
     display: flex;
     justify-content: center;
 `
-const ClubDetailMenuItem = styled.div<ClubInfoMenuProps>(({ isSelected }) => ({
-    marginLeft: '50px',
 
-    fontSize: '20px',
-    fontFamily: 'Montserrat',
-    fontStyle: 'normal',
-    fontWeight: 'bold',
-    lineHeight: '24px',
+const ClubDetailMenuItem = styled.div<ClubInfoMenuProps>`
+    margin-left: 50px;
 
-    display: 'flex',
-    alignItems: 'center',
-    textAlign: 'center',
+    font-size: 20px;
+    font-family: Montserrat;
+    font-style: normal;
+    font-weight: bold;
+    line-height: 24px;
 
-    color: isSelected ? palette.primaryGradient.toString() : palette.dark50.toString(),
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: ${palette.dark50.toString()};
 
-    // display: 'flex',
-    // justifyContent: 'center',
-    // alignItems: 'center',
-
-    cursor: 'pointer',
-}))
+    background: ${props => props.isSelected && css`-webkit-linear-gradient(90deg, #BC9CFF 0%, #8BA4F9 100%)`};
+    -webkit-background-clip: ${props => props.isSelected && css`text`};
+    -webkit-text-fill-color: ${props => props.isSelected && css`transparent`};
+    
+    cursor: pointer;
+`
 
 const TopWrapper = styled.div`
     display: flex;
     justify-content: space-between;
+    min-width: 1000px;
 `
 
 interface Props {
@@ -140,7 +141,7 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
 
         const handleLike: () => void = async () => {
             if(user!.isAuth) {
-                dispatch(likeClub.request({ cludId: club._id, userId: user!._id, setLikeImg, likeImg, setLikeCount, likeCount}));
+                dispatch(likeClub.request({ cludId: club._id, userId: user._id, setLikeImg, likeImg, setLikeCount, likeCount}));
             } else {
                 alert('로그인해주세요')
             }
@@ -185,11 +186,11 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
                 { selectedTab === 'CLUB_INTRO' as T.TabItem &&
                     <ClubIntro club={club}/>
                 }
-                { selectedTab === 'QNA' as T.TabItem &&
-                    <CommentList user={user} clubId={club._id}/>
-                }
                 { selectedTab === 'STORY' as T.TabItem &&
                     <StoryList clubId={club._id}/>
+                }
+                { selectedTab === 'QNA' as T.TabItem &&
+                    <CommentList user={user} clubId={club._id}/>
                 }
             </Root>
         ) : null;

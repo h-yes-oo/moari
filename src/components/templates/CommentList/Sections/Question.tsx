@@ -4,6 +4,7 @@ import Comment from 'types';
 import { AuthResponse } from 'api/auth';
 import Profile from './Profile';
 import { useDispatch } from 'react-redux';
+import palette from 'constants/palette';
 import { deleteComment, saveComment } from 'modules/comment';
 
 const Root = styled.div`
@@ -38,7 +39,7 @@ const Content = styled.div`
     vertical-align: middle;
     margin-top: 7px;
 
-    color: rgba(31, 32, 65, 0.75);
+    color: ${palette.dark75.toString()};
 `
 
 const Answer = styled.div`
@@ -66,8 +67,7 @@ const EraseButton = styled.a`
 
     display: flex;
     align-items: center;
-
-    color: rgba(31, 32, 65, 0.5);
+    color: ${palette.dark50.toString()};
 
     cursor: pointer;
 `
@@ -85,7 +85,7 @@ const AnswerButton = styled.a`
     display: flex;
     align-items: center;
 
-    color: rgba(31, 32, 65, 0.5);
+    color: ${palette.dark50.toString()};
 
     cursor: pointer;
 `
@@ -111,7 +111,7 @@ const Date = styled.div`
     display: flex;
     align-items: center;
 
-    color: rgba(31, 32, 65, 0.5);
+    color: ${palette.dark50.toString()};
 `
 
 const ContentInput = styled.textarea`
@@ -121,14 +121,13 @@ const ContentInput = styled.textarea`
     font-size: 20px;
 
     width: 800px;
-    height: auto;
+    height: 88px;
     margin-top: 7px;
 
-    border: 1px solid #BC9CFF;
+    border: 1px solid ${palette.primaryGradient.toString()};
     box-sizing: border-box;
     border-radius: 4px;
-    color: rgba(31, 32, 65, 0.75);
-    overflow: scroll;
+    color: ${palette.dark75.toString()};
 
     &::-webkit-scrollbar { width: 0 !important };
     &:focus {
@@ -149,7 +148,7 @@ const SubmitButton = styled.a`
     font-size: 18px;
     line-height: 10px;
 
-    color: rgba(31, 32, 65, 0.5);
+    color: ${palette.dark50.toString()};
     cursor: pointer;
 `
 
@@ -177,7 +176,8 @@ const Question: FC<CommentProps> = ({ user, clubId, question, comments, refreshF
     }
 
     const resize = (e:React.ChangeEvent<HTMLTextAreaElement>) => {
-        e.currentTarget.style.height = (20 + e.currentTarget.scrollHeight) + "px";
+        e.currentTarget.style.height = "88px";
+        e.currentTarget.style.height = e.currentTarget.scrollHeight + "px";
         setContent(e.target.value);
     }
 
