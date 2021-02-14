@@ -1,6 +1,6 @@
 import React, { FC, ReactNode, useState } from 'react';
 import styled from 'styled-components';
-import Comment from 'types';
+import { Comment } from 'types';
 import { AuthResponse } from 'api/auth';
 import Profile from './Profile';
 import { useDispatch } from 'react-redux';

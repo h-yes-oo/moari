@@ -82,7 +82,7 @@ export const ClubDetailTab = {
 export type TabItem = keyof typeof ClubDetailTab;
 //export type ClubDetailTab = typeof ClubDetailTab[TabItem];
 
-export default interface Club {
+export interface Club {
     _id: string;
     name: string;
     school: string;
@@ -96,7 +96,7 @@ export default interface Club {
     // managerIds: string[]
 }
 
-export default interface Comment {
+export interface Comment {
     _id: string
     writer: any
     responseTo?: string
@@ -104,7 +104,7 @@ export default interface Comment {
     createdDate: string
 }
 
-export default interface Story {
+export interface Story {
     _id: string;
     clubId: string;
     content: string;

@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import * as T from 'types';
 import ClubCard from 'components/templates/ClubCard';
 import { RootState } from 'modules/index';
-import Club from 'types';
+import { Club } from 'types';
 import { AuthResponse } from 'api/auth';
 
 const Root = styled.div`

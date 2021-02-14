@@ -14,7 +14,7 @@ export interface PostRecruitPayload {
 
 export interface PostRecruitResponse {
   success: boolean,
-  club: Recruit,
+  recruit: Recruit,
   err: any | null
 }
 

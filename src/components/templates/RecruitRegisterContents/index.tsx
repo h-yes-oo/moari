@@ -1,9 +1,5 @@
-<<<<<<< HEAD
 import React, { FC, ReactNode, useEffect, useState } from 'react';
-=======
-import React, { FC, ReactNode, useState } from 'react';
 import { useDispatch } from 'react-redux';
->>>>>>> refactor: redux refactoring
 import styled from 'styled-components';
 
 import RegisterForm from '../RegisterForm';

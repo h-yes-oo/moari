@@ -1,6 +1,6 @@
 import React, { FC, ReactNode, useState, useEffect } from 'react';
 import styled from 'styled-components';
-import Comment from 'types';
+import { Comment } from 'types';
 import { AuthResponse } from 'api/auth';
 import Question from './Sections/Question';
 import searchPurpleSvg from 'assets/icons/searchPurple.svg';

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { CLUB_SERVER } from 'components/Config'
-import Club from 'types';
+import { Club } from 'types';
 
 export async function postClubRequest({ name, school, description, photos, category, tags, status }: PostClubPayload){
     const formData = new FormData();

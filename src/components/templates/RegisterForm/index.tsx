@@ -175,12 +175,6 @@ const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options,
 
     const handleDateInput: (input: string[], setValue: Dispatch<SetStateAction<string[]>>) => void = (input, setValue) => {
         if (!input) return;
-        setCurrDuration(input); 
-        setValue(input);
-    }
-
-    const handleDateInput: (input: string[], setValue: Dispatch<SetStateAction<string[]>>) => void = (input, setValue) => {
-        if (!input) return;
         setValue(input);
         setCurrDuration(input);
     }
