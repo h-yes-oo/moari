@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useState } from 'react';
+import React, { FC, ReactNode, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import RegisterForm from '../RegisterForm';
 import * as T from 'types';
@@ -30,16 +30,28 @@ interface Props {
 const ClubRegisterContents: FC<Props> = () => {
     const [clubName, setClubName] = useState<string>(''); // required
     const [recruitTitle, setRecruitTitle] = useState<string>(''); // required
-    const [recruitDuration, setRecruitDuration] = useState<string>('');
+    const [recruitDuration, setRecruitDuration] = useState<string[]>([]);
     const [recruitContact, setRecruitContact] = useState<string>('');
     const [recruitDetails, setRecruitDetails] = useState<string>('');
     
+    useEffect(() => {
+        console.log(recruitDuration);
+    }, [recruitDuration]);
+
     const isRequiredEmpty: (input: string) => boolean = (input) => {
         return input === '';
     }
 
     const handlePostRecruit: () => void = () => {
-        alert('모집 공고를 등록합니다.');    
+        if (clubName === '') return requiredAlert(clubName, '동아리 이름');
+        else if (recruitTitle === '') return requiredAlert(recruitTitle, '공고 제목');
+        else if (recruitContact === '') return requiredAlert(recruitContact, '대표 연락처');
+
+        // dispatch(postClub.request({ name, school, description, photos, category, tags, status, history })); 
+    }
+
+    const requiredAlert: (type: any, text: string) => void = (type, text) => {
+        alert(`[${text}]은/는 필수 항목입니다.`);
     }
 
     const dummyClubData = ['멋쟁이사자처럼', '스누버디', '사운드림'];
@@ -71,6 +83,7 @@ const ClubRegisterContents: FC<Props> = () => {
                         title={text.recruitDuration.title}
                         description={[text.recruitDuration.description1, text.recruitDuration.description2]}
                         type={T.RegisterFormType.CALENDAR}
+                        setValue={setRecruitDuration}
                         required={false}
                         height={'48px'}
                     />
@@ -80,7 +93,7 @@ const ClubRegisterContents: FC<Props> = () => {
                         type={T.RegisterFormType.INPUT}
                         highlight={isRequiredEmpty(recruitContact)}
                         setValue={setRecruitContact}
-                        required={false}
+                        required={true}
                         height={'48px'}
                     />
                 </Section>
@@ -91,7 +104,7 @@ const ClubRegisterContents: FC<Props> = () => {
                         type={T.RegisterFormType.TEXT_AREA}
                         highlight={isRequiredEmpty(recruitDetails)}
                         setValue={setRecruitDetails}
-                        required={true}
+                        required={false}
                         height={'600px'}
                     />
                 </Section>

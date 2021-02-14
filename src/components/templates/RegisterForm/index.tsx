@@ -169,8 +169,14 @@ const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options,
 
     const handleSelectImage: (files: HTMLInputElement["files"], setValue: Dispatch<SetStateAction<FileList>>) => void = (files, setValue) => {
         if (!files) return;
-        setValue(files);
         setSelectedFiles(files);
+        setValue(files);
+    }
+
+    const handleDateInput: (input: string[], setValue: Dispatch<SetStateAction<string[]>>) => void = (input, setValue) => {
+        if (!input) return;
+        setCurrDuration(input); 
+        setValue(input);
     }
 
     const startTyping: (e: React.FocusEvent<HTMLTextAreaElement>) => void = (e) => {
@@ -320,17 +326,18 @@ const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options,
                 />
             )
         case T.RegisterFormType.CALENDAR:
+            if (setValue === undefined) return null;
             return (
                 <FlexContainer>
                     <CalendarForm 
                         type='date' 
                         placeholder={currDuration[0] ? currDuration[0] : description[0]} 
-                        onChange={(e) => setCurrDuration([e.target.value, currDuration[1]])} 
+                        onChange={(e) => handleDateInput([e.target.value, currDuration[1]], setValue)} 
                     />
                     <CalendarForm 
                         type='date' 
                         placeholder={currDuration[1] ? currDuration[1] : description[1]} 
-                        onChange={(e) => setCurrDuration([currDuration[0], e.target.value])} 
+                        onChange={(e) => handleDateInput([currDuration[0], e.target.value], setValue)} 
                     />
                 </FlexContainer>
             );        
