@@ -5,8 +5,8 @@ import { Recruit } from 'types';
 export interface PostRecruitPayload {
   clubId: string;
   title: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   contact: string;
   description: string;
   history: any;

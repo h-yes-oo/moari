@@ -179,6 +179,12 @@ const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options,
         setValue(input);
     }
 
+    const handleDateInput: (input: string[], setValue: Dispatch<SetStateAction<string[]>>) => void = (input, setValue) => {
+        if (!input) return;
+        setValue(input);
+        setCurrDuration(input);
+    }
+
     const startTyping: (e: React.FocusEvent<HTMLTextAreaElement>) => void = (e) => {
         if (e.target.value === description) e.target.value = "";
     }

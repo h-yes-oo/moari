@@ -1,9 +1,17 @@
+<<<<<<< HEAD
 import React, { FC, ReactNode, useEffect, useState } from 'react';
+=======
+import React, { FC, ReactNode, useState } from 'react';
+import { useDispatch } from 'react-redux';
+>>>>>>> refactor: redux refactoring
 import styled from 'styled-components';
+
 import RegisterForm from '../RegisterForm';
 import * as T from 'types';
 import text from './text';
+import { postRecruit } from 'modules/postRecruit';
 import registerButtonSvg from 'assets/icons/register-button.svg';
+import { RouteComponentProps } from 'react-router';
 
 const Root = styled.div`
     display: flex;
@@ -33,6 +41,8 @@ const ClubRegisterContents: FC<Props> = () => {
     const [recruitDuration, setRecruitDuration] = useState<string[]>([]);
     const [recruitContact, setRecruitContact] = useState<string>('');
     const [recruitDetails, setRecruitDetails] = useState<string>('');
+
+    const dispatch = useDispatch();
     
     useEffect(() => {
         console.log(recruitDuration);

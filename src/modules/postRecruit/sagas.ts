@@ -4,7 +4,7 @@ import { call, put, takeEvery } from 'redux-saga/effects';
 
 function* postRecruitSaga(action: ReturnType<typeof postRecruit.request>) {
   try {
-    const postRecruitResponse : PostRecruitResponse = yield call(postRecruitRequest, action.payload);
+    const postRecruitResponse: PostRecruitResponse = yield call(postRecruitRequest, action.payload);
     const { history } = action.payload;
     yield put(postRecruit.success(postRecruitResponse));
     if(postRecruitResponse.success) {
