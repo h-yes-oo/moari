@@ -45,12 +45,20 @@ const clubSchema = mongoose.Schema({
     views: {
         type: Number,
         default: 0
-    },
-    recruits: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Recruit'
-    }]
+    }
+    // managers: [{
+    //     type: userSchema,
+    //     ref: "User"
+    // }],
+    // useCertificate: {
+    //     type: Boolean,
+    // },
+    // alumni: {
+    //     type: User[],
+    // },
 })  
+
+// add gender ratio?
 
 const Image = mongoose.model('Image', imageSchema); 
 const Club = mongoose.model('Club', clubSchema)

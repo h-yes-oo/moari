@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const { Club, Image } = require("../models/Club");
 const { User } = require("../models/User");
-const { Recruit } = require("../models/Recruit");
 
 // use for image upload
 const fs = require("fs");
@@ -175,7 +174,7 @@ router.post("/:clubId/like/:userId", async (req, res) => {
     const club = await Club.findById(req.params.clubId);
     const user = await User.findById(req.params.userId);
     if (user.likedClubs.some((cid) => cid.toString() === club.id)) {
-      // console.log('already exists...')
+      console.log("already exists...");
       user.likedClubs = user.likedClubs.filter(
         (cid) => cid.toString() !== club.id
       );
@@ -183,7 +182,7 @@ router.post("/:clubId/like/:userId", async (req, res) => {
         (uid) => uid.toString() !== user._id.toString()
       );
     } else {
-      // console.log('new like!')
+      console.log("new like!");
       user.likedClubs.push(club);
       club.likedUsers.push(user);
     }
@@ -196,41 +195,8 @@ router.post("/:clubId/like/:userId", async (req, res) => {
   }
 });
 
-// 모집공고 등록
-router.post("/:clubId/recruit", async (req, res) => {
-  try {
-    const recruit = new Recruit({
-      ...req.body,
-      club: req.params.clubId
-    });
-
-    recruit.save((err, recruit) => {
-      if (err) return res.json({ success: false, err });
-      club.recruits.push(recruit);
-      club.save();
-      return res.status(200).json({
-        success: true,
-        recruit,
-      });
-    });
-  } catch (err) {
-    res.status(400).json({ success: false, err });
-  }
-});
-
-router.get("/:clubId/recruit", async (req, res) => {
-  try {
-    Club.findById(req.params.clubId)
-      .populate("recruits")
-      .exec((err, recruits) => {
-        res.status(200).json({
-          success: true,
-          recruits,
-        });
-      });
-  } catch (err) {
-    res.status(400).json({ success: false, err });
-  }
+router.get("/info", function (req, res) {
+  res.send("clubs info");
 });
 
 module.exports = router;
