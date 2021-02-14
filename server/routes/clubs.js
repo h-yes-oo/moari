@@ -199,14 +199,9 @@ router.post("/:clubId/like/:userId", async (req, res) => {
 // 모집공고 등록
 router.post("/:clubId/recruit", async (req, res) => {
   try {
-    const club = await Club.findById(req.params.clubId);
     const recruit = new Recruit({
-      club: club._id,
-      title: req.body.title,
-      startDate: req.body.startDate,
-      endDate: req.body.endDate,
-      contact: req.body.contact,
-      description: req.body.description,
+      ...req.body,
+      club: req.params.clubId
     });
 
     recruit.save((err, recruit) => {
