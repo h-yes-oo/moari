@@ -201,8 +201,9 @@ router.post("/:clubId/recruit", async (req, res) => {
   try {
     const recruit = new Recruit({
       ...req.body,
-      club: req.params.clubId
+      club: req.params.clubId,
     });
+    const club = await Club.findById(req.params.clubId);
 
     recruit.save((err, recruit) => {
       if (err) return res.json({ success: false, err });
