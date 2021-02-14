@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
@@ -7,7 +7,7 @@ import * as T from 'types';
 import text from './text';
 import { postRecruit } from 'modules/postRecruit';
 import registerButtonSvg from 'assets/icons/register-button.svg';
-import { RouteComponentProps } from 'react-router';
+import { RouteComponentProps, withRouter } from 'react-router';
 
 const Root = styled.div`
     display: flex;
@@ -31,29 +31,36 @@ interface Props {
 
 }
 
-const ClubRegisterContents: FC<Props> = () => {
-    const [clubName, setClubName] = useState<string>(''); // required
-    const [recruitTitle, setRecruitTitle] = useState<string>(''); // required
-    const [recruitDuration, setRecruitDuration] = useState<string[]>([]);
-    const [recruitContact, setRecruitContact] = useState<string>('');
-    const [recruitDetails, setRecruitDetails] = useState<string>('');
+const RecruitRegisterContents: FC<Props & RouteComponentProps> = ({ history }) => {
+    const [clubId, setClubId] = useState<string>('5fdc69aa557db83a55c525b4'); // mock data
+    const [title, setTitle] = useState<string>(''); 
+    const [duration, setDuration] = useState<string[]>([]);
+    const [contact, setContact] = useState<string>('');
+    const [description, setDescription] = useState<string>('');
 
     const dispatch = useDispatch();
     
     useEffect(() => {
-        console.log(recruitDuration);
-    }, [recruitDuration]);
+        console.log(duration);
+    }, [duration]);
 
     const isRequiredEmpty: (input: string) => boolean = (input) => {
         return input === '';
     }
 
     const handlePostRecruit: () => void = () => {
-        if (clubName === '') return requiredAlert(clubName, '동아리 이름');
-        else if (recruitTitle === '') return requiredAlert(recruitTitle, '공고 제목');
-        else if (recruitContact === '') return requiredAlert(recruitContact, '대표 연락처');
+        if (clubId === '') return requiredAlert(clubId, '동아리 이름');
+        else if (title === '') return requiredAlert(title, '공고 제목');
+        else if (contact === '') return requiredAlert(contact, '대표 연락처');
 
-        // dispatch(postClub.request({ name, school, description, photos, category, tags, status, history })); 
+        dispatch(postRecruit.request({ 
+            clubId, title, 
+            startDate: duration[0], 
+            endDate: duration[1], 
+            contact, 
+            description, 
+            history 
+        })); 
     }
 
     const requiredAlert: (type: any, text: string) => void = (type, text) => {
@@ -71,8 +78,8 @@ const ClubRegisterContents: FC<Props> = () => {
                         description={text.clubName.description}
                         type={T.RegisterFormType.SELECT_BOX}
                         options={dummyClubData}
-                        highlight={isRequiredEmpty(clubName)}
-                        setValue={setClubName}
+                        highlight={isRequiredEmpty(clubId)}
+                        setValue={setClubId}
                         required={true}
                         height={'48px'}
                     />
@@ -80,8 +87,8 @@ const ClubRegisterContents: FC<Props> = () => {
                         title={text.recruitTitle.title}
                         description={text.recruitTitle.description}
                         type={T.RegisterFormType.INPUT}
-                        highlight={isRequiredEmpty(recruitTitle)}
-                        setValue={setRecruitTitle}
+                        highlight={isRequiredEmpty(title)}
+                        setValue={setTitle}
                         required={true}
                         height={'48px'}
                     />
@@ -89,7 +96,7 @@ const ClubRegisterContents: FC<Props> = () => {
                         title={text.recruitDuration.title}
                         description={[text.recruitDuration.description1, text.recruitDuration.description2]}
                         type={T.RegisterFormType.CALENDAR}
-                        setValue={setRecruitDuration}
+                        setValue={setDuration}
                         required={false}
                         height={'48px'}
                     />
@@ -97,8 +104,8 @@ const ClubRegisterContents: FC<Props> = () => {
                         title={text.recruitContact.title}
                         description={text.recruitContact.description}
                         type={T.RegisterFormType.INPUT}
-                        highlight={isRequiredEmpty(recruitContact)}
-                        setValue={setRecruitContact}
+                        highlight={isRequiredEmpty(contact)}
+                        setValue={setContact}
                         required={true}
                         height={'48px'}
                     />
@@ -108,8 +115,8 @@ const ClubRegisterContents: FC<Props> = () => {
                         title={text.recruitDetails.title}
                         description={text.recruitDetails.description}
                         type={T.RegisterFormType.TEXT_AREA}
-                        highlight={isRequiredEmpty(recruitDetails)}
-                        setValue={setRecruitDetails}
+                        highlight={isRequiredEmpty(description)}
+                        setValue={setDescription}
                         required={false}
                         height={'600px'}
                     />
@@ -120,4 +127,4 @@ const ClubRegisterContents: FC<Props> = () => {
     );
 }
 
-export default ClubRegisterContents;
+export default withRouter(RecruitRegisterContents);
