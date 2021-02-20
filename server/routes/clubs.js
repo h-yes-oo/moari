@@ -1,11 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { Club, Image } = require("../models/Club");
+const { Club, Image, Tag } = require("../models/Club");
 const { User } = require("../models/User");
 const { Recruit } = require("../models/Recruit");
 
 // use for image upload
 const fs = require("fs");
+const async = require("async");
 const path = require("path");
 const multer = require("multer");
 
@@ -30,13 +31,12 @@ router.get("/", async (req, res) => {
 
 // single - single file
 // array - multiple files
-router.post("/", upload_club.array("photos"), async (req, res) => {
+router.post("/", upload_club.array("photos"), async (req, res, next) => {
   const club = new Club({
     name: req.body.name,
     school: req.body.school,
     description: req.body.description,
     category: req.body.category,
-    tags: req.body.tags,
     status: req.body.status,
   });
 
@@ -55,9 +55,33 @@ router.post("/", upload_club.array("photos"), async (req, res) => {
     newImage.save();
     club.photos.push(newImage);
   }
+
+  // Promise.all(
+  req.body.tags.forEach((name) => {
+    Tag.findOne({ tagName: name }).exec((err, tag) => {
+      if (err) return res.status(400).json({ success: false, err });
+      if (tag === null) {
+        console.log("new tag");
+        const newTag = new Tag({
+          tagName: name.trim(),
+        });
+        newTag.matchClubs.push(club); // works
+        newTag.save();
+        club.tags.push(newTag);
+      } else {
+        console.log("already exists");
+        tag.matchClubs.push(club); // works
+        tag.save();
+        club.tags.push(tag);
+      }
+      console.log("line98: " + club.tags.length);
+    });
+  });
+
   club.save((err, _) => {
     // success response로 club까지 리턴하면 너무 오래 지연되어 server error 발생
     if (err) return res.json({ success: false, err });
+    console.log(club.tags.length);
     return res.status(200).json({
       success: true,
       // club,
