@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { Club, Image } = require("../models/Club");
+const { Club, Image, Tag } = require("../models/Club");
 const { User } = require("../models/User");
 const { Recruit } = require("../models/Recruit");
 
@@ -8,6 +8,7 @@ const { Recruit } = require("../models/Recruit");
 const fs = require("fs");
 const path = require("path");
 const multer = require("multer");
+const e = require("express");
 
 const upload_club = multer({
   storage: multer.diskStorage({
@@ -30,13 +31,12 @@ router.get("/", async (req, res) => {
 
 // single - single file
 // array - multiple files
-router.post("/", upload_club.array("photos"), async (req, res) => {
+router.post("/", upload_club.array("photos"), async (req, res, next) => {
   const club = new Club({
     name: req.body.name,
     school: req.body.school,
     description: req.body.description,
     category: req.body.category,
-    tags: req.body.tags,
     status: req.body.status,
   });
 
@@ -55,12 +55,34 @@ router.post("/", upload_club.array("photos"), async (req, res) => {
     newImage.save();
     club.photos.push(newImage);
   }
-  club.save((err, _) => {
-    // success response로 club까지 리턴하면 너무 오래 지연되어 server error 발생
+
+  await Promise.all(
+    req.body.tags.map(async (name) => {
+      try {
+        const tag = await Tag.findOne({ tagName: name });
+        if (!tag) {
+          const newTag = new Tag({
+            tagName: name.trim(),
+          });
+          newTag.matchClubs.push(club); // works
+          newTag.save();
+          club.tags.push(newTag);
+        } else {
+          tag.matchClubs.push(club); // works
+          tag.save();
+          club.tags.push(tag);
+        }
+      } catch (err) {
+        res.json({ message: err });
+      }
+    })
+  );
+
+  club.save((err, club) => {
+    // WARNING: success response로 club까지 리턴하면 너무 오래 지연되어 server error 발생
     if (err) return res.json({ success: false, err });
     return res.status(200).json({
       success: true,
-      // club,
     });
   });
 });
@@ -175,7 +197,6 @@ router.post("/:clubId/like/:userId", async (req, res) => {
     const club = await Club.findById(req.params.clubId);
     const user = await User.findById(req.params.userId);
     if (user.likedClubs.some((cid) => cid.toString() === club.id)) {
-      // console.log('already exists...')
       user.likedClubs = user.likedClubs.filter(
         (cid) => cid.toString() !== club.id
       );
@@ -183,7 +204,6 @@ router.post("/:clubId/like/:userId", async (req, res) => {
         (uid) => uid.toString() !== user._id.toString()
       );
     } else {
-      // console.log('new like!')
       user.likedClubs.push(club);
       club.likedUsers.push(user);
     }
