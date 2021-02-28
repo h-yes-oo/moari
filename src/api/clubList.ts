@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { CLUB_SERVER, SEARCH_SERVER } from 'components/Config'
-import Club from 'types';
+import { Club } from 'types';
 
 export interface ClubListResponse {
   success: boolean,

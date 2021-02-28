@@ -6,7 +6,7 @@ const initialState: PostClubState = {
     loading: false,
     error: null,
     data: null
-  }
+}
 
 const post = createReducer<PostClubState, PostClubActions>(initialState)
 .handleAction(postClub.request, (state) => ({

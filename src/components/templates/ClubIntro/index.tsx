@@ -1,7 +1,7 @@
 import React, { FC, ReactNode } from 'react';
 import styled from 'styled-components';
 
-import Club from 'types';
+import { Club } from 'types';
 import palette from 'constants/palette';
 
 const ClubContentsContainer = styled.div`

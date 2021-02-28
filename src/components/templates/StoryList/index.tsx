@@ -9,6 +9,10 @@ import PhotoSlider from './PhotoSlider';
 import { fetchStories } from 'modules/stories';
 import { deleteStory, saveStory } from 'modules/story';
 import Plus from 'assets/icons/plus.svg';
+import sampleImg from 'assets/samples/likelion.jpg';
+import axios from 'axios';
+import { Story } from 'types';
+
 
 interface StoryListProps {
     clubId: string;

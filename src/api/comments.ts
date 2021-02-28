@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { COMMENT_SERVER } from 'components/Config';
-import Comment from 'types';
+import { Comment } from 'types';
 
 export interface CommentsResponse {
     success: boolean,
