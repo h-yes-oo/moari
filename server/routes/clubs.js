@@ -6,9 +6,9 @@ const { Recruit } = require("../models/Recruit");
 
 // use for image upload
 const fs = require("fs");
-const async = require("async");
 const path = require("path");
 const multer = require("multer");
+const e = require("express");
 
 const upload_club = multer({
   storage: multer.diskStorage({
@@ -56,35 +56,33 @@ router.post("/", upload_club.array("photos"), async (req, res, next) => {
     club.photos.push(newImage);
   }
 
-  // Promise.all(
-  req.body.tags.forEach((name) => {
-    Tag.findOne({ tagName: name }).exec((err, tag) => {
-      if (err) return res.status(400).json({ success: false, err });
-      if (tag === null) {
-        console.log("new tag");
-        const newTag = new Tag({
-          tagName: name.trim(),
-        });
-        newTag.matchClubs.push(club); // works
-        newTag.save();
-        club.tags.push(newTag);
-      } else {
-        console.log("already exists");
-        tag.matchClubs.push(club); // works
-        tag.save();
-        club.tags.push(tag);
+  await Promise.all(
+    req.body.tags.map(async (name) => {
+      try {
+        const tag = await Tag.findOne({ tagName: name });
+        if (!tag) {
+          const newTag = new Tag({
+            tagName: name.trim(),
+          });
+          newTag.matchClubs.push(club); // works
+          newTag.save();
+          club.tags.push(newTag);
+        } else {
+          tag.matchClubs.push(club); // works
+          tag.save();
+          club.tags.push(tag);
+        }
+      } catch (err) {
+        res.json({ message: err });
       }
-      console.log("line98: " + club.tags.length);
-    });
-  });
+    })
+  );
 
-  club.save((err, _) => {
-    // success response로 club까지 리턴하면 너무 오래 지연되어 server error 발생
+  club.save((err, club) => {
+    // WARNING: success response로 club까지 리턴하면 너무 오래 지연되어 server error 발생
     if (err) return res.json({ success: false, err });
-    console.log(club.tags.length);
     return res.status(200).json({
       success: true,
-      // club,
     });
   });
 });
@@ -199,7 +197,6 @@ router.post("/:clubId/like/:userId", async (req, res) => {
     const club = await Club.findById(req.params.clubId);
     const user = await User.findById(req.params.userId);
     if (user.likedClubs.some((cid) => cid.toString() === club.id)) {
-      // console.log('already exists...')
       user.likedClubs = user.likedClubs.filter(
         (cid) => cid.toString() !== club.id
       );
@@ -207,7 +204,6 @@ router.post("/:clubId/like/:userId", async (req, res) => {
         (uid) => uid.toString() !== user._id.toString()
       );
     } else {
-      // console.log('new like!')
       user.likedClubs.push(club);
       club.likedUsers.push(user);
     }
