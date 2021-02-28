@@ -19,7 +19,7 @@ export interface PostRecruitResponse {
 }
 
 export async function postRecruitRequest ({ clubId, title, startDate, endDate, contact, description }: PostRecruitPayload){
-  return await axios.post<PostRecruitResponse>(`${CLUB_SERVER}/${clubId}/recruit/`, {
+  return await axios.post<PostRecruitResponse>(`${CLUB_SERVER}/${clubId}/recruit`, {
     clubId, title, startDate, endDate, contact, description
   })
   .then(res => res.data);

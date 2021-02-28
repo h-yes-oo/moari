@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { STORY_SERVER } from 'components/Config';
-import Story from 'types';
+import { Story } from 'types';
 
 export interface StoriesResponse {
     success: boolean;
@@ -44,7 +44,7 @@ export interface SaveStoryPayload {
 }
 
 export async function saveStoryRequest({ clubId, content, files }: SaveStoryPayload) {
-    let formData = new FormData;
+    let formData = new FormData();
         const config = {
             header: {'content-type': 'multipart/form-data'}
         }

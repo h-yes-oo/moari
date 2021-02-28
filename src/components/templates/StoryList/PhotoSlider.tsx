@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react';
 import styled from 'styled-components';
-import Story from 'types';
+import { Story } from 'types';
 import LeftArrow from 'assets/icons/left-arrow.svg';
 import RightArrow from 'assets/icons/right-arrow.svg';
 import palette from 'constants/palette';
