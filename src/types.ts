@@ -53,31 +53,25 @@ export enum Status {
     PREPARE = '모집 준비 중',
 }
 
-// export enum ClubDetailTab {
-//     CLUB_INTRO = '동아리 소개',
-//     RECRUIT_NOTICE = '모집 공고',
-//     CLUB_NEWS = '동아리 소식',
-//     QNA = '묻고 답하기',
-// };
-
 export const ClubDetailTab = {
     CLUB_INTRO : {
         name: '동아리 소개',
-        path: "/info"
+        path: "info"
     },
     RECRUIT_NOTICE : {
         name: '모집공고',
-        path: "/recruitment"
+        path: "recruitment"
     },
     STORY : {
         name: '동아리 소식',
-        path: "/story"
+        path: "story"
     },
     QNA : {
         name: '묻고 답하기',
-        path: "/qna"
+        path: "qna"
     },
 } as const;
+
 export type TabItem = keyof typeof ClubDetailTab;
 //export type ClubDetailTab = typeof ClubDetailTab[TabItem];
 
