@@ -1,15 +1,10 @@
 import React, { FC } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router';
 
-interface Props {
-
-}
+interface Props {}
 
 const RecruitNotice: FC<Props & RouteComponentProps> = () => {
-  return (
-    <>
-    </>
-  );
-}
+  return <></>;
+};
 
 export default withRouter(RecruitNotice);
