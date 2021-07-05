@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
@@ -90,7 +90,7 @@ interface ClubInfoRouterProps {
   tab: string;
 }
 
-const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ match, user, history }) => {
+const ClubDetailPage = ({ match, user, history }: Props & RouteComponentProps<ClubInfoRouterProps>) => {
   const [selectedTab, setSelectedTab] = useState<T.TabItem>(
     match.params.tab === 'story'
       ? ('STORY' as T.TabItem)
@@ -123,66 +123,65 @@ const ClubDetailPage: FC<Props & RouteComponentProps<ClubInfoRouterProps>> = ({ 
 
   if (fetchedData === null || user === null) {
     return <Loading />;
-  } else {
-    const club = fetchedData!.club;
-    const handleTabClick: (type: keyof typeof T.ClubDetailTab, path: string) => void = (type, path) => {
-      setSelectedTab(type);
-      history.push(`/club/${club._id}${path}`);
-    };
-
-    const isSelectedTab: (type: T.TabItem) => boolean = (type) => {
-      return selectedTab === type;
-    };
-
-    const handleLike: () => void = async () => {
-      if (user!.isAuth) {
-        dispatch(
-          likeClub.request({ cludId: club._id, userId: user!._id, setLikeImg, likeImg, setLikeCount, likeCount })
-        );
-      } else {
-        alert('로그인해주세요');
-      }
-    };
-
-    const menuItems: ReactNode = Object.entries(T.ClubDetailTab).map(([key, value]) => {
-      return (
-        <ClubDetailMenuItem
-          key={key}
-          isSelected={isSelectedTab(key as T.TabItem)}
-          onClick={() => handleTabClick(key as T.TabItem, value.path)}
-        >
-          {value.name}
-        </ClubDetailMenuItem>
-      );
-    });
-
-    return club ? (
-      <Root>
-        <BoldLargeText>{club.name}</BoldLargeText>
-        <TopWrapper>
-          <IconTagWrapper>
-            <IconCountWrapper>
-              <Icon src={likeImg ? likeFilledSvg : likeEmptySvg} onClick={() => handleLike()} />
-              <IconCount>{likeCount}</IconCount>
-              <Icon src={eyesSvg} />
-              <IconCount>{club.views}</IconCount>
-            </IconCountWrapper>
-            <TagWrapper>
-              {/* array.map으로 전환 필요*/}
-              <TagText>#학회</TagText>
-              <TagText>#생명과학</TagText>
-              <TagText>#화학</TagText>
-              <TagText>#논문읽기</TagText>
-            </TagWrapper>
-          </IconTagWrapper>
-          <ClubDetailMenuWrapper>{menuItems}</ClubDetailMenuWrapper>
-        </TopWrapper>
-        {selectedTab === ('CLUB_INTRO' as T.TabItem) && <ClubIntro club={club} />}
-        {selectedTab === ('QNA' as T.TabItem) && <CommentList user={user} clubId={club._id} />}
-        {selectedTab === ('STORY' as T.TabItem) && <StoryList clubId={club._id} />}
-      </Root>
-    ) : null;
   }
+
+  const handleTabClick: (type: keyof typeof T.ClubDetailTab, path: string) => void = (type, path) => {
+    setSelectedTab(type);
+    history.push(`/club/${club._id}${path}`);
+  };
+
+  const isSelectedTab: (type: T.TabItem) => boolean = (type) => {
+    return selectedTab === type;
+  };
+
+  const handleLike: () => void = async () => {
+    if (user!.isAuth) {
+      dispatch(likeClub.request({ cludId: club._id, userId: user!._id, setLikeImg, likeImg, setLikeCount, likeCount }));
+    } else {
+      alert('로그인해주세요');
+    }
+  };
+
+  const club = fetchedData!.club;
+
+  const menuItems: ReactNode = Object.entries(T.ClubDetailTab).map(([key, value]) => {
+    return (
+      <ClubDetailMenuItem
+        key={key}
+        isSelected={isSelectedTab(key as T.TabItem)}
+        onClick={() => handleTabClick(key as T.TabItem, value.path)}
+      >
+        {value.name}
+      </ClubDetailMenuItem>
+    );
+  });
+
+  return club ? (
+    <Root>
+      <BoldLargeText>{club.name}</BoldLargeText>
+      <TopWrapper>
+        <IconTagWrapper>
+          <IconCountWrapper>
+            <Icon src={likeImg ? likeFilledSvg : likeEmptySvg} onClick={() => handleLike()} />
+            <IconCount>{likeCount}</IconCount>
+            <Icon src={eyesSvg} />
+            <IconCount>{club.views}</IconCount>
+          </IconCountWrapper>
+          <TagWrapper>
+            {/* TODO: array.map으로 변경*/}
+            <TagText>#학회</TagText>
+            <TagText>#생명과학</TagText>
+            <TagText>#화학</TagText>
+            <TagText>#논문읽기</TagText>
+          </TagWrapper>
+        </IconTagWrapper>
+        <ClubDetailMenuWrapper>{menuItems}</ClubDetailMenuWrapper>
+      </TopWrapper>
+      {selectedTab === ('CLUB_INTRO' as T.TabItem) && <ClubIntro club={club} />}
+      {selectedTab === ('QNA' as T.TabItem) && <CommentList user={user} clubId={club._id} />}
+      {selectedTab === ('STORY' as T.TabItem) && <StoryList clubId={club._id} />}
+    </Root>
+  ) : null;
 };
 
 export default withRouter(ClubDetailPage);

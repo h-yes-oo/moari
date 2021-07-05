@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 
 import palette from 'constants/palette';
@@ -32,7 +32,7 @@ interface FormFactoryProps {
   value?: any;
 }
 
-const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options, setValue, initialValue, value }) => {
+const FormFactory = ({ type, description, height, options, setValue, initialValue, value }: FormFactoryProps) => {
   switch (type) {
     case T.LoginFormType.INPUT:
       if (setValue === undefined) return null;
@@ -54,7 +54,7 @@ interface Props {
   value?: any;
 }
 
-const LoginForm: FC<Props> = ({ description, type, height, setValue, initialValue, value }) => {
+const LoginForm = ({ description, type, height, setValue, initialValue, value }: Props) => {
   return (
     <Root>
       <FormFactory

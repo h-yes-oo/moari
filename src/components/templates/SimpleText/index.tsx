@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import { BoldLargeText } from 'constants/styles';
@@ -9,9 +9,7 @@ const BoldLargeTextWrapper = styled.div`
   margin: 48px 0;
 `;
 
-interface ProposeClubProps {}
-
-export const ProposeClubText: FC<ProposeClubProps> = () => {
+export const ProposeClubText = () => {
   return (
     <BoldLargeTextWrapper>
       <BoldLargeText>이런 동아리 어때요 ?</BoldLargeText>

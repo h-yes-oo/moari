@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useState, useRef, useEffect } from 'react';
+import React, { ReactNode, useState, useRef, useEffect } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -38,13 +38,11 @@ const MenuButton = styled.div<{ isRegisterButton?: boolean }>`
   cursor: pointer;
 `;
 
-interface Props {}
-
 type MenuMap = {
   [key in keyof typeof T.SearchMenu]: string;
 };
 
-const TopMenuBar: FC<Props & RouteComponentProps> = ({ history }) => {
+const TopMenuBar = ({ history }: RouteComponentProps) => {
   const [showUnfoldMenu, setShowUnfoldMenu] = useState<Boolean>(false);
   const [menuLoaded, setMenuLoaded] = useState<boolean>(false);
 
@@ -52,16 +50,6 @@ const TopMenuBar: FC<Props & RouteComponentProps> = ({ history }) => {
   const categoryRef = useRef<HTMLDivElement>(null);
   const tagRef = useRef<HTMLDivElement>(null);
   const statusRef = useRef<HTMLDivElement>(null);
-
-  const menuTextList: MenuMap = {
-    HOME: 'Home',
-    CATEGORY: '분류별 찾기',
-    TAG: '태그로 찾기',
-    STATUS: '모집 상태로 찾기',
-    NAME: '이름 순 전체보기',
-  };
-
-  const registerText: string = '동아리 / 모집공고 등록하기';
 
   const goRegister: () => void = () => {
     history.push('/register/club');
@@ -84,9 +72,15 @@ const TopMenuBar: FC<Props & RouteComponentProps> = ({ history }) => {
 
   const isAllRefLoaded: boolean = homeRef && categoryRef && tagRef && statusRef ? true : false;
 
-  useEffect(() => {
-    setMenuLoaded(true);
-  }, [isAllRefLoaded]);
+  const menuTextList: MenuMap = {
+    HOME: 'Home',
+    CATEGORY: '분류별 찾기',
+    TAG: '태그로 찾기',
+    STATUS: '모집 상태로 찾기',
+    NAME: '이름 순 전체보기',
+  };
+
+  const registerText: string = '동아리 / 모집공고 등록하기';
 
   const MenuList: ReactNode = Object.entries(menuTextList).map(([key, menu]) => (
     <MenuButton
@@ -122,6 +116,10 @@ const TopMenuBar: FC<Props & RouteComponentProps> = ({ history }) => {
         setShowUnfoldMenu={setShowUnfoldMenu}
       />
     ) : null;
+
+  useEffect(() => {
+    setMenuLoaded(true);
+  }, [isAllRefLoaded]);
 
   return (
     <Root>

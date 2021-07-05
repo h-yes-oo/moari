@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
@@ -33,9 +33,7 @@ const Button = styled.div<ButtonProps>(({ buttonType, isSelected }) => ({
   border: isSelected ? '' : `1px solid ${palette.greyBorder.toString()}`,
 }));
 
-interface Props {}
-
-const RegisterButton: FC<Props & RouteComponentProps> = ({ history }) => {
+const RegisterButton = ({ history }: RouteComponentProps) => {
   const isClubSelected: boolean = history.location.pathname.includes('club');
 
   const showRegisterForm: (buttonType: T.RegisterButton) => void = (buttonType) => {

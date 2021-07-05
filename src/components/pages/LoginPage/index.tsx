@@ -1,10 +1,9 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import LoginForm from '../../templates/LoginForm';
-
 import { AuthResponse } from 'api/auth';
 import loginButtonSvg from 'assets/icons/login-button.svg';
 import logo from 'assets/icons/logo.svg';
@@ -114,17 +113,19 @@ interface Props {
   user: AuthResponse;
 }
 
-const LoginPage: FC<Props & RouteComponentProps> = ({ history, user }) => {
+const LoginPage = ({ history, user }: Props & RouteComponentProps) => {
+  const dispatch = useDispatch();
   const rememberMeChecked = localStorage.getItem('rememberMe') ? true : false;
-  const handleRememberMe = () => {
-    setRememberMe(!rememberMe);
-  };
   const initialId: string = localStorage.getItem('rememberMe') ? localStorage.getItem('rememberMe')! : '';
+
   const [id, setId] = useState<string>(initialId);
   const [password, setPassword] = useState<string>('');
   const [rememberMe, setRememberMe] = useState<boolean>(rememberMeChecked);
 
-  const dispatch = useDispatch();
+  const handleRememberMe = () => {
+    setRememberMe(!rememberMe);
+  };
+
   const handleLogin: (event: React.MouseEvent<HTMLImageElement, MouseEvent>) => void = (event) => {
     event.preventDefault();
     dispatch(loginUser.request({ id, password, history, rememberMe }));
@@ -154,13 +155,12 @@ const LoginPage: FC<Props & RouteComponentProps> = ({ history, user }) => {
         <RegisterButton src={loginButtonSvg} onClick={handleLogin} />
         <BottomWrapper>
           <Label>
-            <CheckBox type="checkbox" name="maintainLogin" onChange={handleRememberMe} checked={rememberMe} /> 아이디
-            기억하기
+            <CheckBox type="checkbox" name="maintainLogin" onChange={handleRememberMe} checked={rememberMe} />
+            아이디 기억하기
           </Label>
           <Find href="/">아이디 비밀번호 찾기</Find>
         </BottomWrapper>
         <SignUp>
-          {' '}
           모아리에 처음이신가요 ?<ToSignUp href="/signup"> 회원가입</ToSignUp>{' '}
         </SignUp>
       </Wrapper>

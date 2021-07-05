@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
@@ -164,7 +164,7 @@ interface CommentProps {
   refreshFunction: any;
 }
 
-const Question: FC<CommentProps> = ({ user, clubId, question, comments, refreshFunction }) => {
+const Question = ({ user, clubId, question, comments, refreshFunction }: CommentProps) => {
   const [showAnswerForm, setShowAnswerForm] = useState<boolean>(false);
   const [content, setContent] = useState<string>('');
 
@@ -184,7 +184,7 @@ const Question: FC<CommentProps> = ({ user, clubId, question, comments, refreshF
     setContent(e.target.value);
   };
 
-  async function onSubmit(responseTo: string) {
+  const onSubmit = async (responseTo: string) => {
     dispatch(
       saveComment.request({
         writer: user._id,
@@ -196,26 +196,25 @@ const Question: FC<CommentProps> = ({ user, clubId, question, comments, refreshF
     setShowAnswerForm(false);
     setContent('');
     refreshFunction();
-  }
+  };
 
-  async function onDelete(commentId: string) {
+  const onDelete = async (commentId: string) => {
     dispatch(deleteComment.request({ commentId }));
     refreshFunction();
-  }
+  };
 
-  let answers = comments.filter((comment) => comment.responseTo === question._id);
-  const answerList: ReactNode = answers.map((answer: Comment) => {
-    return (
-      <Answer key={answer._id}>
-        <Profile writer={answer.writer} />
-        <Content>{answer.content}</Content>
-        <ButtonWrapper>
-          {answer.writer._id === user._id && <EraseButton onClick={() => onDelete(answer._id)}>지우기</EraseButton>}
-          <Date>{answer.createdDate}</Date>
-        </ButtonWrapper>
-      </Answer>
-    );
-  });
+  const answers = comments.filter((comment) => comment.responseTo === question._id);
+
+  const answerList: ReactNode = answers.map((answer: Comment) => (
+    <Answer key={answer._id}>
+      <Profile writer={answer.writer} />
+      <Content>{answer.content}</Content>
+      <ButtonWrapper>
+        {answer.writer._id === user._id && <EraseButton onClick={() => onDelete(answer._id)}>지우기</EraseButton>}
+        <Date>{answer.createdDate}</Date>
+      </ButtonWrapper>
+    </Answer>
+  ));
 
   return question.responseTo ? null : (
     <Root key={question._id}>

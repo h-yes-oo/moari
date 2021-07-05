@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
@@ -30,7 +30,7 @@ const RegisterButton = styled.img`
 
 interface Props {}
 
-const ClubRegisterContents: FC<Props & RouteComponentProps> = ({ history }) => {
+const ClubRegisterContents = ({ history }: Props & RouteComponentProps) => {
   const [name, setName] = useState<string>(''); // required
   const [school, setSchool] = useState<string>(''); // required
   const [description, setDescription] = useState<string>('');

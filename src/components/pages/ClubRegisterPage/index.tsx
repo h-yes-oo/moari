@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import ClubRegisterContents from 'components/templates/ClubRegisterContents';
@@ -14,9 +14,7 @@ const GuideText = styled.div`
   margin-bottom: 52px;
 `;
 
-interface Props {}
-
-const ClubRegisterPage: FC<Props> = () => {
+const ClubRegisterPage = () => {
   return (
     <Root>
       <GuideText>

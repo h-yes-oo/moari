@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import { Route, RouteComponentProps } from 'react-router-dom';
 
 import { AuthResponse } from 'api/auth';
@@ -10,7 +10,7 @@ interface Props {
   user: AuthResponse;
 }
 
-const RegisterPage: FC<Props & RouteComponentProps> = ({ match, user }) => {
+const RegisterPage = ({ match, user }: Props & RouteComponentProps) => {
   return (
     <>
       <RegisterButton />

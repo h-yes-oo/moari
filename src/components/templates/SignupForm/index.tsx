@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import palette from 'constants/palette';
@@ -20,7 +20,7 @@ const InputForm = styled.input<{ width?: string }>`
   font-size: 16px;
 `;
 
-interface InputFormProps {
+interface Props {
   description: string;
   setValue?: any;
   value?: any;
@@ -29,8 +29,8 @@ interface InputFormProps {
   width?: string;
 }
 
-const SignupForm: FC<InputFormProps> = ({ description, setValue, value, type, onChange, width }) => {
-  if (onChange === undefined) {
+const SignupForm = ({ description, setValue, value, type, onChange, width }: Props) => {
+  if (!onChange) {
     return (
       <Root>
         <InputForm placeholder={description} type={type} value={value} onChange={(e) => setValue(e.target.value)} />

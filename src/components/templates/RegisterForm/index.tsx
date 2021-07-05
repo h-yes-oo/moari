@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, ReactNode, SetStateAction, useState } from 'react';
+import React, { Dispatch, ReactNode, SetStateAction, useState } from 'react';
 import styled from 'styled-components';
 import Select from 'react-select';
 
@@ -129,7 +129,7 @@ interface FormFactoryProps {
   setValue?: Dispatch<SetStateAction<any>> | ((e: any) => void);
 }
 
-const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options, setValue }) => {
+const FormFactory = ({ type, description, height, options, setValue }: FormFactoryProps) => {
   const [text, setText] = useState<string | string[]>(description);
   const [selectedFiles, setSelectedFiles] = useState<FileList>();
   const [currInput, setCurrInput] = useState<string>('');
@@ -297,7 +297,7 @@ const FormFactory: FC<FormFactoryProps> = ({ type, description, height, options,
 
       return (
         <Select
-          //   styles={customStyles}
+          // styles={customStyles}
           options={selectOptions}
           onChange={(e) => selectChange(e)}
           placeholder={description}
@@ -336,17 +336,7 @@ interface Props {
   setValue?: Dispatch<SetStateAction<any>>;
 }
 
-const RegisterForm: FC<Props> = ({
-  title,
-  guide,
-  description,
-  type,
-  options,
-  height,
-  required,
-  highlight,
-  setValue,
-}) => {
+const RegisterForm = ({ title, guide, description, type, options, height, required, highlight, setValue }: Props) => {
   return (
     <Root>
       <TextWrapper>

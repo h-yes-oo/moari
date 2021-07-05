@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useState, useEffect } from 'react';
+import React, { ReactNode, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
@@ -144,16 +144,13 @@ interface CommentProps {
   clubId: string;
 }
 
-const CommentList: FC<CommentProps> = ({ user, clubId }) => {
+const CommentList = ({ user, clubId }: CommentProps) => {
   const [showForm, setShowForm] = useState<boolean>(false);
   const [content, setContent] = useState<string>('');
   const [searchKeyword, setSearchKeyword] = useState<string>('');
   const [refresh, setRefresh] = useState<boolean>(false);
-  const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(fetchComments.request({ clubId }));
-  }, [clubId, dispatch]);
+  const dispatch = useDispatch();
 
   const refreshFunction = () => {
     setRefresh(!refresh);
@@ -205,28 +202,29 @@ const CommentList: FC<CommentProps> = ({ user, clubId }) => {
     }
   };
 
-  let questionList: ReactNode = <Loading />;
+  const questionList: ReactNode = commentsData!.comments
+    .filter((comment) => !comment.responseTo)
+    .reverse()
+    .map((question: Comment) => {
+      return (
+        <Question
+          key={question._id}
+          user={user}
+          clubId={clubId}
+          comments={commentsData!.comments}
+          question={question}
+          refreshFunction={refreshFunction}
+        />
+      );
+    });
 
-  if (commentsData) {
-    const comments = commentsData!.comments;
-    questionList = comments
-      .filter((comment) => !comment.responseTo)
-      .reverse()
-      .map((question: Comment) => {
-        return (
-          <Question
-            key={question._id}
-            user={user}
-            clubId={clubId}
-            comments={comments}
-            question={question}
-            refreshFunction={refreshFunction}
-          />
-        );
-      });
-  }
+  useEffect(() => {
+    dispatch(fetchComments.request({ clubId }));
+  }, [clubId, dispatch]);
 
-  return (
+  return !commentsData ? (
+    <Loading />
+  ) : (
     <>
       <Wrapper>
         <TopWrapper>

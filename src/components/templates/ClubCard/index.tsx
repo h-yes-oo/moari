@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
@@ -94,7 +94,7 @@ interface Props {
   id: string;
   name: string;
   description: string;
-  image?: any; // need change
+  image?: any; // TODO: type
   status: T.Status;
   category?: T.Category;
   tags?: string[];
@@ -103,7 +103,7 @@ interface Props {
   liked: boolean | undefined;
 }
 
-const ClubCard: FC<Props & RouteComponentProps> = ({
+const ClubCard = ({
   id,
   name,
   description,
@@ -113,14 +113,14 @@ const ClubCard: FC<Props & RouteComponentProps> = ({
   views,
   history,
   liked,
-}) => {
-  const goClubDetail: (id: string) => void = (id) => {
-    history.push(`/club/${id}`);
-  };
-
+}: Props & RouteComponentProps) => {
   const bufferArray = image ? image.img.data.data : '';
   const base64prefix = 'data:image/png;base64,';
   const imageSource = image ? base64prefix + btoa(new TextDecoder('utf-16').decode(new Uint16Array(bufferArray))) : '';
+
+  const goClubDetail: (id: string) => void = (id) => {
+    history.push(`/club/${id}`);
+  };
 
   // TODO: switch-case refactoring
   return (

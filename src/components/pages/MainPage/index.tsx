@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useEffect } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -21,24 +21,22 @@ interface MatchParams {
   status: string;
 }
 
-const MainPage: FC<Props & RouteComponentProps<MatchParams>> = ({ match, user }) => {
+const MainPage = ({ match, user }: Props & RouteComponentProps<MatchParams>) => {
   const dispatch = useDispatch();
+  const fetchedData = useSelector((state: RootState) => state.clubList.data);
 
   const isFilteredPage: boolean = Object.keys(match.params).length > 0;
   const topClubList: ReactNode = isFilteredPage ? null : <TopClubList user={user} />;
   const proposeClubText: ReactNode = isFilteredPage ? null : <ProposeClubText />;
-
-  const fetchedData = useSelector((state: RootState) => state.clubList.data);
 
   useEffect(() => {
     if (isFilteredPage) dispatch(searchClub.request({ keyword: match.params.keyword }));
     else dispatch(fetchClubsAll.request());
   }, [dispatch, isFilteredPage, match.params.keyword]);
 
-  if (!fetchedData) {
-    return <Loading />;
-  }
-  return (
+  return !fetchedData ? (
+    <Loading />
+  ) : (
     <>
       {proposeClubText}
       {topClubList}

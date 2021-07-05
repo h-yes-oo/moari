@@ -1,14 +1,10 @@
-import React, { FC, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 
 import palette from 'constants/palette';
 import sampleImg from 'assets/samples/likelion.jpg';
 import Story from 'types';
-
-interface StoryListProps {
-  clubId: string;
-}
 
 const StoryWrapper = styled.div`
   display: flex;
@@ -112,7 +108,11 @@ const Col = styled.div`
   min-height: 1px;
 `;
 
-const StoryList: FC<StoryListProps> = ({ clubId }) => {
+interface Props {
+  clubId: string;
+}
+
+const StoryList = ({ clubId }: Props) => {
   const [stories, setStories] = useState<Story[]>([]);
 
   const onClickNewButton = () => {};

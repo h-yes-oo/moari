@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 
 import Club from 'types';
@@ -34,7 +34,7 @@ interface ClubIntroProps {
   club: Club;
 }
 
-const ClubIntro: FC<ClubIntroProps> = ({ club }) => {
+const ClubIntro = ({ club }: ClubIntroProps) => {
   const clubImages: ReactNode = club.photos.map((photo, index) => {
     const bufferArray = photo ? photo.img.data.data : '';
     const base64prefix = 'data:image/png;base64,';

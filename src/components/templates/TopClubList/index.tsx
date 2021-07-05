@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useEffect, useRef, useState } from 'react';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
@@ -33,13 +33,13 @@ interface Props {
   user: AuthResponse;
 }
 
-const TopClubList: FC<Props> = ({ user }) => {
+const TopClubList = ({ user }: Props) => {
   const fetchedData = useSelector((state: RootState) => state.clubList.data);
 
+  const [currentSlide, setCurrentSlide] = useState<number>(0);
   const clubs = fetchedData !== null ? fetchedData!.clubs : [];
   const TOTAL_SLIDES: number = Math.floor((clubs.length - 1) / 3);
 
-  const [currentSlide, setCurrentSlide] = useState<number>(0);
   const slideRef = useRef(document.createElement('div'));
 
   const nextSlide = () => {

@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
@@ -88,7 +88,7 @@ interface Props {
   user: AuthResponse;
 }
 
-const SignupPage: FC<Props & RouteComponentProps> = ({ history, user }) => {
+const SignupPage = ({ history, user }: Props & RouteComponentProps) => {
   const [id, setId] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [email, setEmail] = useState<string>('');

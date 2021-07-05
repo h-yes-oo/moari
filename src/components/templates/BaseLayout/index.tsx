@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 
 import Header from '../Header';
@@ -19,12 +19,12 @@ const ContentsWrapper = styled.div`
   flex: 1;
 `;
 
-interface LayoutProps {
+interface Props {
   children: ReactNode;
   user: AuthResponse;
 }
 
-const BaseLayout: FC<LayoutProps> = ({ children, user }) => {
+const BaseLayout = ({ children, user }: Props) => {
   return (
     <Root>
       <Header campusName={'SNU'} user={user} />

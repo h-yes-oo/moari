@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
@@ -28,9 +28,8 @@ interface Props {
   user: AuthResponse;
 }
 
-const ClubList: FC<Props> = ({ keyword, category, tag, status, user }) => {
+const ClubList = ({ keyword, category, tag, status, user }: Props) => {
   const fetchedData = useSelector((state: RootState) => state.clubList.data);
-  const clubs = fetchedData ? fetchedData.clubs : [];
 
   const getFilteredClubs: () => Club[] = () => {
     // TODO: erase console logs and shorten return statements
@@ -45,27 +44,27 @@ const ClubList: FC<Props> = ({ keyword, category, tag, status, user }) => {
     } else return clubs;
   };
 
+  const clubs: Club[] = fetchedData ? fetchedData.clubs : [];
+
   const filteredClubs: Club[] = getFilteredClubs();
 
   const clubsToShow = category !== undefined || tag !== undefined || status !== undefined ? filteredClubs : clubs;
 
-  const clubList: ReactNode = clubsToShow.map((club: Club, index) => {
-    return (
-      <CardWrapper key={index}>
-        <ClubCard
-          key={club._id}
-          id={club._id}
-          name={club.name}
-          description={club.description}
-          image={club.photos ? club.photos[0] : undefined}
-          status={club.status}
-          likes={club.likedUsers.length}
-          views={club.views}
-          liked={user?.likedClubs?.includes(club._id)}
-        />
-      </CardWrapper>
-    );
-  });
+  const clubList: ReactNode = clubsToShow.map((club: Club, index) => (
+    <CardWrapper key={index}>
+      <ClubCard
+        key={club._id}
+        id={club._id}
+        name={club.name}
+        description={club.description}
+        image={club.photos ? club.photos[0] : undefined}
+        status={club.status}
+        likes={club.likedUsers.length}
+        views={club.views}
+        liked={user?.likedClubs?.includes(club._id)}
+      />
+    </CardWrapper>
+  ));
 
   return (
     <Root>

@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import logoSvg from 'assets/icons/footer-logo.svg';
@@ -76,9 +76,7 @@ const Wrapper = styled.div`
   align-items: center;
 `;
 
-interface Props {}
-
-const Footer: FC<Props> = () => {
+const Footer = () => {
   return (
     <Root>
       <FooterLogo src={logoSvg} />

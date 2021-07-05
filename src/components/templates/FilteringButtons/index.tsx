@@ -1,4 +1,4 @@
-import React, { FC, ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { RouteComponentProps, useLocation, withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -42,14 +42,9 @@ interface Props {
   filter: T.FilterType;
 }
 
-const FilteringButtons: FC<Props & RouteComponentProps> = ({ filter, history }) => {
+const FilteringButtons = ({ filter, history }: Props & RouteComponentProps) => {
   const location = useLocation();
   const [selected, setSelected] = useState<string>('');
-
-  useEffect(() => {
-    const currentFilter = location.pathname.slice(location.pathname.lastIndexOf('/') + 1).toUpperCase();
-    setSelected(currentFilter);
-  }, [location.pathname]);
 
   const handleClick: (tag: string) => void = (tag) => {
     setSelected(tag);
@@ -73,6 +68,11 @@ const FilteringButtons: FC<Props & RouteComponentProps> = ({ filter, history }) 
       </TagButtonContainer>
     );
   });
+
+  useEffect(() => {
+    const currentFilter = location.pathname.slice(location.pathname.lastIndexOf('/') + 1).toUpperCase();
+    setSelected(currentFilter);
+  }, [location.pathname]);
 
   return (
     <Root>

@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -20,13 +20,8 @@ interface MatchParams {
   status: string;
 }
 
-const FilteredPage: FC<Props & RouteComponentProps<MatchParams>> = ({ match, user }) => {
+const FilteredPage = ({ match, user }: Props & RouteComponentProps<MatchParams>) => {
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchClubsAll.request());
-  }, [dispatch]);
-
   const fetchedData = useSelector((state: RootState) => state.clubList.data);
 
   const getFilterType: () => T.FilterType = () => {
@@ -38,25 +33,18 @@ const FilteredPage: FC<Props & RouteComponentProps<MatchParams>> = ({ match, use
 
   const filterType: T.FilterType = getFilterType();
 
-  if (fetchedData === null) {
-    return (
-      <>
-        <FilteringButtons filter={filterType} />
-        <Loading />
-      </>
-    );
-  }
+  useEffect(() => {
+    dispatch(fetchClubsAll.request());
+  }, [dispatch]);
 
   return (
     <>
       <FilteringButtons filter={filterType} />
-      <ClubList
-        // keyword={match.params.keyword}
-        category={match.params.category}
-        tag={match.params.tag}
-        status={match.params.status}
-        user={user}
-      />
+      {fetchedData ? (
+        <ClubList category={match.params.category} tag={match.params.tag} status={match.params.status} user={user} />
+      ) : (
+        <Loading />
+      )}
     </>
   );
 };

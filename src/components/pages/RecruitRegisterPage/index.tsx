@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import RecruitRegisterContents from 'components/templates/RecruitRegisterContents';
@@ -6,9 +6,8 @@ import RecruitRegisterContents from 'components/templates/RecruitRegisterContent
 const Root = styled.div`
   padding: 52px 208px;
 `;
-interface Props {}
 
-const RecruitRegisterPage: FC<Props> = () => {
+const RecruitRegisterPage = () => {
   return (
     <Root>
       <RecruitRegisterContents />

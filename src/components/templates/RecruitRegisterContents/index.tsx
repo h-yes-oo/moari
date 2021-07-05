@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import RegisterForm from '../RegisterForm';
 import * as T from 'types';
@@ -23,18 +23,13 @@ const RegisterButton = styled.img`
     cursor: pointer;
   }
 `;
-interface Props {}
 
-const ClubRegisterContents: FC<Props> = () => {
+const ClubRegisterContents = () => {
   const [clubName, setClubName] = useState<string>(''); // required
   const [recruitTitle, setRecruitTitle] = useState<string>(''); // required
   const [recruitDuration, setRecruitDuration] = useState<string[]>([]);
   const [recruitContact, setRecruitContact] = useState<string>('');
   const [recruitDetails, setRecruitDetails] = useState<string>('');
-
-  useEffect(() => {
-    console.log(recruitDuration);
-  }, [recruitDuration]);
 
   const isRequiredEmpty: (input: string) => boolean = (input) => {
     return input === '';

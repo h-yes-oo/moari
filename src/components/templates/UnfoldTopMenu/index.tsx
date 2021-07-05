@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, ReactNode, SetStateAction } from 'react';
+import React, { Dispatch, ReactNode, SetStateAction } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -18,7 +18,7 @@ const Root = styled.div`
   transform: translateY(180px);
 `;
 
-const TabSection = styled.div<{ tabWidth: number }>`
+const TabSection = styled.div<{ tabWidth?: number }>`
   border-left: 2px solid ${palette.greyBorder.toString()};
   width: ${(props) => props.tabWidth}px;
   padding: 20px 16px;
@@ -42,14 +42,14 @@ interface Props {
   setShowUnfoldMenu: Dispatch<SetStateAction<any>>;
 }
 
-const UnfoldTopMenu: FC<Props & RouteComponentProps> = ({
+const UnfoldTopMenu = ({
   homeWidth,
   categoryWidth,
   tagWidth,
   statusWidth,
   setShowUnfoldMenu,
   history,
-}) => {
+}: Props & RouteComponentProps) => {
   const goFindClubs: (type: string, select?: string) => void = (type, select) => {
     history.push(`/${type}/${select}`);
   };
@@ -95,12 +95,11 @@ const UnfoldTopMenu: FC<Props & RouteComponentProps> = ({
     );
   });
 
-  return homeWidth === undefined ||
-    categoryWidth === undefined ||
-    tagWidth === undefined ||
-    statusWidth === undefined ? null : (
+  const notDefined = !homeWidth || !categoryWidth || !tagWidth || !statusWidth;
+
+  return notDefined ? null : (
     <Root onMouseEnter={() => setShowUnfoldMenu(true)} onMouseLeave={() => setShowUnfoldMenu(false)}>
-      <TabSection tabWidth={homeWidth + 32} />
+      <TabSection tabWidth={homeWidth && homeWidth + 32} />
       <TabSection tabWidth={categoryWidth}>{categoryMenus}</TabSection>
       <TabSection tabWidth={tagWidth}>{tagMenus}</TabSection>
       <TabSection tabWidth={statusWidth}>{statusMenus}</TabSection>

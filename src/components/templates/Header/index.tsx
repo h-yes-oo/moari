@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
@@ -73,7 +73,7 @@ const ProfileName = styled.div`
   font-size: 18px;
 `;
 
-// need props (profile img)
+// TODO: need props (profile img)
 const ProfileImage = styled.img`
   width: auto;
   height: 100%;
@@ -95,13 +95,11 @@ interface Props {
   user: AuthResponse;
 }
 
-const Header: FC<Props & RouteComponentProps> = ({ campusName, history, user }) => {
+const Header = ({ campusName, history, user }: Props & RouteComponentProps) => {
   const dispatch = useDispatch();
   const [searchKeyword, setSearchKeyword] = useState<string>('');
 
-  const isAuth = user.isAuth;
-  const name = user.name;
-  const userImage = user.image;
+  const { isAuth, name, image: userImage } = user;
 
   const goMainPage: () => void = () => {
     history.push('/');

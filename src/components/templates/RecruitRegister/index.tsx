@@ -1,8 +1,6 @@
-import React, { FC } from 'react';
+import React from 'react';
 
-interface Props {}
-
-const RecruitRegister: FC<Props> = () => {
+const RecruitRegister = () => {
   return <h1>Recruit Register</h1>;
 };
 

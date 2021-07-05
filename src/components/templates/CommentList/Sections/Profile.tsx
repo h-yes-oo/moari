@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 import { AuthResponse } from 'api/auth';
@@ -39,7 +39,7 @@ interface ProfileProps {
   writer: AuthResponse;
 }
 
-const Profile: FC<ProfileProps> = ({ writer }) => {
+const Profile = ({ writer }: ProfileProps) => {
   return (
     <Root>
       <ProfileImage src={writer.image} />
