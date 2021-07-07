@@ -1,7 +1,6 @@
 const route = {
-    login: '/login',
-    signup: '/signup',
-    // clubInfo; '/[]',
-}
+  login: '/login',
+  signup: '/signup',
+};
 
 export default route;
