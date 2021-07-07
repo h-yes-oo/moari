@@ -19,8 +19,9 @@ const storySchema = mongoose.Schema({
     date: {
         type: String
     },
-    photos : [{
-        type: String
+    storyPhotos : [{
+        type: storyphotoSchema,
+        ref: "StoryPhoto"
     }]
 })
 

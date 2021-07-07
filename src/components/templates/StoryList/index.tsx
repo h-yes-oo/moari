@@ -38,6 +38,34 @@ const Content = styled.div`
   color: ${palette.dark100.toString()};
 `;
 
+const ContentInput = styled.textarea`
+  width: 100%;
+  margin-top: 54px;
+
+  font-family: Montserrat;
+  font-style: normal;
+  font-size: 18px;
+  line-height: 24px;
+  height: 87px;
+
+  display: flex;
+  align-items: center;
+
+  white-space: pre-line;
+
+  color: ${palette.dark100.toString()};
+  border: 1px solid ${palette.primaryGradient.toString()};
+  box-sizing: border-box;
+  border-radius: 4px;
+
+  &::-webkit-scrollbar {
+    width: 0 !important;
+  }
+  &:focus {
+    outline: none;
+  }
+`;
+
 const Date = styled.div`
   position: absolute;
   right: 30px;

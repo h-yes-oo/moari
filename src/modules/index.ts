@@ -10,6 +10,8 @@ import post, { postSaga } from './post';
 import logout, { logoutSaga } from './logout';
 import comments, { commentsSaga } from './comments';
 import comment, { commentSaga } from './comment';
+import stories, { storiesSaga } from './stories';
+import story, { storySaga } from './story';
 
 const rootReducer = combineReducers({
   login,
